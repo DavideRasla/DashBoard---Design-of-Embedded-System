@@ -81,12 +81,38 @@ void UpdateTime()
 
 /*	WPrint(&MyWatchScr[TIMESTR], watchstr); */
 }
-
+/**
+  * @brief  Updates the fuel bar
+  * @param  Value: specifies the quantity of fuel [0, 105]
+  * @retval None
+  */
 void UpdateFuel(int value){
-	LCD_SetTextColor(White);
-	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(110, 180, value, 10);
-	LCD_DrawFullRect(215 - value, 180, value, 10);
+
+	if( value < 30){
+			LCD_SetTextColor(Red);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(110, 180, value, 10);
+		LCD_SetBackColor(Black);
+		LCD_SetTextColor(Black);
+		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
+	}else if(value >30 && value< 70){
+		LCD_SetTextColor(yellow);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(110, 180, value, 10);
+		LCD_SetBackColor(Black);
+		LCD_SetTextColor(Black);
+		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
+	}else{
+		LCD_SetTextColor(Green);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(110, 180, value, 10);
+		LCD_SetBackColor(Black);
+		LCD_SetTextColor(Black);
+		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
+	}
+
+
+
 }
 
 
@@ -115,7 +141,7 @@ TASK(TaskGuiDashboard)
 	
 	UpdateFuel(Fuel_Value++);
 
-	if(Fuel_Value == 105 ){
+	if(Fuel_Value == 100 ){
 		Fuel_Value = 0;
 	}
 } 

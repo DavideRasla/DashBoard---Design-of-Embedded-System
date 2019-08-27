@@ -1255,7 +1255,7 @@ void LCD_DrawFilledRect(uint16_t X_tl, uint16_t Y_tl, uint16_t X_br, uint16_t Y_
   */
 void LCD_DrawFullRect(uint16_t Xpos, uint16_t Ypos, uint16_t Width, uint16_t Height)
 {
-  LCD_SetTextColor(White);
+  //LCD_SetTextColor(White);
 
   LCD_DrawLine(Xpos, Ypos, Width, LCD_DIR_HORIZONTAL);
   LCD_DrawLine(Xpos, (Ypos+Height), Width, LCD_DIR_HORIZONTAL);
@@ -1266,14 +1266,14 @@ void LCD_DrawFullRect(uint16_t Xpos, uint16_t Ypos, uint16_t Width, uint16_t Hei
   Height--;
   Ypos++;
 
-  LCD_SetTextColor(White);
+  //LCD_SetTextColor(White);
 
   while(Height--)
   {
     LCD_DrawLine(Xpos, Ypos++, Width, LCD_DIR_HORIZONTAL);    
   }
 
-  LCD_SetTextColor(White);
+ // LCD_SetTextColor(White);
 }
 
 /*

@@ -176,6 +176,7 @@ typedef struct
 #define Blue		         LCD_COLOR_BLUE
 #define Green		         LCD_COLOR_GREEN
 #define Cyan                     LCD_COLOR_CYAN
+#define yellow            LCD_COLOR_YELLOW
 
 /** 
   * @brief  LCD Lines depending on the chosen fonts.  
