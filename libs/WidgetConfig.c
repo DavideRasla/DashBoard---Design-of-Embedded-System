@@ -7,7 +7,7 @@
 
 #include "Widget.h"
 #include "WidgetConfig.h"
-#include "assets\pictures.h"
+#include "../assets/pictures.h"
 #include <stdio.h>
 #include "stm32f4_discovery_lcd.h"
 #include "fonts.h"
@@ -19,8 +19,8 @@ Image RightArrow = {
 Image LeftArrow = {
 		LeftArrow_ON, LeftArrow_OFF
 };
-Image Oil = {
-		Low_Oil, Low_Oil
+ButtonIcon Oil = {
+		Low_Oil, Low_Oil, BUTTONTEST
 };
 
 Image Neut = {

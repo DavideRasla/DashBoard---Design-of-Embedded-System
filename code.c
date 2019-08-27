@@ -17,7 +17,6 @@
 #include "libs/rtwtypes.h"
 #include "libs/debug.h"
 
-#include "libs_custom/Dashboard.h"
 
 
 const char *RT_MEMORY_ALLOCATION_ERROR;
@@ -112,11 +111,13 @@ void UpdateFuel(int value){
 		LCD_SetTextColor(Black);
 		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
 	}
-
-
-
 }
 
+void checkButton(){
+	if(IsEvent(BUTTONTEST)){
+		debuginfo(0,8,8,8);
+	}
+}
 
 void strencode2digit(char *str, int digit)
 {
@@ -146,6 +147,7 @@ TASK(TaskGuiDashboard)
 	if(Fuel_Value == 100 ){
 		Fuel_Value = 0;
 	}
+	checkButton();
 } 
 
 /**
