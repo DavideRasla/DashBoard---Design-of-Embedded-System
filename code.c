@@ -115,7 +115,9 @@ void UpdateFuel(int value){
 
 void checkButton(){
 	if(IsEvent(BUTTONTEST)){
-		debuginfo(0,8,8,8);
+		LCD_SetTextColor(White);
+		LCD_SetBackColor(Black);
+		debugInt(50, 59, 8, 8, 8);
 	}
 }
 
