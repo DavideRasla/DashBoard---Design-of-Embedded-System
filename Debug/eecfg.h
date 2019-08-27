@@ -1,5 +1,5 @@
-#ifndef EECFG_H
-#define EECFG_H
+#ifndef RTDH_EECFG_H
+#define RTDH_EECFG_H
 
 
 #define RTDRUID_CONFIGURATOR_NUMBER 1278
@@ -64,7 +64,7 @@
  * Automatic options
  *
  **************************************************************************/
-#define __RTD_CYGWIN__
+#define __RTD_LINUX__
 #define __STM32__
 #define __STM32F4xx__
 #define __CORTEX_MX__

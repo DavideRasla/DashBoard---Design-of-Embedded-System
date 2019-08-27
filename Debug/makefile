@@ -62,7 +62,7 @@ EEOPT += __ADD_LIBS__
 # Automatic options
 #
 ############################################################################
-EEOPT += __RTD_CYGWIN__
+EEOPT += __RTD_LINUX__
 EEOPT += __STM32__
 EEOPT += __STM32F4xx__
 EEOPT += __CORTEX_MX__
@@ -85,12 +85,12 @@ ifdef ERIKA_FILES
 ifdef EEBASE
     $(warning EEBASE is set, but it has been overridden by ERIKA_FILES)
 endif
-EEBASE := $(shell cygpath `cygpath -ms '${ERIKA_FILES}'`)
+EEBASE := ${ERIKA_FILES}
 
 else # ERIKA_FILES
 
 ifndef EEBASE
-        EEBASE := $(shell cygpath `cygpath -ms 'C:\eclipse\plugins\com.eu.evidence.ee_2.8.0.20171025_0922\ee_files'`)
+        EEBASE := /home/evidence/Erika_SVN/
 else
         $(warning The usage of EEBASE is deprecated. Please use ERIKA_FILES)
 endif
@@ -109,7 +109,7 @@ $(info Using erika files in $(EEBASE))
 APPBASE := ..
 OUTBASE := Debug
 
-$(eval $(call check_and_set_cygwin_compiler_path,GNU_ARM_ROOT,C:\GNUToolsARMEmbedded\4.8_2014q3))
+$(eval $(call check_and_set_linux_compiler_path,GNU_ARM_ROOT,C:\gnu\ARM))
 
 
 ############################################################################
@@ -141,7 +141,7 @@ LIB_OPT  += __LIB_STM32F4_DISCOVERY__
 # Sources
 #
 ############################################################################
-APP_SRCS += eecfg.c code.c Touch.c pictures.c Event.c Widget.c WidgetConfig.c STMPE811QTR.c debug.c
+APP_SRCS += eecfg.c code.c libs/Touch.c assets/pictures.c libs/Event.c libs/Widget.c libs/WidgetConfig.c libs/STMPE811QTR.c libs/debug.c
 
 
 ############################################################################
