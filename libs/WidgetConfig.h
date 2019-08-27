@@ -24,12 +24,12 @@
 #define SEP1STR 11
 #define SEP2STR 12
 
-#define TIMEMODE 0x01
-#define TIMESETMODE 0x02
-#define ALARMMODE 0x04
-#define DashBoardMODE 0x08
-#define PLUS 0x10
-#define MINUS 0x20
+#define BUTTONTEST 0x01
+//#define TIMESETMODE 0x02
+//#define ALARMMODE 0x04
+//#define DashBoardMODE 0x08
+//#define PLUS 0x10
+//#define MINUS 0x20
 
 extern const Widget MyWatchScr[NUMWIDGETS];
 
