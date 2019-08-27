@@ -11,7 +11,7 @@
 #include "debug.h"
 #include "stm32f4_discovery_lcd.c"
 
-unsigned char contains(const Widget *w, TPoint *point){
+unsigned char contains( Widget *w, TPoint *point){
 	if	((point->x >= w->xl) && (point->x <= w->xl + w->xw) &&
 		 (point->y >= w->yt) && (point->y <= w->yt + w->yh)) {
 /*		debuginfo(5, point->x, point->y, 0);
@@ -22,7 +22,7 @@ unsigned char contains(const Widget *w, TPoint *point){
 		return 0;
 }
 
-unsigned char OnTouch(const Widget ws[], TPoint *press){
+unsigned char OnTouch( Widget ws[], TPoint *press){
 	unsigned char i, res;
 
 	res = 0;
@@ -37,56 +37,59 @@ unsigned char OnTouch(const Widget ws[], TPoint *press){
 	return res;
 }
 
-unsigned char DrawInit(const Widget ws[])
-{
+unsigned char DrawInit( Widget ws[])
+{LCD_SetTextColor(White);
 	unsigned char i;
-	for(i=0; i<NUMWIDGETS; i++) {
+	for(i=0; i<3; i++) {
 		DrawOff(&ws[i]);
 	}
 	return 1;
 }
 
-unsigned char DrawOn(const Widget *w)
+unsigned char DrawOn( Widget *w)
 {
 	char *imgptr = 0;
-
 	switch (w->wt) {
 	case BUTTONICON:
 		imgptr = biconinfo(w)->iconp;
 		break;
 	case BACKGROUND:
 	case IMAGE:
-		imgptr = imginfo(w)->image;
+		imgptr = imginfo(w)->image_on;
 		break;
 	}
 	if (imgptr != 0) {
 		LCD_DrawPicture(w->xl, w->yt, w->xw, w->yh, imgptr);
+		//debugInt(0,0, (int)w->xl,(int) w->yt,(int) imgptr);
 		return 1;
 	} else
+	//debugInt(0,0, (int)w->xl,(int)w->yt, (int)imgptr);
 		return 0;
 }
 
-unsigned char DrawOff(const Widget *w)
+unsigned char DrawOff( Widget *w)
 {
 	char *imgptr = 0;
-
+LCD_SetTextColor(White);
 	switch (w->wt) {
 	case BUTTONICON:
 		imgptr = biconinfo(w)->iconr;
 		break;
 	case BACKGROUND:
 	case IMAGE:
-		imgptr = imginfo(w)->image;
+		imgptr = imginfo(w)->image_off;
 		break;
 	}
 	if (imgptr != 0) {
 		LCD_DrawPicture(w->xl, w->yt, w->xw, w->yh, imgptr);
+		//debugInt(0,0, (int)w->xl, (int)w->yt, 0);
 		return 1;
 	}
+	//debugInt(0,0,(int) w->xl,(int) w->yt, 1);
 		return 0;
 }
 
-unsigned char WPrint(const Widget *w, char *s)
+unsigned char WPrint( Widget *w, char *s)
 {
 	if (w->wt == TEXT) {
 		LCD_SetTextColor(txtinfo(w)->color);
