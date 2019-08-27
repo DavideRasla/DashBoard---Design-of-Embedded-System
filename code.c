@@ -17,6 +17,8 @@
 #include "libs/rtwtypes.h"
 #include "libs/debug.h"
 
+#include "libs_custom/Dashboard.h"
+
 
 const char *RT_MEMORY_ALLOCATION_ERROR;
 
