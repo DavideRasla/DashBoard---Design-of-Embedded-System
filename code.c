@@ -81,7 +81,7 @@ void UpdateTime()
 	setTimeString(watchstr, hours, minutes, seconds, tenths, mode);
 
 
-/*	WPrint(&MyWatchScr[TIMESTR], watchstr); */
+	//WPrint(&MyWatchScr[1], watchstr); 
 }
 /**
   * @brief  Updates the fuel bar
@@ -142,7 +142,7 @@ TASK(TaskGuiDashboard)
 	static uint8_T Fuel_Value = 0;
 	
 	UpdateFuel(Fuel_Value++);
-
+	UpdateTime();
 	if(Fuel_Value == 100 ){
 		Fuel_Value = 0;
 	}
@@ -183,11 +183,11 @@ int main(void)
 
 	/* Draw the background */
 	DrawInit(MyWatchScr);
-	UpdateTime();
+	
 
 	LCD_SetTextColor(White);
-	WPrint(&MyWatchScr[SEP1STR], ":");
-	WPrint(&MyWatchScr[SEP2STR], ":");
+	//WPrint(&MyWatchScr[SEP1STR], ":");
+	//WPrint(&MyWatchScr[SEP2STR], ":");
 
 	/* Program cyclic alarms which will fire after an initial offset,
 	 * and after that periodically
