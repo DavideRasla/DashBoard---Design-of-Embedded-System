@@ -8,7 +8,7 @@
 #include "stm32f4_discovery.h"
 #include "stm32f4_discovery_lcd.h"
 #include "STMPE811QTR.h"
-#include "touch.h"
+#include "Touch.h"
 #include <stdio.h>
 
 #define TOUCH_AD_VALUE_MAX    (4500)

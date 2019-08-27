@@ -5,17 +5,17 @@
 #include <stdio.h>
 #include "stm32f4xx_conf.h"
 #include "stm32f4_discovery.h"
-#include "stm32f4_discovery_lcd.h"
+#include "libs/stm32f4_discovery_lcd.h"
 #include "stm32f4xx.h"
 
-#include "STMPE811QTR.h"
-#include "pictures.h"
-#include "Widget.h"
-#include "WidgetConfig.h"
-#include "Touch.h"
-#include "Event.h"
-#include "rtwtypes.h"
-#include "debug.h"
+#include "libs/STMPE811QTR.h"
+#include "assets/pictures.h"
+#include "libs/Widget.h"
+#include "libs/WidgetConfig.h"
+#include "libs/Touch.h"
+#include "libs/Event.h"
+#include "libs/rtwtypes.h"
+#include "libs/debug.h"
 
 
 const char *RT_MEMORY_ALLOCATION_ERROR;
