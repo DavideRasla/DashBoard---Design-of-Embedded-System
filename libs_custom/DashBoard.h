@@ -4,7 +4,7 @@
 #define METHODS };
 #define END_CLASS
 
-
+/*
 CLASS(Hsm)
 	State state_;
 	State source_;
@@ -20,3 +20,4 @@ METHODS
 END_CLASS
 
 SUBCLASS(ChildHS)
+*/

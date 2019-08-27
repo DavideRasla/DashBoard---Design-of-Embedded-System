@@ -40,7 +40,7 @@ unsigned char OnTouch( Widget ws[], TPoint *press){
 unsigned char DrawInit( Widget ws[])
 {LCD_SetTextColor(White);
 	unsigned char i;
-	for(i=0; i<3; i++) {
+	for(i=0; i<NUMWIDGETS; i++) {
 		DrawOff(&ws[i]);
 	}
 	return 1;

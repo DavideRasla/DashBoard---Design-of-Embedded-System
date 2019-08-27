@@ -30,8 +30,11 @@ extern "C" {
 #endif
 
 extern const unsigned char ImageBuffer[153600]; //BackGround DashBoard
-extern const unsigned char RightArrow_OFF[1050];
-extern const unsigned char RightArrow_ON[1050];
+extern const unsigned char RightArrow_OFF[2694];
+extern const unsigned char RightArrow_ON[2694];
+extern const unsigned char LeftArrow_ON[2694];
+extern const unsigned char LeftArrow_OFF[2694];
+
 //extern const unsigned char Low_Fuel[1050];
 extern const unsigned char Low_Oil[1014];
 extern const unsigned char Neutral[3254];

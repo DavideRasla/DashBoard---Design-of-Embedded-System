@@ -16,6 +16,9 @@ Image RightArrow = {
 		RightArrow_ON, RightArrow_OFF
 };
 
+Image LeftArrow = {
+		LeftArrow_ON, LeftArrow_OFF
+};
 Image Oil = {
 		Low_Oil, Low_Oil
 };
@@ -37,9 +40,10 @@ Image backg = {
 const Widget MyWatchScr[NUMWIDGETS] = {
 	/*  {x1, yt, xw, yh, WidgetType, void *ws}*/
 		{0, 0, 320, 240, BACKGROUND, (void *)&backg},
-		{200, 150, 40, 40, IMAGE, (void *)&Neut},
-		//{270, 30, 40, 40, IMAGE, (void *)&RightArrow},
-		{10, 10, 30, 16, IMAGE, (void *)&Oil},
+		{140, 200, 40, 40, IMAGE, (void *)&Neut},
+		{270, 5, 40, 40, IMAGE, (void *)&RightArrow},
+		{20, 5, 40, 40, IMAGE, (void *)&LeftArrow},
+		{70, 10, 30, 16, IMAGE, (void *)&Oil},
 /*		{244, 188, 35, 43, BUTTONICON, (void *)&buttonDashBoard},
 		{270, 30, 40, 40, BUTTONICON, (void *)&buttonplus},
 		{270, 105, 40, 40, BUTTONICON, (void *)&buttonminus},
