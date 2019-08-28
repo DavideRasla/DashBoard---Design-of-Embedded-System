@@ -33,6 +33,12 @@ unsigned char OnTouch( Widget ws[], TPoint *press){
  			    res = 1;
  			}
 		}
+		if (ws[i].wt == ICON) {
+			if(contains(&ws[i], press)) {
+				SetEvent(iconinfo(&ws[i])->onevent);
+				res = 1;
+			}
+		}
 	}
 	return res;
 }
@@ -97,23 +103,29 @@ LCD_SetTextColor(White);
 		return 0;
 }
 
+unsigned char DrawIcon( Widget *w){
+	char *imgptr = 0;
+	if(w->wt == ICON){
+		if(IsEvent(iconinfo(w)->onevent)){
+			imgptr = iconinfo(w)->image_on;
+		}
+		else{
+			imgptr = iconinfo(w)->image_off;
+		}
+	}
+	if (imgptr != 0)
+		LCD_DrawPicture(w->xl, w->yt, w->xw, w->yh, imgptr);
+
+	return 1;
+}
+
+
 unsigned char DrawIcons( Widget ws[]){
 	LCD_SetTextColor(White);
 	unsigned char i;
-	char *imgptr = 0;
+
 	for(i=0; i<NUMWIDGETS; i++) {
-		if(ws[i].wt == ICON){
-			if(IsEvent(iconinfo(ws[i])->onevent)){
-				imgptr = iconinfo(ws[i])->image_on;
-			}
-			else{
-				imgptr = iconinfo(ws[i])->image_off;
-			}
-		}
-		if (imgptr != 0) 
-			LCD_DrawPicture(ws[i].xl, ws[i].yt, ws[i].xw, ws[i].yh, imgptr);
-		
-			imgptr = 0;
+		DrawIcon(&ws[i]);
 	}
 	return 1;
 }
