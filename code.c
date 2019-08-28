@@ -90,7 +90,7 @@ void UpdateTime()
 void UpdateFuel(int value){
 
 	if( value < 30){
-			LCD_SetTextColor(Red);
+		LCD_SetTextColor(Red);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(110, 180, value, 10);
 		LCD_SetBackColor(Black);
@@ -115,7 +115,9 @@ void UpdateFuel(int value){
 
 void checkButton(){
 	if(IsEvent(BUTTONTEST)){
-		debuginfo(0,8,8,8);
+		LCD_SetTextColor(White);
+		LCD_SetBackColor(Black);
+		debugInt(50, 59, 8, 8, 8);
 	}
 }
 
