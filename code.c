@@ -90,7 +90,7 @@ void UpdateTime()
 void UpdateFuel(int value){
 
 	if( value < 30){
-			LCD_SetTextColor(Red);
+		LCD_SetTextColor(Red);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(110, 180, value, 10);
 		LCD_SetBackColor(Black);

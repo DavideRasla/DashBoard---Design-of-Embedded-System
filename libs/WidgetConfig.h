@@ -8,7 +8,7 @@
 #ifndef WIDGETCONFIG_H_
 #define WIDGETCONFIG_H_
 
-#define NUMWIDGETS 5
+#define NUMWIDGETS 6
 
 #define BAKCG 0
 #define BLeft_Arrow 1
