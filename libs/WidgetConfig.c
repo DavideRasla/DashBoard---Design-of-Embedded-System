@@ -52,6 +52,5 @@ const Widget MyWatchScr[NUMWIDGETS] = {
 		{60, 20, 30, 16, ICON, (void *)&Oil},
 		{230, 20, 30, 30, ICON, (void *)&Low_Fuel},
 		{10, 80, 40, 40, IMAGE_ARR, (void *)&RUN},
-
 };
 
