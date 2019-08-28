@@ -19,8 +19,8 @@ Image RightArrow = {
 Image LeftArrow = {
 		LeftArrow_ON, LeftArrow_OFF
 };
-ButtonIcon Oil = {
-		Low_Oil, Low_Oil, BUTTONTEST
+Icon Oil = {
+		Low_Oil, Low_Oil, OIL
 };
 
 Image Neut = {
