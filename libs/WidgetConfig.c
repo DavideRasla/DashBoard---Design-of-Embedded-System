@@ -50,8 +50,8 @@ const Widget MyWatchScr[NUMWIDGETS] = {
 		{270, 5, 40, 40, IMAGE, (void *)&RightArrow},
 		{10, 5, 40, 40, IMAGE, (void *)&LeftArrow},
 		{60, 20, 30, 16, IMAGE, (void *)&Oil},
-		{230, 20, 30, 30, IMAGE, (void *)&Low_Fuel},
-		{10, 80, 40, 40, IMAGE, (void *)&RUN},
+		{110, 20, 30, 30, IMAGE, (void *)&Low_Fuel},
+		{140, 200, 40, 40, IMAGE, (void *)&RUN},
 
 };
 
