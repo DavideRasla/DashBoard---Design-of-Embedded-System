@@ -143,12 +143,15 @@ Angle++;
 TASK(TaskGuiDashboard)
 {
 	static uint8_T Fuel_Value = 0;
-	
-	UpdateFuel(Fuel_Value++);
-	DrawIcons(MyWatchScr);
+	static uint8_T gear = 0;
 	UpdateTime();
+	UpdateFuel(Fuel_Value++);
+	ChangeGear(&MyWatchScr[5], gear++);
 	if(Fuel_Value == 100 ){
 		Fuel_Value = 0;
+	}
+	if(gear == 7 ){
+		gear = 0;
 	}
 	checkButton();
 } 
@@ -188,7 +191,8 @@ int main(void)
 
 	/* Draw the background */
 	DrawInit(MyWatchScr);
-	
+	/*Draw the icons*/
+	DrawIcons(MyWatchScr);
 
 	LCD_SetTextColor(White);
 	//WPrint(&MyWatchScr[SEP1STR], ":");
