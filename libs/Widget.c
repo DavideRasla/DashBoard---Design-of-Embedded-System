@@ -88,11 +88,42 @@ LCD_SetTextColor(White);
 	//debugInt(0,0,(int) w->xl,(int) w->yt, 1);
 		return 0;
 }
-
-unsigned char ChangeGear( Widget *w, int Gear)
+/**
+  * @brief  Change the gear on the screem
+  * @param  ws[5], N = 0; 1 = 1; 2 = 2...
+  * @retval None
+  */
+unsigned char ChangeGear( Widget *w, int Gear)//ws[5],
 {
-	char *imgptr = 0;
+char *imgptr = 0;
 LCD_SetTextColor(White);
+	switch (Gear) {
+		case 0:
+			imgptr = imgGearinfo(w)->N;
+			break;
+		case 1:
+			imgptr = imgGearinfo(w)->One;
+			break;
+		case 2:
+			imgptr = imgGearinfo(w)->Two;
+			break;
+		case 3:
+			imgptr = imgGearinfo(w)->Three;
+			break;
+		case 4:
+			imgptr = imgGearinfo(w)->Four;
+			break;
+		case 5:
+			imgptr = imgGearinfo(w)->Five;
+			break;
+		case 6:
+			imgptr = imgGearinfo(w)->Six;
+			break;
+	}
+	if (imgptr != 0) {
+		LCD_DrawPicture(w->xl, w->yt, w->xw, w->yh, imgptr);
+		return 1;
+	}
 
 		return 0;
 }

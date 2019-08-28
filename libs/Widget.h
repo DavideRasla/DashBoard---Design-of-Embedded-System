@@ -63,6 +63,8 @@ typedef struct {
 #define biconinfo(w) ((ButtonIcon *)((w)->ws))
 #define iconinfo(w) ((Icon *)((w).ws))
 #define imginfo(w) ((Image *)((w)->ws))
+#define imgGearinfo(w) ((Image_ARRAY *)((w)->ws))
+
 
 unsigned char OnTouch( Widget ws[], TPoint *press);
 unsigned char DrawInit( Widget ws[]);
@@ -70,5 +72,6 @@ unsigned char DrawOn( Widget *w);
 unsigned char DrawOff( Widget *w);
 unsigned char DrawIcons( Widget *w);
 unsigned char WPrint( Widget *w, char *s);
+unsigned char ChangeGear( Widget *w, int Gear);
 
 #endif /* BUTTON_H_ */
