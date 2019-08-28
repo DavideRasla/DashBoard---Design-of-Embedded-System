@@ -55,7 +55,7 @@ unsigned char DrawOn( Widget *w)
 		break;
 	case BACKGROUND:
 	case IMAGE:
-		imgptr = imginfo(w)->image_on;
+		imgptr = imginfo(w)->image;
 		break;
 	}
 	if (imgptr != 0) {
@@ -77,7 +77,7 @@ LCD_SetTextColor(White);
 		break;
 	case BACKGROUND:
 	case IMAGE:
-		imgptr = imginfo(w)->image_off;
+		imgptr = imginfo(w)->image;
 		break;
 	}
 	if (imgptr != 0) {
@@ -89,20 +89,31 @@ LCD_SetTextColor(White);
 		return 0;
 }
 
+unsigned char ChangeGear( Widget *w, int Gear)
+{
+	char *imgptr = 0;
+LCD_SetTextColor(White);
+
+		return 0;
+}
+
 unsigned char DrawIcons( Widget ws[]){
 	LCD_SetTextColor(White);
 	unsigned char i;
+	char *imgptr = 0;
 	for(i=0; i<NUMWIDGETS; i++) {
-		char *imgptr = 0;
 		if(ws[i].wt == ICON){
-			if(IsEvent(iconinfo(ws[i])->onevent))
+			if(IsEvent(iconinfo(ws[i])->onevent)){
 				imgptr = iconinfo(ws[i])->image_on;
-			else
+			}
+			else{
 				imgptr = iconinfo(ws[i])->image_off;
+			}
 		}
-		if (imgptr != 0) {
+		if (imgptr != 0) 
 			LCD_DrawPicture(ws[i].xl, ws[i].yt, ws[i].xw, ws[i].yh, imgptr);
-		}
+		
+			imgptr = 0;
 	}
 	return 1;
 }
