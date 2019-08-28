@@ -16,7 +16,7 @@ Icon RightArrow = {
 		RightArrow_ON, RightArrow_OFF, AR
 };
 
-Image LeftArrow = {
+Icon LeftArrow = {
 		LeftArrow_ON, LeftArrow_OFF , AL
 };
 
@@ -24,7 +24,7 @@ Icon Oil = {
 		Low_Oil_ON, Low_Oil_OFF, OIL
 };
 
-Image RUN = {
+Image_ARRAY RUN = {
 		Neutral, First, Second, third, fourth, fifth, sixth
 };
 
@@ -41,17 +41,16 @@ Text txt = {
 };
 
 Image backg = {
-	ImageBuffer, ImageBuffer
+	ImageBuffer
 };
 
 const Widget MyWatchScr[NUMWIDGETS] = {
 	/*  {x1, yt, xw, yh, WidgetType, void *ws}*/
 		{0, 0, 320, 240, BACKGROUND, (void *)&backg},
-		{270, 5, 40, 40, IMAGE, (void *)&RightArrow},
-		{10, 5, 40, 40, IMAGE, (void *)&LeftArrow},
-		{60, 20, 30, 16, IMAGE, (void *)&Oil},
-		{110, 20, 30, 30, IMAGE, (void *)&Low_Fuel},
-		{140, 200, 40, 40, IMAGE, (void *)&RUN},
-
+		{270, 5, 40, 40, ICON, (void *)&RightArrow},
+		{10, 5, 40, 40, ICON, (void *)&LeftArrow},
+		{60, 20, 30, 16, ICON, (void *)&Oil},
+		{230, 20, 30, 30, ICON, (void *)&Low_Fuel},
+		{10, 80, 40, 40, IMAGE_ARR, (void *)&RUN},
 };
 

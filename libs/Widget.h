@@ -13,19 +13,31 @@
 
 
 typedef enum  {
-	BACKGROUND, BUTTONICON, TEXT, IMAGE, ICON
+	BACKGROUND, BUTTONICON, TEXT, IMAGE,IMAGE_ARR, ICON
 } WidgetType;
 
 typedef struct {
-	unsigned char *image_off;
 	unsigned char *image_on;
+	unsigned char *image_off;
 	Event 		  onevent;
 } Icon;
 
 typedef struct {
-	unsigned char *image_off;
-	unsigned char *image_on;
+	unsigned char *image;
 } Image;
+
+
+typedef struct {
+	unsigned char *N;
+	unsigned char *One;
+	unsigned char *Two;
+	unsigned char *Three;
+	unsigned char *Four;
+	unsigned char *Five;
+	unsigned char *Six;
+
+} Image_ARRAY;
+
 
 typedef struct {
 	unsigned char *iconp;

@@ -198,7 +198,7 @@ int main(void)
 	 * and after that periodically
 	 * */
 	SetRelAlarm(AlarmTaskLCD, 10, 50);
-	SetRelAlarm(AlarmTaskGuiDashboard, 10, 30);
+	SetRelAlarm(AlarmTaskGuiDashboard, 10, 100);
 
   /* Forever loop: background activities (if any) should go here */
 	for (;;) {
