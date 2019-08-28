@@ -35,8 +35,12 @@ unsigned char OnTouch( Widget ws[], TPoint *press){
 		}
 		if (ws[i].wt == ICON) {
 			if(contains(&ws[i], press)) {
+			if(IsEvent(iconinfo(&ws[i])->onevent)){
+				ClearEvent(iconinfo(&ws[i])->onevent);
+				}else{
 				SetEvent(iconinfo(&ws[i])->onevent);
-				res = 1;
+				}
+			res = 1;
 			}
 		}
 	}

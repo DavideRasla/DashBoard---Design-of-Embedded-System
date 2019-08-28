@@ -23,13 +23,10 @@ const char *RT_MEMORY_ALLOCATION_ERROR;
 
 
 uint8_T hours=0, minutes=0, seconds=0, tenths=0, mode=0;
-boolean_T plusButton;
-boolean_T minusButton;
-boolean_T timeMode;
-boolean_T timesetmode;
-boolean_T alarmMode;
-boolean_T DashBoardMode;
 
+boolean_T DashBoardMode;
+uint8_T IstantSpeed = 0;
+uint32_t Speedometer = 0;
 /*
  * SysTick ISR2
  */
@@ -112,15 +109,24 @@ void UpdateFuel(int value){
 		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
 	}
 }
-
-void checkButton(){
-	if(IsEvent(BUTTONTEST)){
-		LCD_SetTextColor(White);
-		LCD_SetBackColor(Black);
-		debugInt(50, 59, 8, 8, 8);
-	}
+void UpdateSpeed(){
+char text[20];
+	LCD_SetTextColor(Black);
+	LCD_SetBackColor(Black);
+	LCD_DrawFullRect(110, 100, 120, 30);
+	LCD_SetTextColor(White);
+   	sprintf((char*)text,"%d Km/h", IstantSpeed);
+    LCD_DisplayStringXY(130, 100, text);
 }
-
+void UpdateSpeedoMeter(){
+char text[20];
+	LCD_SetTextColor(Black);
+	LCD_SetBackColor(Black);
+	LCD_DrawFullRect(130, 200, 100, 30);
+	LCD_SetTextColor(White);
+   	sprintf((char*)text,"%d Km", Speedometer);
+    LCD_DisplayStringXY(130, 210, text);
+}
 void strencode2digit(char *str, int digit)
 {
 	str[2]=0;
@@ -147,13 +153,20 @@ TASK(TaskGuiDashboard)
 	UpdateTime();
 	UpdateFuel(Fuel_Value++);
 	ChangeGear(&MyWatchScr[5], gear++);
+	UpdateSpeed();
+	UpdateSpeedoMeter();
+	DrawIcons(MyWatchScr);
+
+	IstantSpeed++;
+
 	if(Fuel_Value == 100 ){
 		Fuel_Value = 0;
 	}
 	if(gear == 7 ){
 		gear = 0;
 	}
-	checkButton();
+	if(IstantSpeed == 99)
+		IstantSpeed = 0;
 } 
 
 /**
@@ -192,7 +205,7 @@ int main(void)
 	/* Draw the background */
 	DrawInit(MyWatchScr);
 	/*Draw the icons*/
-	DrawIcons(MyWatchScr);
+	
 
 	LCD_SetTextColor(White);
 	//WPrint(&MyWatchScr[SEP1STR], ":");
@@ -202,7 +215,7 @@ int main(void)
 	 * and after that periodically
 	 * */
 	SetRelAlarm(AlarmTaskLCD, 10, 50);
-	SetRelAlarm(AlarmTaskGuiDashboard, 10, 100);
+	SetRelAlarm(AlarmTaskGuiDashboard, 10, 500);
 
   /* Forever loop: background activities (if any) should go here */
 	for (;;) {
