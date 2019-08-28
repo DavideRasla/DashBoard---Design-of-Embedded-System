@@ -25,6 +25,10 @@
 #define SEP2STR 12
 
 #define BUTTONTEST 0x01
+#define OIL 0x02
+#define FUEL 0x04
+#define AR 0x08
+#define AL 0x010
 //#define TIMESETMODE 0x02
 //#define ALARMMODE 0x04
 //#define DashBoardMODE 0x08

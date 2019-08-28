@@ -145,6 +145,7 @@ TASK(TaskGuiDashboard)
 	static uint8_T Fuel_Value = 0;
 	
 	UpdateFuel(Fuel_Value++);
+	DrawIcons(MyWatchScr);
 	UpdateTime();
 	if(Fuel_Value == 100 ){
 		Fuel_Value = 0;

@@ -89,6 +89,24 @@ LCD_SetTextColor(White);
 		return 0;
 }
 
+unsigned char DrawIcons( Widget ws[]){
+	LCD_SetTextColor(White);
+	unsigned char i;
+	for(i=0; i<NUMWIDGETS; i++) {
+		char *imgptr = 0;
+		if(ws[i].wt == ICON){
+			if(IsEvent(iconinfo(ws[i])->onevent))
+				imgptr = iconinfo(ws[i])->image_on;
+			else
+				imgptr = iconinfo(ws[i])->image_off;
+		}
+		if (imgptr != 0) {
+			LCD_DrawPicture(ws[i].xl, ws[i].yt, ws[i].xw, ws[i].yh, imgptr);
+		}
+	}
+	return 1;
+}
+
 unsigned char WPrint( Widget *w, char *s)
 {
 	if (w->wt == TEXT) {

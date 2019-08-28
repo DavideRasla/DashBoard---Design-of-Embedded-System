@@ -12,15 +12,16 @@
 #include "stm32f4_discovery_lcd.h"
 #include "fonts.h"
 
-Image RightArrow = {
-		RightArrow_ON, RightArrow_OFF
+Icon RightArrow = {
+		RightArrow_ON, RightArrow_OFF, AR
 };
 
 Image LeftArrow = {
-		LeftArrow_ON, LeftArrow_OFF
+		LeftArrow_ON, LeftArrow_OFF , AL
 };
-Image Oil = {
-		Low_Oil_ON, Low_Oil_OFF
+
+Icon Oil = {
+		Low_Oil_ON, Low_Oil_OFF, OIL
 };
 
 Image RUN = {
@@ -29,8 +30,8 @@ Image RUN = {
 
 
 
-Image Low_Fuel = {
-		LowFuel_ON, LowFuel_OFF
+Icon Low_Fuel = {
+		LowFuel_ON, LowFuel_OFF, FUEL
 };
 
 
