@@ -8,6 +8,7 @@
 #include "libs/stm32f4_discovery_lcd.h"
 #include "stm32f4xx.h"
 
+#include "config.h"
 #include "libs/STMPE811QTR.h"
 #include "assets/pictures.h"
 #include "libs/Widget.h"
@@ -276,8 +277,8 @@ int main(void)
 	/* Program cyclic alarms which will fire after an initial offset,
 	 * and after that periodically
 	 * */
-	SetRelAlarm(AlarmTaskLCD, 10, 50);
-	SetRelAlarm(AlarmTaskGuiDashboard, 10, 100);
+	SetRelAlarm(AlarmTaskLCD, TASKOFFSET, TASKLCD_FREQ);
+	SetRelAlarm(AlarmTaskGuiDashboard, TASKOFFSET, TASKGUI_FREQ);
 
   /* Forever loop: background activities (if any) should go here */
 	for (;;) {

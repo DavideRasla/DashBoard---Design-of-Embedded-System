@@ -1,15 +1,11 @@
 
 #include <stdlib.h>
 #include "io.h"
+#include "../config.h"
 
 #include "../libs/tm_stm32f4_gpio.h"
 
 //aggiungere libreria adc!!
-
-#define BUTTON_PORT     (GPIOE)
-#define BUTTON_PIN      (GPIO_PIN_5)
-
-
 
 void io_init(){
 	TM_GPIO_Init(BUTTON_PORT,
