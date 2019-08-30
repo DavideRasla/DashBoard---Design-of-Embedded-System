@@ -189,7 +189,7 @@ Angle++;
 TASK(TaskGuiDashboard)
 {
 	static uint8_T Fuel_Value = 0;
-	static uint32_t RPM_Value = 200;
+	static uint32_t RPM_Value = 3000;
 	static uint8_T gear = 0;
 	UpdateTime();
 	UpdateFuel(Fuel_Value++);
@@ -201,7 +201,7 @@ TASK(TaskGuiDashboard)
 
 	IstantSpeed++;
 	Speedometer++;
-	RPM_Value +=50;
+	RPM_Value = 10500;
 
 	if(Fuel_Value == 100 )
 		Fuel_Value = 0;
@@ -209,11 +209,12 @@ TASK(TaskGuiDashboard)
 	if(gear == 7 )
 		gear = 0;
 
-	if(IstantSpeed == 99)
+	if(IstantSpeed == 50){
 		IstantSpeed = 0;
+		RPM_Value = 5000;
+	}
 
-	if(RPM_Value == 13000)
-		RPM_Value = 200;
+
 
 	if(Speedometer == 130000)
 		Speedometer = 0;
