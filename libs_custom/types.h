@@ -10,6 +10,7 @@ typedef enum { false, true } bool_t;
 
 // Converts an expression to bool_t
 #define BOOL(expr) (!!(expr))
+#define U32T(expr) ((uint32_T)(expr))
 
 typedef signed char int8_T;
 typedef unsigned char uint8_T;

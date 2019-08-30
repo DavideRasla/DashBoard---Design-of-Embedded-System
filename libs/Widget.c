@@ -101,7 +101,7 @@ LCD_SetTextColor(White);
 		return 0;
 }
 
-unsigned char ChangeGear( const Widget *w, int Gear)
+unsigned char ChangeGear(  Widget *w, int Gear)
 {
 	char *imgptr = 0;
 LCD_SetTextColor(White);
