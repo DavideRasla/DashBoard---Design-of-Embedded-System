@@ -62,6 +62,7 @@ CPU mySystem {
 			
 			// STM LIBS
 			APP_SRC = "libs/tm_stm32f4_gpio.c";
+			APP_SRC = "libs/tm_stm32f4_adc.c";
 			//COMPILER_TYPE = KEIL;
 			COMPILER_TYPE = GNU; 
 			MULTI_STACK = FALSE;

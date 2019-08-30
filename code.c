@@ -18,7 +18,7 @@
 #include "libs/debug.h"
 #include "libs_custom/io.h"
 #include "libs_custom/types.h"
-
+#include "libs/tm_stm32f4_adc.h"
 
 
 const char *RT_MEMORY_ALLOCATION_ERROR;
@@ -161,7 +161,8 @@ char text[20];
 	LCD_SetBackColor(Black);
 	LCD_DrawFullRect(90, 100, 120, 30);
 	LCD_SetTextColor(White);
-   	sprintf((char*)text,"%d Km/h", IstantSpeed);
+  //	sprintf((char*)text,"%d Km/h", IstantSpeed);DAVIDE:: to restore this
+    sprintf((char*)text,"%d Km/h", Speed_Read());
     LCD_DisplayStringXY(90, 100, text);
 }
 
@@ -222,6 +223,7 @@ TASK(TaskGuiDashboard)
 		IstantSpeed = 0;
 		RPM_Value = 5000;
 	}
+
 
 
 
