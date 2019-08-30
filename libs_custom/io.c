@@ -1,6 +1,7 @@
 
 #include <stdlib.h>
 #include "io.h"
+#include "../config.h"
 
 #include "../libs/tm_stm32f4_gpio.h"
 #include "../libs/tm_stm32f4_adc.h"
