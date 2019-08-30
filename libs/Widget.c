@@ -101,13 +101,42 @@ LCD_SetTextColor(White);
 		return 0;
 }
 
-unsigned char ChangeGear(  Widget *w, int Gear)
-{
-	char *imgptr = 0;
-LCD_SetTextColor(White);
+unsigned char ChangeGear( const Widget *w, int Gear)
+ {
+char *imgptr = 0;
+       char *imgptr = 0;
+ LCD_SetTextColor(White);
+      switch (Gear) {
+               case 0:
+                       imgptr = imgGearinfo(w)->N;
+                       break;
+               case 1:
+                       imgptr = imgGearinfo(w)->One;
+                       break;
+               case 2:
+                       imgptr = imgGearinfo(w)->Two;
+                       break;
+               case 3:
+                       imgptr = imgGearinfo(w)->Three;
+                       break;
+               case 4:
+                       imgptr = imgGearinfo(w)->Four;
+                       break;
+               case 5:
+                       imgptr = imgGearinfo(w)->Five;
+                       break;
+               case 6:
+                       imgptr = imgGearinfo(w)->Six;
+                       break;
+       }
+       if (imgptr != 0) {
+               LCD_DrawPicture(w->xl, w->yt, w->xw, w->yh, imgptr);
+               return 1;
+       }
 
-		return 0;
+                return 0;
 }
+
 
 unsigned char DrawIcon(const Widget *w){
 	char *imgptr = 0;
