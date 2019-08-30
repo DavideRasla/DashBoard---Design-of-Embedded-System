@@ -134,12 +134,12 @@ CHANNEL   ADC1   ADC2   ADC3
 
 /**
  * @brief  Multipliers for VBAT measurement */
-#if defined (STM32F40_41xxx)
-#define ADC_VBAT_MULTI			2
-#endif
-#if defined (STM32F427_437xx) || defined (STM32F429_439xx) || defined (STM32F401xx) || defined (STM32F411xE)
+
+//#define ADC_VBAT_MULTI			2
+
+
 #define ADC_VBAT_MULTI			4
-#endif
+
 
 /**
  * @}

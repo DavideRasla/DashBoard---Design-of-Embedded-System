@@ -17,7 +17,7 @@
  * |----------------------------------------------------------------------
  */
 #include "tm_stm32f4_adc.h"
-
+#include "stm32f4xx_adc.h"
 /* Private functions */
 void TM_ADC_INT_Channel_0_Init(ADC_TypeDef* ADCx);
 void TM_ADC_INT_Channel_1_Init(ADC_TypeDef* ADCx);
