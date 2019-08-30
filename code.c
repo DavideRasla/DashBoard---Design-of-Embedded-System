@@ -26,7 +26,7 @@ uint8_T hours=0, minutes=0, seconds=0, tenths=0, mode=0;
 
 boolean_T DashBoardMode;
 uint8_T IstantSpeed = 0;
-uint32_t Speedometer = 0;
+uint32_t Speedometer = 128000;
 /*
  * SysTick ISR2
  */
@@ -94,7 +94,7 @@ void UpdateFuel(int value){
 		LCD_SetTextColor(Black);
 		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
 	}else if(value >30 && value< 70){
-		LCD_SetTextColor(yellow);
+		LCD_SetTextColor(Yellow);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(110, 180, value, 10);
 		LCD_SetBackColor(Black);
@@ -109,24 +109,64 @@ void UpdateFuel(int value){
 		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
 	}
 }
+
+void UpdateMotorRPM(int value){
+
+	if( value<=5000 ){
+		LCD_SetTextColor(Black);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 50, 44,180);
+		LCD_SetTextColor(Green);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 190 - (value/100) , 44, (value/100) );
+	}else if(value >=5000 && value< 8000){
+		LCD_SetTextColor(Black);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 50, 44,190);
+		LCD_SetTextColor(Yellow);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 190 - (value/100), 44,(value/100));
+		LCD_SetTextColor(Green);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 140, 44, 50);
+	}else{
+		LCD_SetTextColor(Black);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 50, 44,190);
+		LCD_SetTextColor(Red);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 190 - (value/100), 44,(value/100));
+		LCD_SetTextColor(Yellow);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 110, 44, 30);
+		LCD_SetTextColor(Green);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(241, 140, 44, 50);
+
+
+	}
+}
+
 void UpdateSpeed(){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(110, 100, 120, 30);
+	LCD_DrawFullRect(90, 100, 120, 30);
 	LCD_SetTextColor(White);
    	sprintf((char*)text,"%d Km/h", IstantSpeed);
-    LCD_DisplayStringXY(130, 100, text);
+    LCD_DisplayStringXY(90, 100, text);
 }
+
 void UpdateSpeedoMeter(){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(130, 200, 100, 30);
+	LCD_DrawFullRect(100, 200, 100, 30);
 	LCD_SetTextColor(White);
    	sprintf((char*)text,"%d Km", Speedometer);
-    LCD_DisplayStringXY(130, 210, text);
+    LCD_DisplayStringXY(100, 210, text);
 }
+
 void strencode2digit(char *str, int digit)
 {
 	str[2]=0;
@@ -149,24 +189,34 @@ Angle++;
 TASK(TaskGuiDashboard)
 {
 	static uint8_T Fuel_Value = 0;
+	static uint32_t RPM_Value = 200;
 	static uint8_T gear = 0;
 	UpdateTime();
 	UpdateFuel(Fuel_Value++);
+	UpdateMotorRPM(RPM_Value);
 	ChangeGear(&MyWatchScr[5], gear++);
 	UpdateSpeed();
 	UpdateSpeedoMeter();
 	DrawIcons(MyWatchScr);
 
 	IstantSpeed++;
+	Speedometer++;
+	RPM_Value +=50;
 
-	if(Fuel_Value == 100 ){
+	if(Fuel_Value == 100 )
 		Fuel_Value = 0;
-	}
-	if(gear == 7 ){
+
+	if(gear == 7 )
 		gear = 0;
-	}
+
 	if(IstantSpeed == 99)
 		IstantSpeed = 0;
+
+	if(RPM_Value == 13000)
+		RPM_Value = 200;
+
+	if(Speedometer == 130000)
+		Speedometer = 0;
 } 
 
 /**
@@ -215,7 +265,7 @@ int main(void)
 	 * and after that periodically
 	 * */
 	SetRelAlarm(AlarmTaskLCD, 10, 50);
-	SetRelAlarm(AlarmTaskGuiDashboard, 10, 500);
+	SetRelAlarm(AlarmTaskGuiDashboard, 10, 100);
 
   /* Forever loop: background activities (if any) should go here */
 	for (;;) {

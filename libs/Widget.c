@@ -11,7 +11,7 @@
 #include "debug.h"
 #include "stm32f4_discovery_lcd.c"
 
-unsigned char contains( Widget *w, TPoint *point){
+unsigned char contains( const Widget *w, TPoint *point){
 	if	((point->x >= w->xl) && (point->x <= w->xl + w->xw) &&
 		 (point->y >= w->yt) && (point->y <= w->yt + w->yh)) {
 /*		debuginfo(5, point->x, point->y, 0);
@@ -22,7 +22,7 @@ unsigned char contains( Widget *w, TPoint *point){
 		return 0;
 }
 
-unsigned char OnTouch( Widget ws[], TPoint *press){
+unsigned char OnTouch(const Widget ws[], TPoint *press){
 	unsigned char i, res;
 
 	res = 0;
@@ -47,7 +47,7 @@ unsigned char OnTouch( Widget ws[], TPoint *press){
 	return res;
 }
 
-unsigned char DrawInit( Widget ws[])
+unsigned char DrawInit( const Widget ws[])
 {LCD_SetTextColor(White);
 	unsigned char i;
 	for(i=0; i<NUMWIDGETS; i++) {
@@ -56,7 +56,7 @@ unsigned char DrawInit( Widget ws[])
 	return 1;
 }
 
-unsigned char DrawOn( Widget *w)
+unsigned char DrawOn(const Widget *w)
 {
 	char *imgptr = 0;
 	switch (w->wt) {
@@ -77,7 +77,7 @@ unsigned char DrawOn( Widget *w)
 		return 0;
 }
 
-unsigned char DrawOff( Widget *w)
+unsigned char DrawOff(const Widget *w)
 {
 	char *imgptr = 0;
 LCD_SetTextColor(White);
@@ -138,7 +138,7 @@ LCD_SetTextColor(White);
 		return 0;
 }
 
-unsigned char DrawIcon( Widget *w){
+unsigned char DrawIcon(const Widget *w){
 	char *imgptr = 0;
 	if(w->wt == ICON){
 		if(IsEvent(iconinfo(w)->onevent)){
@@ -155,7 +155,7 @@ unsigned char DrawIcon( Widget *w){
 }
 
 
-unsigned char DrawIcons( Widget ws[]){
+unsigned char DrawIcons(const Widget ws[]){
 	LCD_SetTextColor(White);
 	unsigned char i;
 
@@ -165,7 +165,7 @@ unsigned char DrawIcons( Widget ws[]){
 	return 1;
 }
 
-unsigned char WPrint( Widget *w, char *s)
+unsigned char WPrint(const Widget *w, char *s)
 {
 	if (w->wt == TEXT) {
 		LCD_SetTextColor(txtinfo(w)->color);
