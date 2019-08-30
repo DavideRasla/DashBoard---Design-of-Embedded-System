@@ -53,12 +53,15 @@ CPU mySystem {
 			APP_SRC = "code.c";
 			APP_SRC = "libs/Touch.c";
 			APP_SRC = "assets/pictures.c";
-			//APP_SRC = "DashBoard";
 			APP_SRC = "libs/Event.c";
 			APP_SRC = "libs/Widget.c";
 			APP_SRC = "libs/WidgetConfig.c";
 			APP_SRC = "libs/STMPE811QTR.c";
 			APP_SRC = "libs/debug.c";
+			APP_SRC = "libs_custom/io.c";
+			
+			// STM LIBS
+			APP_SRC = "libs/tm_stm32f4_gpio.c";
 			//COMPILER_TYPE = KEIL;
 			COMPILER_TYPE = GNU; 
 			MULTI_STACK = FALSE;

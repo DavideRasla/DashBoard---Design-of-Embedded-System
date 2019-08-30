@@ -14,8 +14,9 @@
 #include "libs/WidgetConfig.h"
 #include "libs/Touch.h"
 #include "libs/Event.h"
-#include "libs/rtwtypes.h"
 #include "libs/debug.h"
+#include "libs_custom/io.h"
+#include "libs_custom/types.h"
 
 
 
@@ -23,12 +24,12 @@ const char *RT_MEMORY_ALLOCATION_ERROR;
 
 
 uint8_T hours=0, minutes=0, seconds=0, tenths=0, mode=0;
-boolean_T plusButton;
-boolean_T minusButton;
-boolean_T timeMode;
-boolean_T timesetmode;
-boolean_T alarmMode;
-boolean_T DashBoardMode;
+bool_t plusButton;
+bool_t minusButton;
+bool_t timeMode;
+bool_t timesetmode;
+bool_t alarmMode;
+bool_t DashBoardMode;
 
 /*
  * SysTick ISR2
@@ -114,10 +115,10 @@ void UpdateFuel(int value){
 }
 
 void checkButton(){
-	if(IsEvent(BUTTONTEST)){
+	if(button_read() == true){
 		LCD_SetTextColor(White);
 		LCD_SetBackColor(Black);
-		debugInt(50, 59, 8, 8, 8);
+		debugInt(60, 60, 8, 8, 8);
 	}
 }
 
@@ -197,6 +198,9 @@ int main(void)
 	LCD_SetTextColor(White);
 	//WPrint(&MyWatchScr[SEP1STR], ":");
 	//WPrint(&MyWatchScr[SEP2STR], ":");
+
+	//Initialize gpio
+	io_init();
 
 	/* Program cyclic alarms which will fire after an initial offset,
 	 * and after that periodically
