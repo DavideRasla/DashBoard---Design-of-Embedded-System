@@ -65,14 +65,13 @@ typedef struct {
 #define imginfo(w) ((Image *)((w)->ws))
 #define imgGearinfo(w) ((Image_ARRAY *)((w)->ws))
 
-
-unsigned char OnTouch(  const Widget ws[], TPoint *press);
-unsigned char DrawInit( const Widget ws[]);
+unsigned char OnTouch( const Widget ws[], TPoint *press);
+unsigned char DrawInit(const Widget ws[]);
 unsigned char DrawOn( const Widget *w);
 unsigned char DrawOff( const Widget *w);
 unsigned char DrawIcons(const Widget w[]);
-unsigned char DrawIcon( const Widget *w);
+unsigned char DrawIcon(const Widget *w);
 unsigned char WPrint( const Widget *w, char *s);
-unsigned char ChangeGear( const Widget *w, int Gear);
+unsigned char ChangeGear( Widget *w, int Gear);
 
 #endif /* BUTTON_H_ */

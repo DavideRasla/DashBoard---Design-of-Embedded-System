@@ -22,7 +22,8 @@ unsigned char contains( const Widget *w, TPoint *point){
 		return 0;
 }
 
-unsigned char OnTouch( const Widget ws[], TPoint *press){
+
+unsigned char OnTouch(const Widget ws[], TPoint *press){
 	unsigned char i, res;
 
 	res = 0;
@@ -35,8 +36,12 @@ unsigned char OnTouch( const Widget ws[], TPoint *press){
 		}
 		if (ws[i].wt == ICON) {
 			if(contains(&ws[i], press)) {
+			if(IsEvent(iconinfo(&ws[i])->onevent)){
+				ClearEvent(iconinfo(&ws[i])->onevent);
+				}else{
 				SetEvent(iconinfo(&ws[i])->onevent);
-				res = 1;
+				}
+			res = 1;
 			}
 		}
 	}
@@ -52,7 +57,8 @@ unsigned char DrawInit( const Widget ws[])
 	return 1;
 }
 
-unsigned char DrawOn( const Widget *w)
+
+unsigned char DrawOn(const Widget *w)
 {
 	char *imgptr = 0;
 	switch (w->wt) {
