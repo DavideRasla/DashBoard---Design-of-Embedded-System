@@ -191,7 +191,7 @@ void checkButtons(){
  *  \return void
  */
 void UpdateMotorRPM(){
-	if(Clutch_Read()==0){
+	//if(Clutch_Read()==0 && Actual_Gear != Neutral_Gear){ //DAVIDE: Credo sia concettualmente sbagliato che il motore non salga di giri se la frizione è tirata
 		if( RPM_Value>=ZERO && RPM_Value<RPM_LOW ){
 			LCD_SetTextColor(Black);
 			LCD_SetBackColor(Black);
@@ -223,7 +223,7 @@ void UpdateMotorRPM(){
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 140, 44, 50);	
 		}	
-	}else{/*Draw a low bar in case the clutch is on */
+	/*}else{/*Draw a low bar in case the clutch is on 
 			LCD_SetTextColor(Black);
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 50, 44,180);
@@ -231,6 +231,7 @@ void UpdateMotorRPM(){
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 190 - (RPM_LOW/100) , 44, (RPM_LOW/100) );
 	}
+	*/
 }
 /*!
  *  \brief Used to print a variable on the screen
@@ -267,8 +268,8 @@ char text[20];
 	LCD_SetTextColor(White);
 
 if( StopEngine == ZERO ){//if engine can work
-	if(Clutch_Read()==0){//if the clutch is not on
-					debug(Actual_Accel);
+	if(Clutch_Read()==0 && Actual_Gear != Neutral_Gear){//if the clutch is not on
+					//debug(Actual_Accel);
 						if(Actual_Accel>ZERO) {//Positive accelleration, need to increase the speed
 							if(IstantSpeed == ZERO){
 									IstantSpeed = 5;
