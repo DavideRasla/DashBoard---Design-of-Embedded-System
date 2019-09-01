@@ -44,7 +44,7 @@ Image backg = {
 	ImageBuffer
 };
 
-const Widget MyWatchScr[NUMWIDGETS] = {
+const Widget MyDashBoardScr[NUMWIDGETS] = {
 	/*  {x1, yt, xw, yh, WidgetType, void *ws}*/
 		{0, 0, 320, 240, BACKGROUND, (void *)&backg},
 		{270, 5, 40, 40, ICON, (void *)&RightArrow},
@@ -52,5 +52,6 @@ const Widget MyWatchScr[NUMWIDGETS] = {
 		{60, 20, 30, 16, ICON, (void *)&Oil},
 		{230, 20, 30, 30, ICON, (void *)&Low_Fuel},
 		{10, 80, 40, 40, IMAGE_ARR, (void *)&RUN},
+		{70, 30, 40, 40, TEXT, (void *)&txt},
 };
 

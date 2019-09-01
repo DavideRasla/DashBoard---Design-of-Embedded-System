@@ -21,14 +21,19 @@
 
 
 
-const char *RT_MEMORY_ALLOCATION_ERROR;
 
+uint8_T hours=13, minutes=44, seconds=ZERO;
 
-uint8_T hours=0, minutes=0, seconds=0, tenths=0, mode=0;
-
-bool_t DashBoardMode;
-uint8_T IstantSpeed = 0;
-uint32_t Speedometer = 128000;
+/*Global Variables*/
+uint8_T   Fuel_Value   		= FULL_FUEL;
+uint8_T   IstantSpeed  		= 10;
+uint32_T  Speedometer  		= SPEEDOMETER_INITIAL;
+uint16_T  RPM_Value    		= RPM_INITIAL;
+uint8_T   Actual_Gear 		= Neutral_Gear;
+double    Actual_Accel 		= ZERO;
+uint32_T  MetersTraveled 	= ZERO;
+uint8_T	  KmTraveled 		= ZERO;
+bool_t 	  StopEngine 		= ZERO; //0 = ON; 1 = OFF
 /*
  * SysTick ISR2
  */
@@ -41,131 +46,263 @@ ISR2(systick_handler)
 /*
  * TASK LCD
  */
-TASK(TaskLCD)
-{
-	unsigned int px, py;
-	TPoint p;
-	if (GetTouch_SC_Async(&px, &py)) {
-		p.x = px;
-		p.y = py;
-		OnTouch(MyWatchScr, &p);
-	}
-}
 
-void setTimeString(char *watchstr, uint8_T hours, uint8_T minutes, uint8_T seconds, uint8_T tenths, uint8_T mode)
-{
-	sprintf(watchstr, "%2d:%2d:%2d", hours, minutes, seconds);
-}
-/*
- * TASK Clock
+
+
+/*!
+ *  \brief Calculates the amount of Meters Traveled in 2 seconds 
+ *  Called: NONE
+ *  \return void
  */
-unsigned char IsUpdateTime()
-{
-	unsigned char res;
-	static unsigned char oh=0, om=0, os=0;
-	if (hours!=oh || minutes!=om || seconds!= os)
-		res = 1;
-	else
-		res = 0;
-	oh = hours;
-	om = minutes;
-	os = seconds;
-	return res;
+void Calculate_MetersTraveled(){//Davide:: Da sistemare, non è precisa
+static uint8_T i = ONE;
+static uint8_T Speed1 = ZERO;
+static uint8_T Speed2 = ZERO;
+static uint8_T Average = ZERO;
+
+	if( i!=2 ){ //First call: 
+	Speed1 = IstantSpeed;
+	}else{ 		//Second call:
+	i = ZERO;
+	Speed2 = IstantSpeed;
+	Average = (Speed1 + Speed2)/2;
+	MetersTraveled = MetersTraveled +  2*Average/3.6;//From km/h to m/s. Calculate for 2 seconds
+	if(MetersTraveled > ONE_KM){//Davide: This should be 1000
+		Speedometer++;
+		KmTraveled++;
+		MetersTraveled = MetersTraveled % ONE_KM; //Save just the meters
+
+		if( KmTraveled % CONSUMPTION_LITRE==ZERO ){
+			Fuel_Value= Fuel_Value - 20;
+			//debug(Fuel_Value);
+			if(Fuel_Value == ZERO){
+				Fuel_Value= ONE;
+				StopEngine = ONE;
+				RPM_Value = RPM_INITIAL;
+				}
+			}
+		}
+	}
+	i++;
 }
 
+/*!
+ *  \brief Updates the clock on the top of the DashBoard. Also calls Calculate_MetersTraveld 
+ *  Called: Calculate_MetersTraveled()
+ *  \return void
+ */
 void UpdateTime()
 {
-	unsigned char watchstr[20];
-	setTimeString(watchstr, hours, minutes, seconds, tenths, mode);
+static uint8_T i = 0;
+unsigned char watchstr[20];
 
-
-	//WPrint(&MyWatchScr[1], watchstr); 
-}
-/**
-  * @brief  Updates the fuel bar
-  * @param  Value: specifies the quantity of fuel [0, 105]
-  * @retval None
-  */
-void UpdateFuel(int value){
-
-	if( value < 30){
-		LCD_SetTextColor(Red);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(110, 180, value, 10);
-		LCD_SetBackColor(Black);
-		LCD_SetTextColor(Black);
-		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
-	}else if(value >30 && value< 70){
-		LCD_SetTextColor(Yellow);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(110, 180, value, 10);
-		LCD_SetBackColor(Black);
-		LCD_SetTextColor(Black);
-		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
-	}else{
-		LCD_SetTextColor(Green);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(110, 180, value, 10);
-		LCD_SetBackColor(Black);
-		LCD_SetTextColor(Black);
-		LCD_DrawFullRect(110 + value, 180, 100 - value, 10);
+	if(i == 5){
+	i = ZERO;
+	seconds++;
+	if(seconds == 60){
+		seconds = ZERO;
+		minutes++;
+		if (minutes == 60){
+			minutes = ZERO;
+			hours++;
+		}
+		if (hours == 99){
+			hours = ZERO;
+		}
+		}
+	Calculate_MetersTraveled(); 	
 	}
+i++;
+	sprintf(watchstr, "%2d:%2d:%2d", hours, minutes, seconds);
+	LCD_SetTextColor(Black);
+	LCD_SetBackColor(Black);
+	LCD_DrawFullRect(95, 20, 135, 30);
+	LCD_SetTextColor(White);
+    LCD_DisplayStringXY(90, 20, watchstr);   
 }
+/*!
+ *  \brief Reads the variable 'Fuel_Value' and draws the relative bar.
+ *  Called: None
+ *  \return void
+ */
+void UpdateFuel(){
 
-void checkButton(){
-	if(button_read() == true){
-		LCD_SetTextColor(White);
-		LCD_SetBackColor(Black);
+	if( Fuel_Value>=ZERO ){
+			if( Fuel_Value < RED_FUEL){
+				LCD_SetTextColor(Red);
+				LCD_SetBackColor(Black);
+				LCD_DrawFullRect(110, 180, Fuel_Value, 10);
+				LCD_SetBackColor(Black);
+				LCD_SetTextColor(Black);
+				LCD_DrawFullRect(110 + Fuel_Value, 180, 100 - Fuel_Value, 10);			
+			}else if(Fuel_Value >=RED_FUEL && Fuel_Value<= YELLOW_FUEL){			
+				LCD_SetTextColor(Yellow);
+				LCD_SetBackColor(Black);
+				LCD_DrawFullRect(110, 180, Fuel_Value, 10);
+				LCD_SetBackColor(Black);
+				LCD_SetTextColor(Black);
+				LCD_DrawFullRect(110 + Fuel_Value, 180, 100 - Fuel_Value, 10);			
+			}else{			
+				LCD_SetTextColor(Green);
+				LCD_SetBackColor(Black);
+				LCD_DrawFullRect(110, 180, Fuel_Value, 10);
+				LCD_SetBackColor(Black);
+				LCD_SetTextColor(Black);
+				LCD_DrawFullRect(110 + Fuel_Value, 180, 100 - Fuel_Value, 10);
+			}
+		}
+}
+/*!
+ *  \brief Checks all the events from the buttons.
+ *  Called: None
+ *  \return void
+ */
+void checkButtons(){
+	if(Button_LeftArrow_Read() == true){
+		if(IsEvent(iconinfo(&MyDashBoardScr[2])->onevent)){
+			ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+			}else{
+			SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+			}
 		debugInt(60, 60, 8, 8, 8);
 	}
+	if(Button_RightArrow_Read() == true){
+		if(IsEvent(iconinfo(&MyDashBoardScr[1])->onevent)){
+			ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+			}else{
+			SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+			}
+	}
 }
-
-void UpdateMotorRPM(int value){
-
-	if( value<=5000 ){
+/*!
+ *  \brief Reads the variable 'RPM_VALUE' and draws the relative bar.
+ *  Called: None
+ *  \return void
+ */
+void UpdateMotorRPM(){
+	if( RPM_Value>=ZERO && RPM_Value<5000 ){
 		LCD_SetTextColor(Black);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(241, 50, 44,180);
 		LCD_SetTextColor(Green);
 		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 190 - (value/100) , 44, (value/100) );
-	}else if(value >=5000 && value< 8000){
+		LCD_DrawFullRect(241, 190 - (RPM_Value/100) , 44, (RPM_Value/100) );
+	}else if( RPM_Value >=5000 && RPM_Value< 8000 ){
 		LCD_SetTextColor(Black);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(241, 50, 44,190);
 		LCD_SetTextColor(Yellow);
 		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 190 - (value/100), 44,(value/100));
+		LCD_DrawFullRect(241, 190 - (RPM_Value/100), 44,(RPM_Value/100));
 		LCD_SetTextColor(Green);
 		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 140, 44, 50);
-	}else{
+		LCD_DrawFullRect(241, 140, 44, 50);	
+	}else if( RPM_Value<RPM_MAX ){
 		LCD_SetTextColor(Black);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(241, 50, 44,190);
 		LCD_SetTextColor(Red);
 		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 190 - (value/100), 44,(value/100));
+		LCD_DrawFullRect(241, 190 - (RPM_Value/100), 44,(RPM_Value/100));
 		LCD_SetTextColor(Yellow);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(241, 110, 44, 30);
 		LCD_SetTextColor(Green);
 		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 140, 44, 50);
-	}
+		LCD_DrawFullRect(241, 140, 44, 50);	
+		}	
 }
-
-void UpdateSpeed(){
+/*!
+ *  \brief Used to print a variable on the screen
+ *  Called: None
+ *  \return void
+ */
+void debug(double a){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(90, 100, 120, 30);
+	LCD_DrawFullRect(50, 130, 100, 40);
 	LCD_SetTextColor(White);
-  //	sprintf((char*)text,"%d Km/h", IstantSpeed);DAVIDE:: to restore this
-    sprintf((char*)text,"%d Km/h", Speed_Read());
+   	sprintf((char*)text,"%f", a);
+    LCD_DisplayStringXY(50, 130, text);
+}
+/*!
+ *  \brief Read from the sensor the amount of Throttle and calculates the actual acceleration of the motorbike.
+ *  Called: None
+ *  \return void
+ */
+void Update_Accell(){
+	Actual_Accel = (double)(Throttle_Read())/RPM_Value;
+}
+/*!
+ *  \brief Reads the variable 'Actual_Accel' and calculate the new speed
+ *  Called: None
+ *  \return void
+ */
+void UpdateSpeedValue(){
+char text[20];
+	LCD_SetTextColor(Black);
+	LCD_SetBackColor(Black);
+	LCD_DrawFullRect(90, 100, 130, 30);
+	LCD_SetTextColor(White);
+
+if( StopEngine == ZERO ){
+			debug( Actual_Accel);
+	if(Actual_Accel>ZERO) {
+		if(IstantSpeed == ZERO){
+				IstantSpeed = 5;
+			}
+			if(IstantSpeed < SPEED_MAX/10){ //low speed
+					IstantSpeed = 5 + IstantSpeed + ((int)(IstantSpeed  *1.4*Actual_Accel));
+			}
+			if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/3){ //low speed
+					IstantSpeed = IstantSpeed + ((int)(IstantSpeed *1.1*Actual_Accel));
+
+			}
+			if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed < SPEED_MAX/2){ //medium speed
+					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.6*Actual_Accel));
+
+			}
+			if(IstantSpeed >= SPEED_MAX/2 && IstantSpeed < SPEED_MAX){ //high speed
+				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX)
+					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.25*Actual_Accel));
+			}
+		}else{
+			if(IstantSpeed < SPEED_MAX/10){ //low speed
+				if( (uint8_T)(IstantSpeed - 0.6*IstantSpeed)>0 ){
+						IstantSpeed =  IstantSpeed - 0.6*IstantSpeed;
+					if(IstantSpeed < 7){
+						IstantSpeed = 0; //Stop
+					}
+				}
+			}
+			if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/5){ //low speed
+				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+					IstantSpeed = IstantSpeed + ((int)(IstantSpeed *0.3*Actual_Accel));
+
+			}
+			if(IstantSpeed >= SPEED_MAX/5 && IstantSpeed < SPEED_MAX/2){ //medium speed
+				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.7*Actual_Accel));
+
+			}
+			if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed <= SPEED_MAX){ //high speed
+				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.9*Actual_Accel));
+			}
+		}
+	}else{
+		IstantSpeed = 0;
+	}
+	sprintf((char*)text,"%d Km/h", IstantSpeed);
     LCD_DisplayStringXY(90, 100, text);
 }
 
+/*!
+ *  \brief Reads the variable 'Speedometer' and print it on the screen
+ *  Called: None
+ *  \return void
+ */
 void UpdateSpeedoMeter(){
 char text[20];
 	LCD_SetTextColor(Black);
@@ -176,67 +313,77 @@ char text[20];
     LCD_DisplayStringXY(100, 210, text);
 }
 
-void strencode2digit(char *str, int digit)
-{
-	str[2]=0;
-	str[0]=digit/10+'0';
-	str[1]=digit%10+'0';
-}
-void UpdateArrows(){
-	static int Angle = 0;
-	//LCD_DrawLineByAngle(160, 120, 100, 270);
 
-Angle++;
-	if(Angle < 360 && Angle > 0){
-		//LCD_DrawLineByAngle(160, 120, 100, Angle);
+/*!
+ *  \brief Simulate the engine response reading the throttle and calculate the new RPM of the engine
+ *  Called: None
+ *  \return void
+ */
+void UpdateEngineResponse(){
+int16_T NewRPM =  Throttle_Read();
+	if( StopEngine == ZERO ){
+		if(NewRPM>ZERO){//More Accel
+			if( RPM_Value < RPM_MAX/2){ //low RPM
+					RPM_Value = RPM_Value + NewRPM;
+			}
+			if(RPM_Value < RPM_MAX-2000){ 
+					RPM_Value = RPM_Value + 0.8*NewRPM;
+			}else if(RPM_Value < RPM_MAX){
+					RPM_Value = RPM_Value + 0.4*NewRPM;
+			}
+		}else {//Less Decel
+			if( RPM_Value < RPM_MAX/2 && RPM_Value+ NewRPM > RPM_MIN ){ //low speed
+					RPM_Value = RPM_Value + NewRPM;
+			}
+			if(RPM_Value < RPM_MAX/2 &&  RPM_Value + 1.2*NewRPM > RPM_MIN ){ 
+					RPM_Value = RPM_Value + 1.2*NewRPM;
+			}else if(RPM_Value + 1.5*NewRPM > RPM_MIN){
+					RPM_Value = RPM_Value + 1.5*NewRPM;
+			}
+		}
 	}
-	if(Angle == 360)
-		Angle = 0;
 }
 
 
+/*!
+ *  \brief Task that draws all the Graphic
+ *  \return void
+ */
 TASK(TaskGuiDashboard)
 {
-	static uint8_T Fuel_Value = 0;
-	static uint32_t RPM_Value = 3000;
-	static uint8_T gear = 0;
 	UpdateTime();
-	UpdateFuel(Fuel_Value++);
-	UpdateMotorRPM(RPM_Value);
-	ChangeGear(&MyWatchScr[5], gear++);
-	UpdateSpeed();
+	UpdateFuel();
+	UpdateMotorRPM();
+	UpdateSpeedValue();
 	UpdateSpeedoMeter();
-	DrawIcons(MyWatchScr);
-	checkButton();
-
-	IstantSpeed++;
-	Speedometer++;
-	RPM_Value = 10500;
-
-	if(Fuel_Value == 100 )
-		Fuel_Value = 0;
-
-	if(gear == 7 )
-		gear = 0;
-
-	if(IstantSpeed == 50){
-		IstantSpeed = 0;
-		RPM_Value = 5000;
-	}
-
-
-
-
-	if(Speedometer == 130000)
-		Speedometer = 0;
+	DrawIcons(MyDashBoardScr);
+	
 } 
 
-/**
-  * @brief  Inserts a delay time.
-  * @param  nCount: specifies the delay time length.
-  * @retval None
-  */
 
+
+/*!
+ *  \brief Task that calculates and updates all the Variables used by TaskGuiDashboard. 
+ *   Also reads all the events from the buttons
+ *  \return void
+ */
+TASK(TaskUpdate)
+{
+UpdateEngineResponse();
+Update_Accell();
+
+checkButtons();
+ChangeGear(&MyDashBoardScr[5], Neutral_Gear);//Davide: This shouldn't be here
+
+//to remove this below. Touch is not used anymore
+	unsigned int px, py;
+	TPoint p;
+	if (GetTouch_SC_Async(&px, &py)) {
+		p.x = px;
+		p.y = py;
+		OnTouch(MyDashBoardScr, &p);
+	}
+}
 
 
 /*
@@ -244,34 +391,26 @@ TASK(TaskGuiDashboard)
  */
 int main(void)
 {
-	//GPIO_InitTypeDef GPIO_InitStructure;
-
 	SystemInit();
   /*Initializes Erika related stuffs*/
 	EE_system_init();
-
-
 
 	/*Initialize systick */
 	EE_systick_set_period(MILLISECONDS_TO_TICKS(1, SystemCoreClock));
 	EE_systick_enable_int();
 	EE_systick_start();
-
 	/* Initializes LCD and touchscreen */
 	IOE_Config();
 	/* Initialize the LCD */
 	STM32f4_Discovery_LCD_Init();
 
-	InitTouch(-0.102, 0.0656, -310, 16);
+	InitTouch(-0.102, 0.0656, -310, 16);//DAVIDE::to remove this
 
-	/* Draw the background */
-	DrawInit(MyWatchScr);
-	/*Draw the icons*/
+	/* Draw the background*/
+	DrawInit(MyDashBoardScr);
 	
 
 	LCD_SetTextColor(White);
-	//WPrint(&MyWatchScr[SEP1STR], ":");
-	//WPrint(&MyWatchScr[SEP2STR], ":");
 
 	//Initialize gpio
 	io_init();
@@ -279,7 +418,7 @@ int main(void)
 	/* Program cyclic alarms which will fire after an initial offset,
 	 * and after that periodically
 	 * */
-	SetRelAlarm(AlarmTaskLCD, TASKOFFSET, TASKLCD_FREQ);
+	SetRelAlarm(AlarmTaskUpdate, TASKOFFSET, TaskUpdate_FREQ);
 	SetRelAlarm(AlarmTaskGuiDashboard, TASKOFFSET, TASKGUI_FREQ);
 
   /* Forever loop: background activities (if any) should go here */

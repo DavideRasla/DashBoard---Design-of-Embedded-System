@@ -101,10 +101,9 @@ LCD_SetTextColor(White);
 		return 0;
 }
 
-unsigned char ChangeGear( const Widget *w, int Gear)
+unsigned char ChangeGear(  Widget *w, int Gear)
  {
 char *imgptr = 0;
-       char *imgptr = 0;
  LCD_SetTextColor(White);
       switch (Gear) {
                case 0:
@@ -168,7 +167,7 @@ unsigned char DrawIcons(const Widget ws[]){
 unsigned char WPrint(const Widget *w, char *s)
 {
 	if (w->wt == TEXT) {
-		LCD_SetTextColor(txtinfo(w)->color);
+		LCD_SetTextColor(White);
 		LCD_SetFont(txtinfo(w)->font);
 		LCD_DisplayStringXY(w->xl, w->yt, s);
 		return 1;

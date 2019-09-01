@@ -120,9 +120,9 @@ CPU mySystem {
     	};
 	
 
-	ALARM AlarmTaskLCD {
+	ALARM AlarmTaskUpdate {
 		COUNTER = myCounter;
-		ACTION = ACTIVATETASK { TASK = TaskLCD; };
+		ACTION = ACTIVATETASK { TASK = TaskUpdate; };
 	};
 	
 	ALARM AlarmTaskGuiDashboard {
@@ -138,7 +138,7 @@ CPU mySystem {
 		SCHEDULE = FULL;
 	};
 	
-	TASK TaskLCD {
+	TASK TaskUpdate {
 		PRIORITY = 0x01;   /* Low priority */
 		AUTOSTART = FALSE;
 		STACK = SHARED;

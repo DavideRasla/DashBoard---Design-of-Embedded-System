@@ -7,9 +7,9 @@
 #include "../libs/tm_stm32f4_adc.h"
 
 
-#define BUTTON_PORT     (GPIOE)
-#define BUTTON_PIN      (GPIO_PIN_5)
-#define Speed_PIN		(GPIO_PIN_6)
+#define BUTTON_PORT    			 			(GPIOE)
+#define BUTTON_PIN_LeftArrow      			(GPIO_PIN_5)
+#define BUTTON_PIN_RightArrow				(GPIO_PIN_6)
 
 
 void io_init(){
@@ -22,8 +22,8 @@ void io_init(){
 
 
 
-/* Initialize ADC1 on channel 3, this is pin PA3 */
-    TM_ADC_Init(ADC1, ADC_Channel_3);
+/* Initialize ADC1 on channel 4, this is pin PA4 */
+    TM_ADC_Init(ADC1, ADC_Channel_4);
 	
 	/* Enable vbat channel */
 	TM_ADC_EnableVbat();
@@ -33,12 +33,72 @@ void io_init(){
 	
 }
 
-bool_t button_read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN)));
+bool_t Button_LeftArrow_Read(){
+	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_LeftArrow)));
+}
+bool_t Button_RightArrow_Read(){
+	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_RightArrow)));
 }
 
-
-uint32_T Speed_Read(){
-
-return U32T(TM_ADC_Read(ADC1, ADC_Channel_3));
+/*
+	Retuns between [100 - 4000]
+*/
+int Throttle_Read(){
+	uint32_T ActualThrottleValue= TM_ADC_Read(ADC1, ADC_Channel_4);
+if(ActualThrottleValue > 1){
+	if( ActualThrottleValue<2000 ){
+		return -150*log(ActualThrottleValue);
+	}else{
+		return 130*log(ActualThrottleValue);
+	}
 }
+return 0;
+}
+/*
+
+double Throttle_Read(){
+	uint32_T ActualThrottleValue= TM_ADC_Read(ADC1, ADC_Channel_3);
+	if( ActualThrottleValue<500 ){
+		return 0.03;
+	}
+	if( ActualThrottleValue<1000 ){
+		return 0.04;
+	}
+	if( ActualThrottleValue<1300 ){
+		return 0.05;
+	}
+	if( ActualThrottleValue<1600 ){
+		return 0.06;
+	}
+	if( ActualThrottleValue<1800 ){
+		return 0.07;
+	}
+	if( ActualThrottleValue<2000 ){
+		return 0.1;
+	}
+	if( ActualThrottleValue<2500 ){
+		return 0.11;
+	}
+	if( ActualThrottleValue<2700 ){
+		return 0.12;
+	}
+	if( ActualThrottleValue<2900 ){
+		return 0.13;
+	}
+	if( ActualThrottleValue<3100 ){
+		return 0.14;
+	}
+	if( ActualThrottleValue<3200 ){
+		return 0.15;
+	}
+	if( ActualThrottleValue<3500 ){
+		return 0.16;
+	}
+	if( ActualThrottleValue<3800 ){
+		return 0.17;
+	}
+	if( ActualThrottleValue<4000 ){
+		return 0.18;
+	}
+return 0;
+}*/

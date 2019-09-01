@@ -15,14 +15,14 @@
     /* TASK definition */
     #define EE_MAX_TASK 2
     #define TaskGuiDashboard 0
-    #define TaskLCD 1
+    #define TaskUpdate 1
 
     /* MUTEX definition */
     #define EE_MAX_RESOURCE 0U
 
     /* ALARM definition */
     #define EE_MAX_ALARM 2U
-    #define AlarmTaskLCD 0U
+    #define AlarmTaskUpdate 0U
     #define AlarmTaskGuiDashboard 1U
 
     /* SCHEDULING TABLE definition */

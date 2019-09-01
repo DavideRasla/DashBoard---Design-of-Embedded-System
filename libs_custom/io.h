@@ -6,7 +6,7 @@
 
 void io_init();
 
-bool_t button_read();
+bool_t Button_LeftArrow_Read();
 
 
 #endif
