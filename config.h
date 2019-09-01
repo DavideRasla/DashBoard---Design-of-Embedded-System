@@ -18,6 +18,8 @@
 //RPM Parameters
 #define RPM_INITIAL					  3000
 #define RPM_MAX						 12000
+#define RPM_LOW						  5000
+#define RPM_MEDIUM					  8000
 #define RPM_MIN						  2000
 
 

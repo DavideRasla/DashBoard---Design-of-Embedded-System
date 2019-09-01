@@ -21,10 +21,10 @@
 
 
 
+/*Global Variables*/
 
 uint8_T hours=13, minutes=44, seconds=ZERO;
 
-/*Global Variables*/
 uint8_T   Fuel_Value   		= FULL_FUEL;
 uint8_T   IstantSpeed  		= 10;
 uint32_T  Speedometer  		= SPEEDOMETER_INITIAL;
@@ -34,6 +34,7 @@ double    Actual_Accel 		= ZERO;
 uint32_T  MetersTraveled 	= ZERO;
 uint8_T	  KmTraveled 		= ZERO;
 bool_t 	  StopEngine 		= ZERO; //0 = ON; 1 = OFF
+
 /*
  * SysTick ISR2
  */
@@ -42,10 +43,6 @@ ISR2(systick_handler)
 	/* count the interrupts, waking up expired alarms */
 	CounterTick(myCounter);
 }
-
-/*
- * TASK LCD
- */
 
 
 
@@ -164,7 +161,7 @@ void checkButtons(){
 			}else{
 			SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 			}
-		debugInt(60, 60, 8, 8, 8);
+		//debugInt(60, 60, 8, 8, 8);
 	}
 	if(Button_RightArrow_Read() == true){
 		if(IsEvent(iconinfo(&MyDashBoardScr[1])->onevent)){
@@ -180,14 +177,14 @@ void checkButtons(){
  *  \return void
  */
 void UpdateMotorRPM(){
-	if( RPM_Value>=ZERO && RPM_Value<5000 ){
+	if( RPM_Value>=ZERO && RPM_Value<RPM_LOW ){
 		LCD_SetTextColor(Black);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(241, 50, 44,180);
 		LCD_SetTextColor(Green);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(241, 190 - (RPM_Value/100) , 44, (RPM_Value/100) );
-	}else if( RPM_Value >=5000 && RPM_Value< 8000 ){
+	}else if( RPM_Value>=RPM_LOW && RPM_Value<RPM_MEDIUM ){
 		LCD_SetTextColor(Black);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(241, 50, 44,190);
@@ -247,8 +244,8 @@ char text[20];
 	LCD_SetTextColor(White);
 
 if( StopEngine == ZERO ){
-			debug( Actual_Accel);
-	if(Actual_Accel>ZERO) {
+			debug(Actual_Accel);
+	if(Actual_Accel>ZERO) {//Positive accelleration, need to increase the speed
 		if(IstantSpeed == ZERO){
 				IstantSpeed = 5;
 			}
@@ -267,8 +264,8 @@ if( StopEngine == ZERO ){
 				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX)
 					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.25*Actual_Accel));
 			}
-		}else{
-			if(IstantSpeed < SPEED_MAX/10){ //low speed
+		}else{//Negative accelleration, need to reduce the speed
+			if(IstantSpeed < SPEED_MAX/10){ //very low speed
 				if( (uint8_T)(IstantSpeed - 0.6*IstantSpeed)>0 ){
 						IstantSpeed =  IstantSpeed - 0.6*IstantSpeed;
 					if(IstantSpeed < 7){
@@ -292,7 +289,7 @@ if( StopEngine == ZERO ){
 			}
 		}
 	}else{
-		IstantSpeed = 0;
+		IstantSpeed = 0;//No Fuel
 	}
 	sprintf((char*)text,"%d Km/h", IstantSpeed);
     LCD_DisplayStringXY(90, 100, text);
