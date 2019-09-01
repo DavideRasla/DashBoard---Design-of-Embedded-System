@@ -54,6 +54,7 @@ unsigned char DrawInit( const Widget ws[])
 	for(i=0; i<NUMWIDGETS; i++) {
 		DrawOff(&ws[i]);
 	}
+	ChangeGear(&MyDashBoardScr[5], 0);
 	return 1;
 }
 

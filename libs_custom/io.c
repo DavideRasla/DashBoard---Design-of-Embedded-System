@@ -8,9 +8,10 @@
 
 
 #define BUTTON_PORT    			 			(GPIOE)
-#define BUTTON_PIN_LeftArrow      			(GPIO_PIN_5)
-#define BUTTON_PIN_RightArrow				(GPIO_PIN_6)
-
+#define BUTTON_PIN_LeftArrow      			(GPIO_PIN_7)
+#define BUTTON_PIN_RightArrow				(GPIO_PIN_8)
+#define BUTTON_PIN_GearUp					(GPIO_PIN_5)
+#define BUTTON_PIN_GearDown					(GPIO_PIN_6)
 
 void io_init(){
 	TM_GPIO_Init(BUTTON_PORT,
@@ -22,9 +23,10 @@ void io_init(){
 
 
 
-/* Initialize ADC1 on channel 4, this is pin PA4 */
+/* Initialize ADC1 on channel 4 for the throttle, this is pin PA4 */
     TM_ADC_Init(ADC1, ADC_Channel_4);
-	
+/* Initialize ADC2 on channel 3 for the Clutch, this is pin PA3 */
+    TM_ADC_Init(ADC2, ADC_Channel_3);	
 	/* Enable vbat channel */
 	TM_ADC_EnableVbat();
 	
@@ -39,7 +41,12 @@ bool_t Button_LeftArrow_Read(){
 bool_t Button_RightArrow_Read(){
 	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_RightArrow)));
 }
-
+bool_t Button_GearUp_Read(){
+	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_GearUp)));
+}
+bool_t Button_GearDown_Read(){
+	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_GearDown)));
+}
 /*
 	Retuns between [100 - 4000]
 */
@@ -53,6 +60,18 @@ if(ActualThrottleValue > 1){
 	}
 }
 return 0;
+}
+
+bool_t Clutch_Read(){
+uint32_T ActualClutchValue= TM_ADC_Read(ADC1, ADC_Channel_3);
+	if(ActualClutchValue > 1){
+		if( ActualClutchValue<2000 ){
+			return 0;//unactive
+		}else{
+			return 1;//active
+		}
+	}
+	return 0;
 }
 /*
 

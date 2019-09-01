@@ -170,6 +170,20 @@ void checkButtons(){
 			SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 			}
 	}
+	if(Button_GearUp_Read() == true && Actual_Gear <= 5 && Clutch_Read()==1 ){
+		Actual_Gear++;
+		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
+		IstantSpeed = IstantSpeed / 2;
+		RPM_Value = RPM_Value / 2;
+
+	}
+	if(Button_GearDown_Read() == true && Actual_Gear > 0 && Clutch_Read()==1 ){
+		Actual_Gear--;
+		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
+		IstantSpeed = IstantSpeed / 2;
+		RPM_Value = RPM_Value / 2;
+	}
+	
 }
 /*!
  *  \brief Reads the variable 'RPM_VALUE' and draws the relative bar.
@@ -177,37 +191,46 @@ void checkButtons(){
  *  \return void
  */
 void UpdateMotorRPM(){
-	if( RPM_Value>=ZERO && RPM_Value<RPM_LOW ){
-		LCD_SetTextColor(Black);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 50, 44,180);
-		LCD_SetTextColor(Green);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 190 - (RPM_Value/100) , 44, (RPM_Value/100) );
-	}else if( RPM_Value>=RPM_LOW && RPM_Value<RPM_MEDIUM ){
-		LCD_SetTextColor(Black);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 50, 44,190);
-		LCD_SetTextColor(Yellow);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 190 - (RPM_Value/100), 44,(RPM_Value/100));
-		LCD_SetTextColor(Green);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 140, 44, 50);	
-	}else if( RPM_Value<RPM_MAX ){
-		LCD_SetTextColor(Black);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 50, 44,190);
-		LCD_SetTextColor(Red);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 190 - (RPM_Value/100), 44,(RPM_Value/100));
-		LCD_SetTextColor(Yellow);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 110, 44, 30);
-		LCD_SetTextColor(Green);
-		LCD_SetBackColor(Black);
-		LCD_DrawFullRect(241, 140, 44, 50);	
+	if(Clutch_Read()==0){
+		if( RPM_Value>=ZERO && RPM_Value<RPM_LOW ){
+			LCD_SetTextColor(Black);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 50, 44,180);
+			LCD_SetTextColor(Green);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 190 - (RPM_Value/100) , 44, (RPM_Value/100) );
+		}else if( RPM_Value>=RPM_LOW && RPM_Value<RPM_MEDIUM ){
+			LCD_SetTextColor(Black);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 50, 44,190);
+			LCD_SetTextColor(Yellow);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 190 - (RPM_Value/100), 44,(RPM_Value/100));
+			LCD_SetTextColor(Green);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 140, 44, 50);	
+		}else if( RPM_Value<RPM_MAX ){
+			LCD_SetTextColor(Black);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 50, 44,190);
+			LCD_SetTextColor(Red);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 190 - (RPM_Value/100), 44,(RPM_Value/100));
+			LCD_SetTextColor(Yellow);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 110, 44, 30);
+			LCD_SetTextColor(Green);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 140, 44, 50);	
 		}	
+	}else{/*Draw a low bar in case the clutch is on */
+			LCD_SetTextColor(Black);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 50, 44,180);
+			LCD_SetTextColor(Green);
+			LCD_SetBackColor(Black);
+			LCD_DrawFullRect(241, 190 - (RPM_LOW/100) , 44, (RPM_LOW/100) );
+	}
 }
 /*!
  *  \brief Used to print a variable on the screen
@@ -243,51 +266,55 @@ char text[20];
 	LCD_DrawFullRect(90, 100, 130, 30);
 	LCD_SetTextColor(White);
 
-if( StopEngine == ZERO ){
-			debug(Actual_Accel);
-	if(Actual_Accel>ZERO) {//Positive accelleration, need to increase the speed
-		if(IstantSpeed == ZERO){
-				IstantSpeed = 5;
-			}
-			if(IstantSpeed < SPEED_MAX/10){ //low speed
-					IstantSpeed = 5 + IstantSpeed + ((int)(IstantSpeed  *1.4*Actual_Accel));
-			}
-			if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/3){ //low speed
-					IstantSpeed = IstantSpeed + ((int)(IstantSpeed *1.1*Actual_Accel));
+if( StopEngine == ZERO ){//if engine can work
+	if(Clutch_Read()==0){//if the clutch is not on
+					debug(Actual_Accel);
+						if(Actual_Accel>ZERO) {//Positive accelleration, need to increase the speed
+							if(IstantSpeed == ZERO){
+									IstantSpeed = 5;
+								}
+								if(IstantSpeed < SPEED_MAX/10){ //low speed
+										IstantSpeed = 5 + IstantSpeed + ((int)(IstantSpeed  *1.4*Actual_Accel));
+								}
+								if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/3){ //low speed
+										IstantSpeed = IstantSpeed + ((int)(IstantSpeed *1.1*Actual_Accel));
 
-			}
-			if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed < SPEED_MAX/2){ //medium speed
-					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.6*Actual_Accel));
+								}
+								if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed < SPEED_MAX/2){ //medium speed
+										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.6*Actual_Accel));
 
-			}
-			if(IstantSpeed >= SPEED_MAX/2 && IstantSpeed < SPEED_MAX){ //high speed
-				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX)
-					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.25*Actual_Accel));
-			}
-		}else{//Negative accelleration, need to reduce the speed
-			if(IstantSpeed < SPEED_MAX/10){ //very low speed
-				if( (uint8_T)(IstantSpeed - 0.6*IstantSpeed)>0 ){
-						IstantSpeed =  IstantSpeed - 0.6*IstantSpeed;
-					if(IstantSpeed < 7){
-						IstantSpeed = 0; //Stop
-					}
-				}
-			}
-			if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/5){ //low speed
-				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-					IstantSpeed = IstantSpeed + ((int)(IstantSpeed *0.3*Actual_Accel));
+								}
+								if(IstantSpeed >= SPEED_MAX/2 && IstantSpeed < SPEED_MAX){ //high speed
+									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX)
+										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.25*Actual_Accel));
+								}
+								}else{//Negative accelleration, need to reduce the speed
+									if(IstantSpeed < SPEED_MAX/10){ //very low speed
+										if( (uint8_T)(IstantSpeed - 0.6*IstantSpeed)>0 ){
+											IstantSpeed =  IstantSpeed - 0.6*IstantSpeed;
+											if(IstantSpeed < 7){
+											IstantSpeed = 0; //Stop
+											}
+										}
+									}
+								if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/5){ //low speed
+									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+										IstantSpeed = IstantSpeed + ((int)(IstantSpeed *0.3*Actual_Accel));
 
-			}
-			if(IstantSpeed >= SPEED_MAX/5 && IstantSpeed < SPEED_MAX/2){ //medium speed
-				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.7*Actual_Accel));
+								}
+								if(IstantSpeed >= SPEED_MAX/5 && IstantSpeed < SPEED_MAX/2){ //medium speed
+									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.7*Actual_Accel));
 
-			}
-			if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed <= SPEED_MAX){ //high speed
-				if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-					IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.9*Actual_Accel));
-			}
-		}
+								}
+								if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed <= SPEED_MAX){ //high speed
+									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.9*Actual_Accel));
+								}
+							}
+						}else{//Clutch is ON, slow 10%
+								IstantSpeed = IstantSpeed -  ((int)(IstantSpeed * 0.07)); //slow 10%
+						}
 	}else{
 		IstantSpeed = 0;//No Fuel
 	}
@@ -370,7 +397,7 @@ UpdateEngineResponse();
 Update_Accell();
 
 checkButtons();
-ChangeGear(&MyDashBoardScr[5], Neutral_Gear);//Davide: This shouldn't be here
+
 
 //to remove this below. Touch is not used anymore
 	unsigned int px, py;
