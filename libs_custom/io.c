@@ -2,56 +2,113 @@
 #include <stdlib.h>
 #include "io.h"
 #include "../config.h"
+#include "../libs/types.h"
+#include "../libs/Event.h"
+
 
 #include "../libs/tm_stm32f4_gpio.h"
 #include "../libs/tm_stm32f4_adc.h"
 
+#define is_pin_high(GPIOx, GPIO_Pin)	(((GPIOx) & (GPIO_Pin)) == 0 ? 0 : 1)
 
-#define BUTTON_PORT    			 			(GPIOE)
-#define BUTTON_PIN_LeftArrow      			(GPIO_PIN_7)
-#define BUTTON_PIN_RightArrow				(GPIO_PIN_8)
-#define BUTTON_PIN_GearUp					(GPIO_PIN_5)
-#define BUTTON_PIN_GearDown					(GPIO_PIN_6)
+
+//#define BUTTON_PORT    			 			(GPIOE)
+//#define BUTTON_PIN_LeftArrow      			(GPIO_PIN_7)
+//#define BUTTON_PIN_RightArrow				(GPIO_PIN_8)
+//#define BUTTON_PIN_GearUp					(GPIO_PIN_5)
+//#define BUTTON_PIN_GearDown					(GPIO_PIN_6)
 
 void io_init(){
-	TM_GPIO_Init(BUTTON_PORT,
-				BUTTON_PIN,
-			  TM_GPIO_Mode_IN,
-			  TM_GPIO_OType_PP,
-			  TM_GPIO_PuPd_DOWN,
-			  TM_GPIO_Speed_High);
+	//BUTTON INPUTS
+	TM_GPIO_Init(BTN_PORT,
+				BTN_GEAR_UP_PIN,
+				TM_GPIO_Mode_IN,
+				TM_GPIO_OType_PP,
+				TM_GPIO_PuPd_DOWN,
+				TM_GPIO_Speed_High);
+
+	TM_GPIO_Init(BTN_PORT,
+					BTN_GEAR_DOWN_PIN,
+					TM_GPIO_Mode_IN,
+					TM_GPIO_OType_PP,
+					TM_GPIO_PuPd_DOWN,
+					TM_GPIO_Speed_High);
+
+	TM_GPIO_Init(BTN_PORT,
+					BTN_TURNLIGHT_DX_PIN,
+						TM_GPIO_Mode_IN,
+						TM_GPIO_OType_PP,
+						TM_GPIO_PuPd_DOWN,
+						TM_GPIO_Speed_High);
+
+	TM_GPIO_Init(BTN_PORT,
+				BTN_TURNLIGHT_SX_PIN,
+						TM_GPIO_Mode_IN,
+						TM_GPIO_OType_PP,
+						TM_GPIO_PuPd_DOWN,
+						TM_GPIO_Speed_High);
+
+	TM_GPIO_Init(BTN_PORT,
+			BTN_HEADLIGHT_PIN,
+						TM_GPIO_Mode_IN,
+						TM_GPIO_OType_PP,
+						TM_GPIO_PuPd_DOWN,
+						TM_GPIO_Speed_High);
 
 
-
+	//ADC INPUTS
 /* Initialize ADC1 on channel 4 for the throttle, this is pin PA4 */
-    TM_ADC_Init(ADC1, ADC_Channel_4);
+    TM_ADC_Init(ADC_THROTTLE_DEV, ADC_THROTTLE_CHANNEL);
 /* Initialize ADC2 on channel 3 for the Clutch, this is pin PA3 */
-    TM_ADC_Init(ADC2, ADC_Channel_3);	
+    TM_ADC_Init(ADC_CLUTCH_DEV, ADC_CLUTCH_CHANNEL);
 	/* Enable vbat channel */
 	TM_ADC_EnableVbat();
 	
+	//OUTPUTS
+	TM_GPIO_Init(OUT_PORT,
+				LED_ARROW_DX,
+				TM_GPIO_Mode_OUT,
+				TM_GPIO_OType_PP,
+				TM_GPIO_PuPd_DOWN,
+				TM_GPIO_Speed_High);
+
+	TM_GPIO_Init(OUT_PORT,
+					LED_ARROW_SX,
+					TM_GPIO_Mode_OUT,
+					TM_GPIO_OType_PP,
+					TM_GPIO_PuPd_DOWN,
+					TM_GPIO_Speed_High);
+
+	TM_GPIO_Init(OUT_PORT,
+					LED_LIGHT,
+					TM_GPIO_Mode_OUT,
+					TM_GPIO_OType_PP,
+					TM_GPIO_PuPd_DOWN,
+					TM_GPIO_Speed_High);
+
+
 
 
 	
 }
 
 bool_t Button_LeftArrow_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_LeftArrow)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_TURNLIGHT_SX_PORT), (BTN_TURNLIGHT_SX_PIN)));
 }
 bool_t Button_RightArrow_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_RightArrow)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_TURNLIGHT_DX_PORT), (BTN_TURNLIGHT_DX_PIN)));
 }
 bool_t Button_GearUp_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_GearUp)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_GEAR_UP_PORT), (BTN_GEAR_UP_PIN)));
 }
 bool_t Button_GearDown_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BUTTON_PORT), (BUTTON_PIN_GearDown)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_GEAR_DOWN_PORT), (BTN_GEAR_DOWN_PIN)));
 }
 /*
 	Retuns between [100 - 4000]
 */
 int Throttle_Read(){
-	uint32_T ActualThrottleValue= TM_ADC_Read(ADC1, ADC_Channel_4);
+	uint32_T ActualThrottleValue= TM_ADC_Read(ADC_THROTTLE_DEV, ADC_THROTTLE_CHANNEL);
 if(ActualThrottleValue > 1){
 	if( ActualThrottleValue<2000 ){
 		return -150*log(ActualThrottleValue);
@@ -63,7 +120,7 @@ return 0;
 }
 
 bool_t Clutch_Read(){
-uint32_T ActualClutchValue= TM_ADC_Read(ADC1, ADC_Channel_3);
+uint32_T ActualClutchValue= TM_ADC_Read(ADC_CLUTCH_DEV, ADC_CLUTCH_CHANNEL);
 	if(ActualClutchValue > 1){
 		if( ActualClutchValue<2000 ){
 			return 0;//unactive
@@ -121,3 +178,23 @@ double Throttle_Read(){
 	}
 return 0;
 }*/
+
+void get_buttons_events(){
+	uint16_T val = TM_GPIO_GetPortInputValue(BTN_PORT);
+	if(is_pin_high(val,BTN_GEAR_UP_PIN)){
+		SetEvent(GEARUP);
+	}
+	if(is_pin_high(val,BTN_GEAR_DOWN_PIN)){
+		SetEvent(GEARDOWN);
+	}
+	if(is_pin_high(val,BTN_TURNLIGHT_DX_PIN)){
+		SetEvent(TURNR);
+	}
+	if(is_pin_high(val,BTN_TURNLIGHT_SX_PIN)){
+		SetEvent(TURNL);
+	}
+	if(is_pin_high(val,	BTN_HEADLIGHT_PIN)){
+		SetEvent(LIGHT);
+	}
+}
+

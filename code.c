@@ -131,7 +131,8 @@ void UpdateFuel(){
 				LCD_DrawFullRect(110, 180, Fuel_Value, 10);
 				LCD_SetBackColor(Black);
 				LCD_SetTextColor(Black);
-				LCD_DrawFullRect(110 + Fuel_Value, 180, 100 - Fuel_Value, 10);			
+				LCD_DrawFullRect(110 + Fuel_Value, 180, 100 - Fuel_Value, 10);
+				SetEvent(FUEL);
 			}else if(Fuel_Value >=RED_FUEL && Fuel_Value<= YELLOW_FUEL){			
 				LCD_SetTextColor(Yellow);
 				LCD_SetBackColor(Black);
@@ -154,30 +155,36 @@ void UpdateFuel(){
  *  Called: None
  *  \return void
  */
-void checkButtons(){
-	if(Button_LeftArrow_Read() == true){
+void checkEvents(){
+//void checkButtons(){
+	if(IsEvent(TURNL)){
 		if(IsEvent(iconinfo(&MyDashBoardScr[2])->onevent)){
 			ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-			}else{
+		}else{
 			SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-			}
+		}
+		ClearEvent(TURNL);
 		//debugInt(60, 60, 8, 8, 8);
 	}
-	if(Button_RightArrow_Read() == true){
+	if(IsEvent(TURNR)){
 		if(IsEvent(iconinfo(&MyDashBoardScr[1])->onevent)){
 			ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 			}else{
 			SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 			}
+		ClearEvent(TURNR);
 	}
-	if(Button_GearUp_Read() == true && Actual_Gear <= 5 && Clutch_Read()==1 ){
+	if(IsEvent(LIGHT)){
+
+	}
+	if(IsEvent(GEARUP) && Actual_Gear <= 5 && Clutch_Read()==1 ){
 		Actual_Gear++;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
 		RPM_Value = RPM_Value / 2;
 
 	}
-	if(Button_GearDown_Read() == true && Actual_Gear > 0 && Clutch_Read()==1 ){
+	if(IsEvent(GEARDOWN) && Actual_Gear > 0 && Clutch_Read()==1 ){
 		Actual_Gear--;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
@@ -397,7 +404,7 @@ TASK(TaskUpdate)
 UpdateEngineResponse();
 Update_Accell();
 
-checkButtons();
+checkEvents();
 
 
 //to remove this below. Touch is not used anymore

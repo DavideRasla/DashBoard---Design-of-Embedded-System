@@ -38,16 +38,48 @@
 #define	Sixth_Gear						 6
 
 //GPIO CONFIGURATIONS
-#define BUTTON_PORT     (GPIOE)
-#define BUTTON_PIN      (GPIO_PIN_5)
+//#define BUTTON_PORT     (GPIOE)
+//#define BUTTON_PIN      (GPIO_PIN_5)
+#define BTN_PORT 				(GPIOE)
 
-//GUI CONFIGURATION
+#define BTN_GEAR_UP_PIN			(GPIO_PIN_0)
+#define BTN_GEAR_DOWN_PIN		(GPIO_PIN_2)
+#define BTN_TURNLIGHT_DX_PIN	(GPIO_PIN_4)
+#define BTN_TURNLIGHT_SX_PIN	(GPIO_PIN_6)
+#define BTN_HEADLIGHT_PIN		(GPIO_PIN_5)
 
+#define OUT_PORT				(GPIOA)
+
+#define LED_ARROW_DX			(GPIO_PIN_1)
+#define LED_ARROW_SX			(GPIO_PIN_3)
+#define LED_LIGHT				(GPIO_PIN_5)
+
+/* Initialize ADC1 on channel 4 for the throttle, this is pin PA4 */
+#define ADC_THROTTLE_DEV		(ADC1)
+#define ADC_THROTTLE_CHANNEL 	(ADC_Channel_4)
+
+/* Initialize ADC2 on channel 3 for the Clutch, this is pin PA3 */
+#define ADC_CLUTCH_DEV			(ADC2)
+#define ADC_CLUTCH_CHANNEL 		(ADC_Channel_3)
 
 //TASK CONFIGURATIONS
 #define TASKOFFSET 		10
 #define TaskUpdate_FREQ	50
 #define TASKGUI_FREQ	200
+
+
+//EVENTS DASHBOARD
+#define OIL 		0x02
+#define FUEL 		0x04
+#define AR			0x08
+#define AL			0x010
+
+//EVENTS BUTTONS
+#define TURNR 		0x012
+#define TURNL 		0x014
+#define GEARUP 		0x016
+#define GEARDOWN 	0x018
+#define LIGHT		0x020
 
 
 
