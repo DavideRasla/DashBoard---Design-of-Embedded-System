@@ -59,7 +59,7 @@
 #define ADC_THROTTLE_CHANNEL 	(ADC_Channel_4)
 
 /* Initialize ADC2 on channel 3 for the Clutch, this is pin PA3 */
-#define ADC_CLUTCH_DEV			(ADC1)
+#define ADC_CLUTCH_DEV			(ADC2)
 #define ADC_CLUTCH_CHANNEL 		(ADC_Channel_3)
 
 //TASK CONFIGURATIONS
