@@ -142,19 +142,7 @@ unsigned char DrawIcon(const Widget *w){
 	char *imgptr = 0;
 	if(w->wt == ICON){
 		if(IsEvent(iconinfo(w)->onevent)){
-			if(iconinfo(w)->isBlinking){
-				if(iconinfo(w)->blinkStatus){
-					imgptr = iconinfo(w)->image_on;
-					iconinfo(w)->blinkStatus = 0;
-				}
-				else{
-					imgptr = iconinfo(w)->image_off;
-					iconinfo(w)->blinkStatus =1;
-				}
-
-			}
-			else
-				imgptr = iconinfo(w)->image_on;
+			imgptr = iconinfo(w)->image_on;
 		}
 		else{
 			imgptr = iconinfo(w)->image_off;

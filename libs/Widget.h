@@ -21,8 +21,6 @@ typedef struct {
 	unsigned char *image_on;
 	unsigned char *image_off;
 	Event 		  onevent;
-	bool_t		  isBlinking;
-	bool_t		  blinkStatus;
 } Icon;
 
 typedef struct {
