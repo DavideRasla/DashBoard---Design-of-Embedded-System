@@ -172,6 +172,7 @@ void UpdateFuel(){
  *  \return void
  */
 void checkEvents(){
+
 	if(Button_LeftArrow_Read()){
 		Blink_Left = !Blink_Left;
 		Blink_Right = 0;
@@ -211,6 +212,7 @@ void checkEvents(){
 				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 			}
 	}
+
 
 	
 	//if(IsEvent(LIGHT)){

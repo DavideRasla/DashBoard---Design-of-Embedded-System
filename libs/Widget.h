@@ -10,6 +10,7 @@
 #include "Event.h"
 #include "Touch.h"
 #include "fonts.h"
+#include "types.h"
 
 
 typedef enum  {
