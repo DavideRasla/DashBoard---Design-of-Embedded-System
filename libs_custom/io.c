@@ -177,18 +177,23 @@ void get_buttons_events(){
 	uint16_T val = TM_GPIO_GetPortInputValue(BTN_PORT);
 	if(is_pin_high(val,BTN_GEAR_UP_PIN)){
 		SetEvent(GEARUP);
+		debug(2);
 	}
 	if(is_pin_high(val,BTN_GEAR_DOWN_PIN)){
 		SetEvent(GEARDOWN);
+		debug(3);
 	}
 	if(is_pin_high(val,BTN_TURNLIGHT_DX_PIN)){
 		SetEvent(TURNR);
+		debug(4);
 	}
 	if(is_pin_high(val,BTN_TURNLIGHT_SX_PIN)){
 		SetEvent(TURNL);
+		debug(5);
 	}
 	if(is_pin_high(val,	BTN_HEADLIGHT_PIN)){
 		SetEvent(LIGHT);
+		debug(6);
 	}
 }
 
