@@ -158,6 +158,7 @@ void UpdateFuel(){
 void checkEvents(){
 //void checkButtons(){
 	if(IsEvent(TURNL)){
+		//debug(20);
 		if(IsEvent(iconinfo(&MyDashBoardScr[2])->onevent)){
 			ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 		}else{
@@ -167,6 +168,7 @@ void checkEvents(){
 		//debugInt(60, 60, 8, 8, 8);
 	}
 	if(IsEvent(TURNR)){
+		debug(111);
 		if(IsEvent(iconinfo(&MyDashBoardScr[1])->onevent)){
 			ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 			}else{
@@ -407,7 +409,7 @@ Update_Accell();
 get_buttons_events();
 checkEvents();
 
-debug(Clutch_Read());
+//debug(Clutch_Read());
 
 //to remove this below. Touch is not used anymore
 	unsigned int px, py;
