@@ -14,15 +14,15 @@
 #include "../config.h"
 
 Icon RightArrow = {
-		RightArrow_ON, RightArrow_OFF, AR
+		RightArrow_ON, RightArrow_OFF, AR,1,0
 };
 
 Icon LeftArrow = {
-		LeftArrow_ON, LeftArrow_OFF , AL
+		LeftArrow_ON, LeftArrow_OFF , AL,1,0
 };
 
 Icon Oil = {
-		Low_Oil_ON, Low_Oil_OFF, OIL
+		Low_Oil_ON, Low_Oil_OFF, OIL,0,0
 };
 
 Image_ARRAY RUN = {
@@ -32,7 +32,7 @@ Image_ARRAY RUN = {
 
 
 Icon Low_Fuel = {
-		LowFuel_ON, LowFuel_OFF, FUEL
+		LowFuel_ON, LowFuel_OFF, FUEL,0,0
 };
 
 
