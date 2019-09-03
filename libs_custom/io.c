@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "io.h"
 #include "../config.h"
-#include "../libs/types.h"
+#include "../libs_custom/types.h"
 #include "../libs/Event.h"
 
 
@@ -93,16 +93,16 @@ void io_init(){
 }
 
 bool_t Button_LeftArrow_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_TURNLIGHT_SX_PORT), (BTN_TURNLIGHT_SX_PIN)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_TURNLIGHT_SX_PIN)));
 }
 bool_t Button_RightArrow_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_TURNLIGHT_DX_PORT), (BTN_TURNLIGHT_DX_PIN)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_TURNLIGHT_DX_PIN)));
 }
 bool_t Button_GearUp_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_GEAR_UP_PORT), (BTN_GEAR_UP_PIN)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_GEAR_UP_PIN)));
 }
 bool_t Button_GearDown_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_GEAR_DOWN_PORT), (BTN_GEAR_DOWN_PIN)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_GEAR_DOWN_PIN)));
 }
 /*
 	Retuns between [100 - 4000]
