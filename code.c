@@ -91,7 +91,7 @@ static uint8_T Average = ZERO;
 	}else{
 		ClearEvent(iconinfo(&MyDashBoardScr[3])->onevent);
 	}
-	if(Partial_Speedometer> Oil_MustBe_Refilled + Km_Before_Crash ){
+	if(Partial_Speedometer>= Oil_MustBe_Refilled + Km_Before_Crash ){
 		StopEngine = 1;
 	}
 }
@@ -222,14 +222,16 @@ void checkEvents(){
 		Actual_Gear++;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
-		RPM_Value = RPM_Value / 2;
+		if((RPM_Value / 2)>RPM_MIN)
+			RPM_Value = RPM_Value / 2;
 
 	}
 	if(Button_GearDown_Read() && Actual_Gear > 0 && Clutch_Read()==1 ){
 		Actual_Gear--;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
-		RPM_Value = RPM_Value / 2;
+		if((RPM_Value / 2)>RPM_MIN)
+			RPM_Value = RPM_Value / 2;
 	}
 	
 }

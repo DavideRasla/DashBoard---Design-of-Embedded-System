@@ -1,8 +1,4 @@
-/*!	\file	Button.h
- 	\author Daniel Casini
- 	\date	10/03/2014
-	\brief	Button handling file for the watch
-*/
+
 
 #ifndef WIDGET_H_
 #define WIDGET_H_
@@ -10,7 +6,7 @@
 #include "Event.h"
 #include "Touch.h"
 #include "fonts.h"
-#include "types.h"
+#include "../libs_custom/types.h"
 
 
 typedef enum  {
