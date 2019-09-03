@@ -233,7 +233,7 @@ void checkEvents(){
 		if((RPM_Value / 2)>RPM_MIN)
 			RPM_Value = RPM_Value / 2;
 	}
-	if(Button_ResetKm_Read()  ){
+	if(Button_ResetKm_Read() && StopEngine == 0 ){//Reset the partial km
 		Partial_Speedometer = 0;
 	}
 
@@ -453,7 +453,6 @@ TASK(TaskUpdate)
 
 UpdateEngineResponse();
 Update_Accell();
-//get_buttons_events();
 checkEvents();
 
 
