@@ -240,20 +240,7 @@ void UpdateMotorRPM(){
 	}
 	*/
 }
-/*!
- *  \brief Used to print a variable on the screen
- *  Called: None
- *  \return void
- */
-void debug(double a){
-char text[20];
-	LCD_SetTextColor(Black);
-	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(50, 130, 100, 40);
-	LCD_SetTextColor(White);
-   	sprintf((char*)text,"%f", a);
-    LCD_DisplayStringXY(50, 130, text);
-}
+
 /*!
  *  \brief Read from the sensor the amount of Throttle and calculates the actual acceleration of the motorbike.
  *  Called: None
@@ -345,6 +332,20 @@ char text[20];
     LCD_DisplayStringXY(100, 210, text);
 }
 
+/*!
+ *  \brief Used to print a variable on the screen
+ *  Called: None
+ *  \return void
+ */
+void debug(int a){
+char text[20];
+	LCD_SetTextColor(Black);
+	LCD_SetBackColor(Black);
+	LCD_DrawFullRect(50, 130, 100, 40);
+	LCD_SetTextColor(White);
+   	sprintf((char*)text,"%d", a);
+    LCD_DisplayStringXY(50, 130, text);
+}
 
 /*!
  *  \brief Simulate the engine response reading the throttle and calculate the new RPM of the engine
@@ -393,7 +394,6 @@ TASK(TaskGuiDashboard)
 } 
 
 
-
 /*!
  *  \brief Task that calculates and updates all the Variables used by TaskGuiDashboard. 
  *   Also reads all the events from the buttons
@@ -401,6 +401,7 @@ TASK(TaskGuiDashboard)
  */
 TASK(TaskUpdate)
 {
+get_buttons_events();
 UpdateEngineResponse();
 Update_Accell();
 
