@@ -15,7 +15,7 @@
 #define SPEED_MAX 					   250
 #define CONSUMPTION_LITRE				 2 		//2km for litre
 #define Oil_MustBe_Refilled			  	 1		//Should be 500
-#define Km_Before_Crash					  1		//Should be 50
+#define Km_Before_Crash					 1		//Should be 50
 
 //RPM Parameters
 #define RPM_INITIAL					  3000
@@ -49,7 +49,7 @@
 #define BTN_TURNLIGHT_DX_PIN	(GPIO_PIN_4)
 #define BTN_TURNLIGHT_SX_PIN	(GPIO_PIN_6)
 #define BTN_HEADLIGHT_PIN		(GPIO_PIN_2)
-
+#define BTN_RESET_PARTIALKM		(GPIO_PIN_1)
 #define OUT_PORT				(GPIOB)
 
 #define LED_ARROW_DX			(GPIO_PIN_1)

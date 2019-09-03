@@ -233,6 +233,10 @@ void checkEvents(){
 		if((RPM_Value / 2)>RPM_MIN)
 			RPM_Value = RPM_Value / 2;
 	}
+	if(Button_ResetKm_Read()  ){
+		Partial_Speedometer = 0;
+	}
+
 	
 }
 /*!

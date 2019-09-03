@@ -99,6 +99,10 @@ bool_t Button_GearUp_Read(){
 bool_t Button_GearDown_Read(){
 	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_GEAR_DOWN_PIN)));
 }
+bool_t Button_ResetKm_Read(){
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_RESET_PARTIALKM)));
+}
+
 /*
 	Retuns between [100 - 4000]
 */
