@@ -18,7 +18,10 @@ void debuginfo(int id, int a, int b, int c)
 void debugInt(int Xpos, int Ypos, int a, int b, int c)
 {
 	char text[80];
-
+	LCD_SetTextColor(Black);
+	LCD_SetBackColor(Black);
+	LCD_DrawFullRect(Xpos, Ypos, 150, 40);
+	LCD_SetTextColor(White);
    sprintf((char*)text,"%d , %d , %d", a, b, c);
 
     LCD_DisplayStringXY(Xpos, Ypos, text);

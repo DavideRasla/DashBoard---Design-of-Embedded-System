@@ -25,16 +25,19 @@
 
 uint8_T hours=13, minutes=44, seconds=ZERO;
 
-uint8_T   Fuel_Value   		= FULL_FUEL;
-uint8_T   IstantSpeed  		= 10;
-uint32_T  Speedometer  		= SPEEDOMETER_INITIAL;
-uint16_T  RPM_Value    		= RPM_INITIAL;
-uint8_T   Actual_Gear 		= Neutral_Gear;
-double    Actual_Accel 		= ZERO;
-uint32_T  MetersTraveled 	= ZERO;
-uint8_T	  KmTraveled 		= ZERO;
-bool_t 	  StopEngine 		= ZERO; //0 = ON; 1 = OFF
-
+uint8_T   Fuel_Value   			= FULL_FUEL;
+uint8_T   IstantSpeed  			= ZERO;
+uint32_T  Speedometer  			= SPEEDOMETER_INITIAL;
+uint32_T  Partial_Speedometer  	= ZERO;
+uint16_T  RPM_Value    			= RPM_INITIAL;
+uint8_T   Actual_Gear 			= Neutral_Gear;
+double    Actual_Accel 			= ZERO;
+uint32_T  MetersTraveled 		= ZERO;
+uint8_T	  KmTraveled 			= ZERO;
+bool_t 	  StopEngine 			= ZERO; //0 = ON; 1 = OFF
+bool_t Blink_Left = 0;
+bool_t Blink_Right = 0;
+uint8_T time_Arrow = 0;
 /*
  * SysTick ISR2
  */
@@ -64,8 +67,9 @@ static uint8_T Average = ZERO;
 	Speed2 = IstantSpeed;
 	Average = (Speed1 + Speed2)/2;
 	MetersTraveled = MetersTraveled +  2*Average/3.6;//From km/h to m/s. Calculate for 2 seconds
-	if(MetersTraveled > ONE_KM){//Davide: This should be 1000
+	if(MetersTraveled > ONE_KM){
 		Speedometer++;
+		Partial_Speedometer++;
 		KmTraveled++;
 		MetersTraveled = MetersTraveled % ONE_KM; //Save just the meters
 
@@ -81,6 +85,15 @@ static uint8_T Average = ZERO;
 		}
 	}
 	i++;
+
+	if(Partial_Speedometer>Oil_MustBe_Refilled){//if there is not a refill before X km, the oil 
+		SetEvent(iconinfo(&MyDashBoardScr[3])->onevent);
+	}else{
+		ClearEvent(iconinfo(&MyDashBoardScr[3])->onevent);
+	}
+	if(Partial_Speedometer> Oil_MustBe_Refilled + Km_Before_Crash ){
+		StopEngine = 1;
+	}
 }
 
 /*!
@@ -110,6 +123,9 @@ unsigned char watchstr[20];
 	Calculate_MetersTraveled(); 	
 	}
 i++;
+if(time_Arrow<5){
+	time_Arrow++;
+}
 	sprintf(watchstr, "%2d:%2d:%2d", hours, minutes, seconds);
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
@@ -156,19 +172,46 @@ void UpdateFuel(){
  *  \return void
  */
 void checkEvents(){
-//void checkButtons(){
-	if(Button_LeftArrow_Read()==0){
-			ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-		}else{
-			SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+	if(Button_LeftArrow_Read()){
+		Blink_Left = !Blink_Left;
+		Blink_Right = 0;
+		ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+		ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+		time_Arrow = 0;
 		}
-
-	
-	if(Button_RightArrow_Read()==0){
-			ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
-			}else{
-			SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+//debugInt(20, 130,time_Arrow, Blink_Left, Blink_Right);
+	if(Button_RightArrow_Read()){
+		Blink_Right = !Blink_Right;
+		Blink_Left = 0;
+		ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+		ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+		time_Arrow = 0;
+		}	
+	if(Blink_Left == 1){
+			if(time_Arrow <=3){
+				SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+				}
+			else if(time_Arrow>3){
+				ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+				}
+			if(time_Arrow == 5){
+				time_Arrow = 0;
+				ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 			}
+	}		
+	if(Blink_Right == 1){
+			if(time_Arrow <=3){
+				SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+				}
+			else if(time_Arrow>3){
+				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+				}
+			if(time_Arrow == 5){
+				time_Arrow = 0;
+				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+			}
+	}
+
 	
 	//if(IsEvent(LIGHT)){
 
@@ -194,8 +237,8 @@ void checkEvents(){
  *  \return void
  */
 void UpdateMotorRPM(){
-	//if(Clutch_Read()==0 && Actual_Gear != Neutral_Gear){ //DAVIDE: Credo sia concettualmente sbagliato che il motore non salga di giri se la frizione è tirata
-		if( RPM_Value>=ZERO && RPM_Value<RPM_LOW ){
+	if(StopEngine == 0 ){
+		if( RPM_Value>RPM_MIN && RPM_Value<RPM_LOW ){
 			LCD_SetTextColor(Black);
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 50, 44,180);
@@ -226,15 +269,15 @@ void UpdateMotorRPM(){
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 140, 44, 50);	
 		}	
-	/*}else{/*Draw a low bar in case the clutch is on 
+	}else{
 			LCD_SetTextColor(Black);
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 50, 44,180);
-			LCD_SetTextColor(Green);
+			LCD_SetTextColor(Black);
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 190 - (RPM_LOW/100) , 44, (RPM_LOW/100) );
 	}
-	*/
+	
 }
 
 /*!
@@ -322,10 +365,12 @@ void UpdateSpeedoMeter(){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(100, 200, 100, 30);
+	LCD_DrawFullRect(50, 200, 200, 30);
 	LCD_SetTextColor(White);
    	sprintf((char*)text,"%d Km", Speedometer);
-    LCD_DisplayStringXY(100, 210, text);
+    LCD_DisplayStringXY(140, 210, text);
+    sprintf((char*)text,"%d Km", Partial_Speedometer);
+    LCD_DisplayStringXY(50, 210, text);
 }
 
 /*!

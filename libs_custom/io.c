@@ -118,10 +118,8 @@ bool_t Clutch_Read(){
 uint32_T ActualClutchValue= TM_ADC_Read(ADC_CLUTCH_DEV, ADC_CLUTCH_CHANNEL);
 	if(ActualClutchValue > 1){
 		if( ActualClutchValue<2000 ){
-			debug(0);
 			return 0;//unactive
 		}else{
-			debug(9);
 			return 1;//active
 		}
 	}

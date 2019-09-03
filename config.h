@@ -14,13 +14,15 @@
 //Motorbike Parameters
 #define SPEED_MAX 					   250
 #define CONSUMPTION_LITRE				 2 		//2km for litre
+#define Oil_MustBe_Refilled			  	 1		//Should be 500
+#define Km_Before_Crash					  1		//Should be 50
 
 //RPM Parameters
 #define RPM_INITIAL					  3000
-#define RPM_MAX						 12000
-#define RPM_LOW						  5000
+#define RPM_MAX						 14000
+#define RPM_LOW						  2000
 #define RPM_MEDIUM					  8000
-#define RPM_MIN						  2000
+#define RPM_MIN						  500
 
 
 //Dashboard Parameters
