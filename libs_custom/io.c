@@ -12,12 +12,6 @@
 #define is_pin_high(GPIOx, GPIO_Pin)	(((GPIOx) & (GPIO_Pin)) == 0 ? 0 : 1)
 
 
-//#define BUTTON_PORT    			 			(GPIOE)
-//#define BUTTON_PIN_LeftArrow      			(GPIO_PIN_7)
-//#define BUTTON_PIN_RightArrow				(GPIO_PIN_8)
-//#define BUTTON_PIN_GearUp					(GPIO_PIN_5)
-//#define BUTTON_PIN_GearDown					(GPIO_PIN_6)
-
 void io_init(){
 	//BUTTON INPUTS
 	TM_GPIO_Init(BTN_PORT,

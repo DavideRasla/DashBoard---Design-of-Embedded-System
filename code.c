@@ -245,13 +245,13 @@ void UpdateMotorRPM(){
  *  Called: None
  *  \return void
  */
-void debug(double a){
+void debug( int a){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
 	LCD_DrawFullRect(50, 130, 100, 40);
 	LCD_SetTextColor(White);
-   	sprintf((char*)text,"%f", a);
+   	sprintf((char*)text,"%d", a);
     LCD_DisplayStringXY(50, 130, text);
 }
 /*!
