@@ -43,12 +43,12 @@
 #define BTN_PORT 				(GPIOE)
 
 #define BTN_GEAR_UP_PIN			(GPIO_PIN_0)
-#define BTN_GEAR_DOWN_PIN		(GPIO_PIN_2)
+#define BTN_GEAR_DOWN_PIN		(GPIO_PIN_5)
 #define BTN_TURNLIGHT_DX_PIN	(GPIO_PIN_4)
 #define BTN_TURNLIGHT_SX_PIN	(GPIO_PIN_6)
-#define BTN_HEADLIGHT_PIN		(GPIO_PIN_5)
+#define BTN_HEADLIGHT_PIN		(GPIO_PIN_2)
 
-#define OUT_PORT				(GPIOA)
+#define OUT_PORT				(GPIOB)
 
 #define LED_ARROW_DX			(GPIO_PIN_1)
 #define LED_ARROW_SX			(GPIO_PIN_3)
@@ -58,9 +58,9 @@
 #define ADC_THROTTLE_DEV		(ADC1)
 #define ADC_THROTTLE_CHANNEL 	(ADC_Channel_4)
 
-/* Initialize ADC2 on channel 3 for the Clutch, this is pin PA3 */
+/* Initialize ADC2 on channel 5 for the Clutch, this is pin PA5 */
 #define ADC_CLUTCH_DEV			(ADC2)
-#define ADC_CLUTCH_CHANNEL 		(ADC_Channel_3)
+#define ADC_CLUTCH_CHANNEL 		(ADC_Channel_5)
 
 //TASK CONFIGURATIONS
 #define TASKOFFSET 		10

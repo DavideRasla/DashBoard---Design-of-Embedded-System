@@ -157,36 +157,29 @@ void UpdateFuel(){
  */
 void checkEvents(){
 //void checkButtons(){
-	if(IsEvent(TURNL)){
-		//debug(20);
-		if(IsEvent(iconinfo(&MyDashBoardScr[2])->onevent)){
-			ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-		}else{
-			SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-		}
-		ClearEvent(TURNL);
-		//debugInt(60, 60, 8, 8, 8);
+	if(Button_LeftArrow_Read()==0){
+		ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+	}else{
+		SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 	}
-	if(IsEvent(TURNR)){
-		debug(111);
-		if(IsEvent(iconinfo(&MyDashBoardScr[1])->onevent)){
-			ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
-			}else{
-			SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
-			}
-		ClearEvent(TURNR);
-	}
-	if(IsEvent(LIGHT)){
 
+	if(Button_RightArrow_Read()==0){
+		ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
+	}else{
+		SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 	}
-	if(IsEvent(GEARUP) && Actual_Gear <= 5 && Clutch_Read()==1 ){
+	
+	//if(IsEvent(LIGHT)){
+
+	//}
+	if(Button_GearUp_Read() && Actual_Gear <= 5 && Clutch_Read()==1 ){
 		Actual_Gear++;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
 		RPM_Value = RPM_Value / 2;
 
 	}
-	if(IsEvent(GEARDOWN) && Actual_Gear > 0 && Clutch_Read()==1 ){
+	if(Button_GearDown_Read() && Actual_Gear > 0 && Clutch_Read()==1 ){
 		Actual_Gear--;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
@@ -406,7 +399,7 @@ TASK(TaskUpdate)
 
 UpdateEngineResponse();
 Update_Accell();
-get_buttons_events();
+//get_buttons_events();
 checkEvents();
 
 
