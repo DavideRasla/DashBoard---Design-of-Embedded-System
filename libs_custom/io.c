@@ -9,7 +9,7 @@
 #include "../libs/tm_stm32f4_gpio.h"
 #include "../libs/tm_stm32f4_adc.h"
 
-#define is_pin_high(GPIOx, GPIO_Pin)	(((GPIOx) & (GPIO_Pin)) == 0 ? 0 : 1)
+
 
 
 void io_init(){
@@ -58,6 +58,7 @@ void io_init(){
 	/* Enable vbat channel */
 	TM_ADC_EnableVbat();
 	
+	/*
 	//OUTPUTS
 	TM_GPIO_Init(OUT_PORT,
 				LED_ARROW_DX,
@@ -81,7 +82,7 @@ void io_init(){
 					TM_GPIO_Speed_High);
 
 
-
+*/
 
 	
 }
@@ -128,27 +129,4 @@ uint32_T ActualClutchValue= TM_ADC_Read(ADC_CLUTCH_DEV, ADC_CLUTCH_CHANNEL);
 }
 
 
-void get_buttons_events(){
-
-	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_GEAR_UP_PIN)){
-		SetEvent(GEARUP);
-		debug(2);
-	}
-	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_GEAR_DOWN_PIN)){
-		SetEvent(GEARDOWN);
-		debug(3);
-	}
-	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_TURNLIGHT_DX_PIN)){
-		SetEvent(TURNR);
-		debug(4);
-	}
-	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_TURNLIGHT_SX_PIN)){
-		SetEvent(TURNL);
-		debug(5);
-	}
-	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_HEADLIGHT_PIN)){
-		SetEvent(LIGHT);
-		debug(6);
-	}
-}
 
