@@ -117,81 +117,36 @@ bool_t Clutch_Read(){
 uint32_T ActualClutchValue= TM_ADC_Read(ADC_CLUTCH_DEV, ADC_CLUTCH_CHANNEL);
 	if(ActualClutchValue > 1){
 		if( ActualClutchValue<2000 ){
+			debug(0);
 			return 0;//unactive
 		}else{
+			debug(9);
 			return 1;//active
 		}
 	}
 	return 0;
 }
-/*
 
-double Throttle_Read(){
-	uint32_T ActualThrottleValue= TM_ADC_Read(ADC1, ADC_Channel_3);
-	if( ActualThrottleValue<500 ){
-		return 0.03;
-	}
-	if( ActualThrottleValue<1000 ){
-		return 0.04;
-	}
-	if( ActualThrottleValue<1300 ){
-		return 0.05;
-	}
-	if( ActualThrottleValue<1600 ){
-		return 0.06;
-	}
-	if( ActualThrottleValue<1800 ){
-		return 0.07;
-	}
-	if( ActualThrottleValue<2000 ){
-		return 0.1;
-	}
-	if( ActualThrottleValue<2500 ){
-		return 0.11;
-	}
-	if( ActualThrottleValue<2700 ){
-		return 0.12;
-	}
-	if( ActualThrottleValue<2900 ){
-		return 0.13;
-	}
-	if( ActualThrottleValue<3100 ){
-		return 0.14;
-	}
-	if( ActualThrottleValue<3200 ){
-		return 0.15;
-	}
-	if( ActualThrottleValue<3500 ){
-		return 0.16;
-	}
-	if( ActualThrottleValue<3800 ){
-		return 0.17;
-	}
-	if( ActualThrottleValue<4000 ){
-		return 0.18;
-	}
-return 0;
-}*/
 
 void get_buttons_events(){
-	uint16_T val = TM_GPIO_GetPortInputValue(BTN_PORT);
-	if(is_pin_high(val,BTN_GEAR_UP_PIN)){
+
+	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_GEAR_UP_PIN)){
 		SetEvent(GEARUP);
 		debug(2);
 	}
-	if(is_pin_high(val,BTN_GEAR_DOWN_PIN)){
+	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_GEAR_DOWN_PIN)){
 		SetEvent(GEARDOWN);
 		debug(3);
 	}
-	if(is_pin_high(val,BTN_TURNLIGHT_DX_PIN)){
+	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_TURNLIGHT_DX_PIN)){
 		SetEvent(TURNR);
 		debug(4);
 	}
-	if(is_pin_high(val,BTN_TURNLIGHT_SX_PIN)){
+	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_TURNLIGHT_SX_PIN)){
 		SetEvent(TURNL);
 		debug(5);
 	}
-	if(is_pin_high(val,	BTN_HEADLIGHT_PIN)){
+	if((bool_t)TM_GPIO_GetInputPinValue(BTN_PORT,BTN_HEADLIGHT_PIN)){
 		SetEvent(LIGHT);
 		debug(6);
 	}

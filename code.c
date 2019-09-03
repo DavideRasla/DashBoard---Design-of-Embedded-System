@@ -409,7 +409,6 @@ Update_Accell();
 get_buttons_events();
 checkEvents();
 
-//debug(Clutch_Read());
 
 //to remove this below. Touch is not used anymore
 	unsigned int px, py;
