@@ -120,25 +120,35 @@ CPU mySystem {
     	};
 	
 
-	ALARM AlarmTaskUpdate {
+	ALARM AlarmTaskUpdateSensors {
 		COUNTER = myCounter;
-		ACTION = ACTIVATETASK { TASK = TaskUpdate; };
+		ACTION = ACTIVATETASK { TASK = TaskUpdateSensors; };
 	};
 	
-	ALARM AlarmTaskGuiDashboard {
+	ALARM AlarmTaskGuiDashboardSlow {
 		COUNTER = myCounter;
-		ACTION = ACTIVATETASK { TASK = TaskGuiDashboard; };
+		ACTION = ACTIVATETASK { TASK = TaskGuiDashboardSlow; };
 	};
- 
-	TASK TaskGuiDashboard {
+ 	ALARM AlarmTaskGuiDashboardFast {
+		COUNTER = myCounter;
+		ACTION = ACTIVATETASK { TASK = TaskGuiDashboardFast ; };
+	};
+
+	TASK TaskGuiDashboardSlow {
 		PRIORITY = 0x02;   /* High priority */
 		AUTOSTART = FALSE;
 		STACK = SHARED;
 		ACTIVATION = 1;    /* only one pending activation */
 		SCHEDULE = FULL;
 	};
-	
-	TASK TaskUpdate {
+	TASK TaskGuiDashboardFast {
+		PRIORITY = 0x03;   /* High priority */
+		AUTOSTART = FALSE;
+		STACK = SHARED;
+		ACTIVATION = 1;    /* only one pending activation */
+		SCHEDULE = FULL;
+	};	
+	TASK TaskUpdateSensors {
 		PRIORITY = 0x01;   /* Low priority */
 		AUTOSTART = FALSE;
 		STACK = SHARED;

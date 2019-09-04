@@ -55,6 +55,14 @@ unsigned char DrawInit( const Widget ws[])
 		DrawOff(&ws[i]);
 	}
 	ChangeGear(&MyDashBoardScr[5], 0);
+/*Draw the string "km" in order to avoid useless refreshing*/
+	LCD_SetTextColor(Black);
+	LCD_SetBackColor(Black);
+	LCD_DrawFullRect(50, 200, 280, 30);
+	LCD_SetTextColor(White);
+    LCD_DisplayStringXY(210, 210, "Km");
+    LCD_DisplayStringXY(40, 210, "Km");
+    LCD_DisplayStringXY(150, 100, "Km");
 	return 1;
 }
 

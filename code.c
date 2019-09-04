@@ -91,7 +91,7 @@ static uint8_T Average = ZERO;
 	}else{
 		ClearEvent(iconinfo(&MyDashBoardScr[3])->onevent);
 	}
-	if(Partial_Speedometer>= Oil_MustBe_Refilled + Km_Before_Crash ){
+	if(Partial_Speedometer> Oil_MustBe_Refilled + Km_Before_Crash ){
 		StopEngine = 1;
 	}
 }
@@ -106,7 +106,7 @@ void UpdateTime()
 static uint8_T i = 0;
 unsigned char watchstr[20];
 
-	if(i == 5){
+	if(i == 1){
 	i = ZERO;
 	seconds++;
 	if(seconds == 60){
@@ -123,9 +123,7 @@ unsigned char watchstr[20];
 	Calculate_MetersTraveled(); 	
 	}
 i++;
-if(time_Arrow<5){
-	time_Arrow++;
-}
+
 	sprintf(watchstr, "%2d:%2d:%2d", hours, minutes, seconds);
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
@@ -173,6 +171,7 @@ void UpdateFuel(){
  */
 void checkEvents(){
 
+
 	if(Button_LeftArrow_Read()){
 		Blink_Left = !Blink_Left;
 		Blink_Right = 0;
@@ -189,28 +188,26 @@ void checkEvents(){
 		time_Arrow = 0;
 		}	
 	if(Blink_Left == 1){
-			if(time_Arrow <=3){
+			if(time_Arrow ==20){
 				SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 				}
-			else if(time_Arrow>3){
+			else if(time_Arrow==40){
 				ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-				}
-			if(time_Arrow == 5){
 				time_Arrow = 0;
-				ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-			}
+				}
+			time_Arrow++;
+
 	}		
 	if(Blink_Right == 1){
-			if(time_Arrow <=3){
+			if(time_Arrow ==20){
 				SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 				}
-			else if(time_Arrow>3){
+			else if(time_Arrow==40){
 				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
-				}
-			if(time_Arrow == 5){
 				time_Arrow = 0;
-				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
-			}
+				}
+			time_Arrow++;
+			
 	}
 
 
@@ -305,7 +302,7 @@ void UpdateSpeedValue(){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(90, 100, 130, 30);
+	LCD_DrawFullRect(90, 100, 45, 30);
 	LCD_SetTextColor(White);
 
 if( StopEngine == ZERO ){//if engine can work
@@ -360,7 +357,7 @@ if( StopEngine == ZERO ){//if engine can work
 	}else{
 		IstantSpeed = 0;//No Fuel
 	}
-	sprintf((char*)text,"%d Km/h", IstantSpeed);
+	sprintf((char*)text,"%d", IstantSpeed);
     LCD_DisplayStringXY(90, 100, text);
 }
 
@@ -373,12 +370,13 @@ void UpdateSpeedoMeter(){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(50, 200, 200, 30);
+	LCD_DrawFullRect(110, 200, 70, 30);
+	LCD_DrawFullRect(20, 200, 15, 30);
 	LCD_SetTextColor(White);
-   	sprintf((char*)text,"%d Km", Speedometer);
-    LCD_DisplayStringXY(140, 210, text);
-    sprintf((char*)text,"%d Km", Partial_Speedometer);
-    LCD_DisplayStringXY(50, 210, text);
+   	sprintf((char*)text,"%d", Speedometer);
+    LCD_DisplayStringXY(110, 210, text);
+    sprintf((char*)text,"%d", Partial_Speedometer);
+    LCD_DisplayStringXY(20, 210, text);
 }
 
 /*!
@@ -431,39 +429,32 @@ int16_T NewRPM =  Throttle_Read();
  *  \brief Task that draws all the Graphic
  *  \return void
  */
-TASK(TaskGuiDashboard)
+TASK(TaskGuiDashboardSlow)
 {
-	UpdateTime();
 	UpdateFuel();
-	UpdateMotorRPM();
-	UpdateSpeedValue();
 	UpdateSpeedoMeter();
 	DrawIcons(MyDashBoardScr);
-	
+	UpdateTime();
+} 
+TASK(TaskGuiDashboardFast)
+{
+	UpdateMotorRPM();
+	UpdateSpeedValue();
 } 
 
 
 /*!
- *  \brief Task that calculates and updates all the Variables used by TaskGuiDashboard. 
+ *  \brief Task that calculates and updates all the Variables used by TaskGuiDashboardSlow. 
  *   Also reads all the events from the buttons
  *  \return void
  */
-TASK(TaskUpdate)
+TASK(TaskUpdateSensors)
 {
 
 UpdateEngineResponse();
 Update_Accell();
 checkEvents();
 
-
-//to remove this below. Touch is not used anymore
-	unsigned int px, py;
-	TPoint p;
-	if (GetTouch_SC_Async(&px, &py)) {
-		p.x = px;
-		p.y = py;
-		OnTouch(MyDashBoardScr, &p);
-	}
 }
 
 
@@ -499,9 +490,9 @@ int main(void)
 	/* Program cyclic alarms which will fire after an initial offset,
 	 * and after that periodically
 	 * */
-	SetRelAlarm(AlarmTaskUpdate, TASKOFFSET, TaskUpdate_FREQ);
-	SetRelAlarm(AlarmTaskGuiDashboard, TASKOFFSET, TASKGUI_FREQ);
-
+	SetRelAlarm(AlarmTaskUpdateSensors, TASKOFFSET, TaskUpdateSensors_FREQ);
+	SetRelAlarm(AlarmTaskGuiDashboardSlow, TASKOFFSET, TASKGUI_FREQ_SLOW);
+	SetRelAlarm(AlarmTaskGuiDashboardFast, TASKOFFSET, TASKGUI_FREQ_FAST);
   /* Forever loop: background activities (if any) should go here */
 	for (;;) {
 	}

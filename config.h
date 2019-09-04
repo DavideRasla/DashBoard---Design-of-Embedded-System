@@ -66,9 +66,9 @@
 
 //TASK CONFIGURATIONS
 #define TASKOFFSET 		10
-#define TaskUpdate_FREQ	50
-#define TASKGUI_FREQ	200
-
+#define TaskUpdateSensors_FREQ	50
+#define TASKGUI_FREQ_FAST	200
+#define TASKGUI_FREQ_SLOW	1000
 
 //EVENTS DASHBOARD
 #define OIL 		0x02
