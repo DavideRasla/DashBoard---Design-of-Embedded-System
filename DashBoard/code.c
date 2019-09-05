@@ -86,13 +86,13 @@ static uint8_T Average = ZERO;
 	}
 	i++;
 
-	if(Partial_Speedometer>Oil_MustBe_Refilled){//if there is not a refill before X km, the oil 
+	if( Partial_Speedometer>Oil_MustBe_Refilled ){//if there is not a refill before X km
 		SetEvent(iconinfo(&MyDashBoardScr[3])->onevent);
 	}else{
 		ClearEvent(iconinfo(&MyDashBoardScr[3])->onevent);
 	}
 	if(Partial_Speedometer> Oil_MustBe_Refilled + Km_Before_Crash ){
-		StopEngine = 1;
+		StopEngine = ONE;
 	}
 }
 
@@ -171,7 +171,6 @@ void UpdateFuel(){
  */
 void checkEvents(){
 
-
 	if(Button_LeftArrow_Read()){
 		Blink_Left = !Blink_Left;
 		Blink_Right = 0;
@@ -179,7 +178,6 @@ void checkEvents(){
 		ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 		time_Arrow = 0;
 		}
-//debugInt(20, 130,time_Arrow, Blink_Left, Blink_Right);
 	if(Button_RightArrow_Read()){
 		Blink_Right = !Blink_Right;
 		Blink_Left = 0;
@@ -215,7 +213,7 @@ void checkEvents(){
 	//if(IsEvent(LIGHT)){
 
 	//}
-	if(Button_GearUp_Read() && Actual_Gear <= 5 && Clutch_Read()==1 ){
+	if(Button_GearUp_Read() && Actual_Gear <= Sixth_Gear && Clutch_Read()==1 ){
 		Actual_Gear++;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
@@ -223,11 +221,11 @@ void checkEvents(){
 			RPM_Value = RPM_Value / 2;
 
 	}
-	if(Button_GearDown_Read() && Actual_Gear > 0 && Clutch_Read()==1 ){
+	if(Button_GearDown_Read() && Actual_Gear > Neutral_Gear && Clutch_Read()==1 ){
 		Actual_Gear--;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
-		if((RPM_Value / 2)>RPM_MIN)
+		if( (RPM_Value/2)>RPM_MIN )
 			RPM_Value = RPM_Value / 2;
 	}
 	if(Button_ResetKm_Read() && StopEngine == 0 ){//Reset the partial km
@@ -242,7 +240,7 @@ void checkEvents(){
  *  \return void
  */
 void UpdateMotorRPM(){
-	if(StopEngine == 0 ){
+	if(StopEngine == 0 ){ /*If the Engine is in a valid state*/
 		if( RPM_Value>RPM_MIN && RPM_Value<RPM_LOW ){
 			LCD_SetTextColor(Black);
 			LCD_SetBackColor(Black);
@@ -274,7 +272,7 @@ void UpdateMotorRPM(){
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 140, 44, 50);	
 		}	
-	}else{
+	}else{ /*No rpm is possible*/
 			LCD_SetTextColor(Black);
 			LCD_SetBackColor(Black);
 			LCD_DrawFullRect(241, 50, 44,180);
@@ -306,10 +304,10 @@ char text[20];
 	LCD_SetTextColor(White);
 
 if( StopEngine == ZERO ){//if engine can work
-	if(Clutch_Read()==0 && Actual_Gear != Neutral_Gear){//if the clutch is not on
+	if(Clutch_Read()==0 && Actual_Gear != Neutral_Gear){//if the clutch is not on AND if the gear is not in neutral
 					//debug(Actual_Accel);
 						if(Actual_Accel>ZERO) {//Positive accelleration, need to increase the speed
-							if(IstantSpeed == ZERO){
+								if(IstantSpeed == ZERO){
 									IstantSpeed = 5;
 								}
 								if(IstantSpeed < SPEED_MAX/10){ //low speed
@@ -317,17 +315,15 @@ if( StopEngine == ZERO ){//if engine can work
 								}
 								if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/3){ //low speed
 										IstantSpeed = IstantSpeed + ((int)(IstantSpeed *1.1*Actual_Accel));
-
 								}
 								if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed < SPEED_MAX/2){ //medium speed
 										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.6*Actual_Accel));
-
 								}
 								if(IstantSpeed >= SPEED_MAX/2 && IstantSpeed < SPEED_MAX){ //high speed
 									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX)
 										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.25*Actual_Accel));
 								}
-								}else{//Negative accelleration, need to reduce the speed
+						}else{//Negative accelleration, need to reduce the speed
 									if(IstantSpeed < SPEED_MAX/10){ //very low speed
 										if( (uint8_T)(IstantSpeed - 0.6*IstantSpeed)>0 ){
 											IstantSpeed =  IstantSpeed - 0.6*IstantSpeed;
@@ -336,26 +332,24 @@ if( StopEngine == ZERO ){//if engine can work
 											}
 										}
 									}
-								if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/5){ //low speed
-									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-										IstantSpeed = IstantSpeed + ((int)(IstantSpeed *0.3*Actual_Accel));
-
-								}
-								if(IstantSpeed >= SPEED_MAX/5 && IstantSpeed < SPEED_MAX/2){ //medium speed
-									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.7*Actual_Accel));
-
-								}
-								if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed <= SPEED_MAX){ //high speed
-									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.9*Actual_Accel));
-								}
+									if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/5){ //low speed
+										if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+											IstantSpeed = IstantSpeed + ((int)(IstantSpeed *0.3*Actual_Accel));
+									}
+									if(IstantSpeed >= SPEED_MAX/5 && IstantSpeed < SPEED_MAX/2){ //medium speed
+										if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+											IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.7*Actual_Accel));
+									}
+									if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed <= SPEED_MAX){ //high speed
+										if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
+											IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.9*Actual_Accel));
+									}
 							}
 						}else{//Clutch is ON, slow 10%
 								IstantSpeed = IstantSpeed -  ((int)(IstantSpeed * 0.07)); //slow 10%
 						}
-	}else{
-		IstantSpeed = 0;//No Fuel
+}else{/*No Fuel || No Oil*/
+		IstantSpeed = 0;
 	}
 	sprintf((char*)text,"%d", IstantSpeed);
     LCD_DisplayStringXY(90, 100, text);

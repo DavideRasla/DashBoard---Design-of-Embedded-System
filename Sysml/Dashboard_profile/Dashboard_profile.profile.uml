@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Profile xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_UAOVQM5tEem8osQJGYOTtQ" name="Dashboard_profile">
+  <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_kz3RkM5tEem8osQJGYOTtQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_qn5swM5tEem8osQJGYOTtQ" source="PapyrusVersion">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qn5swc5tEem8osQJGYOTtQ" key="Version" value="0.0.0"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qn5sws5tEem8osQJGYOTtQ" key="Comment" value="&lt;undefined>"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qn5sw85tEem8osQJGYOTtQ" key="Copyright" value=""/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qn5sxM5tEem8osQJGYOTtQ" key="Date" value=""/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qn5sxc5tEem8osQJGYOTtQ" key="Author" value="&lt;undefined>"/>
+    </eAnnotations>
+    <contents xmi:type="ecore:EPackage" xmi:id="_p9VQUM5uEem8osQJGYOTtQ" name="Dashboard_profile" nsURI="http:///schemas/Dashboard_profile/_pnqiUM5uEem8osQJGYOTtQ/2" nsPrefix="Dashboard_profile">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_p9V3YM5uEem8osQJGYOTtQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_p9V3Yc5uEem8osQJGYOTtQ" key="Version" value="0.0.3"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_p9V3Ys5uEem8osQJGYOTtQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_p9V3Y85uEem8osQJGYOTtQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_p9V3ZM5uEem8osQJGYOTtQ" key="Date" value="2019-09-03"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_p9V3Zc5uEem8osQJGYOTtQ" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_p9VQUc5uEem8osQJGYOTtQ" name="Block">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_p9VQUs5uEem8osQJGYOTtQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_qn5FsM5tEem8osQJGYOTtQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_p9VQU85uEem8osQJGYOTtQ" name="Component" eSuperTypes="_p9VQUc5uEem8osQJGYOTtQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_p9VQVM5uEem8osQJGYOTtQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_IgVVEM5uEem8osQJGYOTtQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_p9VQVs5uEem8osQJGYOTtQ" name="Hardware" eSuperTypes="_p9VQU85uEem8osQJGYOTtQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_p9VQV85uEem8osQJGYOTtQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_MqKRMM5uEem8osQJGYOTtQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_p9VQWM5uEem8osQJGYOTtQ" name="VCC" ordered="false" lowerBound="1" eType="_p9VQXc5uEem8osQJGYOTtQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_p9VQWs5uEem8osQJGYOTtQ" name="GND" ordered="false" lowerBound="1" eType="_p9VQXc5uEem8osQJGYOTtQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EDataType" xmi:id="_p9VQXc5uEem8osQJGYOTtQ" name="Pin" instanceClassName="java.lang.String">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_p9VQXs5uEem8osQJGYOTtQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_fU2OsM5uEem8osQJGYOTtQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_p9VQX85uEem8osQJGYOTtQ" name="Software" eSuperTypes="_p9VQU85uEem8osQJGYOTtQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_p9VQYM5uEem8osQJGYOTtQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_QvqG8M5uEem8osQJGYOTtQ"/>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_GKYKUM5uEem8osQJGYOTtQ" name="Dashboard_profile" nsURI="http:///schemas/Dashboard_profile/_GKXjQM5uEem8osQJGYOTtQ/1" nsPrefix="Dashboard_profile">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GKYKU85uEem8osQJGYOTtQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GKYKVM5uEem8osQJGYOTtQ" key="Version" value="0.0.2"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GKYKVc5uEem8osQJGYOTtQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GKYKVs5uEem8osQJGYOTtQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GKYKV85uEem8osQJGYOTtQ" key="Date" value="2019-09-03"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GKYKWM5uEem8osQJGYOTtQ" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_GKYKUc5uEem8osQJGYOTtQ" name="Block">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GKYKUs5uEem8osQJGYOTtQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_qn5FsM5tEem8osQJGYOTtQ"/>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_kz34oM5tEem8osQJGYOTtQ" name="Dashboard_profile" nsURI="http:///schemas/Dashboard_profile/_kz2DcM5tEem8osQJGYOTtQ/0" nsPrefix="Dashboard_profile">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_kz34oc5tEem8osQJGYOTtQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kz34os5tEem8osQJGYOTtQ" key="Version" value="0.0.1"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kz34o85tEem8osQJGYOTtQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kz34pM5tEem8osQJGYOTtQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kz34pc5tEem8osQJGYOTtQ" key="Date" value="2019-09-03"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kz34ps5tEem8osQJGYOTtQ" key="Author" value=""/>
+      </eAnnotations>
+    </contents>
+  </eAnnotations>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_UGsJoM5tEem8osQJGYOTtQ">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_UGswsM5tEem8osQJGYOTtQ">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_qn5FsM5tEem8osQJGYOTtQ" name="Block"/>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_IgVVEM5uEem8osQJGYOTtQ" name="Component">
+    <generalization xmi:type="uml:Generalization" xmi:id="_Kv7ZIM5uEem8osQJGYOTtQ" general="_qn5FsM5tEem8osQJGYOTtQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_MqKRMM5uEem8osQJGYOTtQ" name="Hardware">
+    <generalization xmi:type="uml:Generalization" xmi:id="_UWo0sM5uEem8osQJGYOTtQ" general="_IgVVEM5uEem8osQJGYOTtQ"/>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_ZyrmoM5uEem8osQJGYOTtQ" name="VCC" type="_fU2OsM5uEem8osQJGYOTtQ"/>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_kXd0AM5uEem8osQJGYOTtQ" name="GND" type="_fU2OsM5uEem8osQJGYOTtQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_QvqG8M5uEem8osQJGYOTtQ" name="Software">
+    <generalization xmi:type="uml:Generalization" xmi:id="_U76E8M5uEem8osQJGYOTtQ" general="_IgVVEM5uEem8osQJGYOTtQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_fU2OsM5uEem8osQJGYOTtQ" name="Pin"/>
+</uml:Profile>
