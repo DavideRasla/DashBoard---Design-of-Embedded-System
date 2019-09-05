@@ -22,26 +22,26 @@
 
 /*Global Variables*/
 
-uint8_T hours=Initial_Hours, minutes=59, seconds=55;
 
-uint8_T   Fuel_Value   			= FULL_FUEL;
-uint8_T   IstantSpeed  			= ZERO;
-uint32_T  Speedometer  			= SPEEDOMETER_INITIAL;
-uint32_T  Partial_Speedometer  	= ZERO;
-uint16_T  RPM_Value    			= RPM_INITIAL;
-uint8_T   Actual_Gear 			= Neutral_Gear;
-double    Actual_Accel 			= ZERO;
-uint32_T  MetersTraveled 		= ZERO;
-uint8_T	  KmTraveled 			= ZERO;
-bool_t 	  StopEngine 			= ZERO; //0 = ON; 1 = OFF
-bool_t Blink_Left = ZERO;
-bool_t Blink_Right = ZERO;
-uint8_T time_Arrow = ZERO;
+uint8_T hours=Initial_Hours, minutes=59, seconds=55;		// Clock variables
+uint8_T   Fuel_Value   			= FULL_FUEL;				// Fuel value, inizializated to full
+uint8_T   IstantSpeed  			= ZERO;						// Speed on the scren
+uint32_T  Speedometer  			= SPEEDOMETER_INITIAL;		// Total KM counter
+uint32_T  Partial_Speedometer  	= ZERO;						// Total partial KM counter. This can be resetted
+uint16_T  RPM_Value    			= RPM_INITIAL;				// RPM of the engine
+uint8_T   Actual_Gear 			= Neutral_Gear;				// Actual gear of the motorbike. Is shown on the screen
+double    Actual_Accel 			= ZERO;						// Actual accelleration readed by the sensors
+uint32_T  MetersTraveled 		= ZERO;						// Meters traveled since the Power On
+uint8_T	  KmTraveled 			= ZERO;						// KM traveled since the Power On
+bool_t 	  StopEngine 			= ZERO; 					// If equals to zero the engine can work, otherwise the engine has a problem or the motorbike is without fuel
+bool_t Blink_Left 				= ZERO;						// If equals to one the left arrow can blink
+bool_t Blink_Right				= ZERO;						// If equals to one the right arrow can blink
+uint8_T time_Arrow 				= ZERO;						// Used to count the time in order to simulate the blinking of the arrow
 
 
-/*Events: Task ReadSensors will set them at ONE when needed. Task CheckEvents will reset them when used. */
+/*Events variables: When the task ReadSensor reads a valid input they are set to one */
 
-bool_t Event_LeftArrow = ZERO;
+bool_t Event_LeftArrow = ZERO;								
 bool_t Event_RightArrow = ZERO;
 bool_t Event_GearUp = ZERO;
 bool_t Event_GearDown = ZERO;
@@ -57,21 +57,20 @@ ISR2(systick_handler)
 }
 
 
-
 /*!
  *  \brief Calculates the amount of Meters Traveled in 2 seconds 
  *  Called: NONE
  *  \return void
  */
-void Calculate_MetersTraveled(){//Davide:: Da sistemare, non è precisa
+void Calculate_MetersTraveled(){
 static uint8_T i = ONE;
 static uint8_T Speed1 = ZERO;
 static uint8_T Speed2 = ZERO;
 static uint8_T Average = ZERO;
 
-	if( i!=2 ){ //First call: 
+	if( i!=2 ){ //First call: simulate an instant t0 
 	Speed1 = IstantSpeed;
-	}else{ 		//Second call:
+	}else{ 		//Second call: simulate an istant t1
 	i = ZERO;
 	Speed2 = IstantSpeed;
 	Average = (Speed1 + Speed2)/2;
@@ -82,9 +81,8 @@ static uint8_T Average = ZERO;
 		KmTraveled++;
 		MetersTraveled = MetersTraveled % ONE_KM; //Save just the meters
 
-		if( KmTraveled % CONSUMPTION_LITRE==ZERO ){
+		if( KmTraveled % CONSUMPTION_LITRE==ZERO ){	// if kmTraveled is a multiple of the km/litre
 			Fuel_Value= Fuel_Value - 20;
-			//debug(Fuel_Value);
 			if(Fuel_Value == ZERO){
 				Fuel_Value= ONE;
 				StopEngine = ONE;
@@ -95,12 +93,12 @@ static uint8_T Average = ZERO;
 	}
 	i++;
 
-	if( Partial_Speedometer>Oil_MustBe_Refilled ){//if there is not a refill before X km
+	if( Partial_Speedometer>Oil_MustBe_Refilled ){//if there is not a refill before X km, the engine can work but the oil icon is on
 		SetEvent(iconinfo(&MyDashBoardScr[3])->onevent);
 	}else{
 		ClearEvent(iconinfo(&MyDashBoardScr[3])->onevent);
 	}
-	if(Partial_Speedometer> Oil_MustBe_Refilled + Km_Before_Crash ){
+	if(Partial_Speedometer> Oil_MustBe_Refilled + Km_Before_Crash ){ //if there is not a a refill at all the engine melts 
 		StopEngine = ONE;
 	}
 }
@@ -136,7 +134,7 @@ bool_t inc_h = ZERO;
 			hours = ZERO;
 		}
 		}
-	Calculate_MetersTraveled(); 	
+	Calculate_MetersTraveled(); 	//Called here in order to simulate the evolution in the time
 	}
 i++;
 
@@ -149,14 +147,14 @@ i++;
 	LCD_SetTextColor(White);
     LCD_DisplayStringXY(180, 20, Seconds_Str);  
 
-    if(inc_m==ONE){
+    if(inc_m==ONE){				//in order to avoid useless refresh, draws the minutes only if needed
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
 	LCD_DrawFullRect(150, 20, 30, 30);
 	LCD_SetTextColor(White);
    		LCD_DisplayStringXY(150, 20, Minutes_Str);
    	}
-   	if(inc_h==ONE){
+   	if(inc_h==ONE){				//in order to avoid useless refresh, draws the hours only if needed
    		LCD_SetTextColor(Black);
 		LCD_SetBackColor(Black);
 		LCD_DrawFullRect(90, 20, 50, 30);
@@ -203,14 +201,8 @@ void UpdateFuel(){
  *  Called: None
  *  \return void
  */
-
-
 void checkEvents(){
-
-
-
-
-	if(Event_LeftArrow){
+	if(Event_LeftArrow){ //if the task readSensors reads a valid input, then the left arrow must blink
 		Event_LeftArrow = ZERO;
 		Blink_Left = !Blink_Left;
 		Blink_Right = ZERO;
@@ -219,7 +211,7 @@ void checkEvents(){
 		time_Arrow = ZERO;
 		}
 
-	if(Event_RightArrow ){
+	if(Event_RightArrow ){//if the task readSensors reads a valid input, then the right arrow must blink
 		Event_RightArrow = ZERO; 
 		Blink_Right = !Blink_Right;
 		Blink_Left = ZERO;
@@ -229,20 +221,20 @@ void checkEvents(){
 		}	
 
 	if(Blink_Left == 1){
-			if(time_Arrow ==20){
+			if(time_Arrow ==20){//20 * 50ms = 1 second
 				SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 				}
-			else if(time_Arrow==40){
+			else if(time_Arrow==40){//40 * 50ms = 2 second
 				ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-				time_Arrow = ZERO;
+				time_Arrow = ZERO;	//restart the counter
 				}
 			time_Arrow++;
 	}		
 	if(Blink_Right == 1){
-			if(time_Arrow ==20){
+			if(time_Arrow ==20){//20 * 50ms = 1 second
 				SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 				}
-			else if(time_Arrow==40){
+			else if(time_Arrow==40){//40 * 50ms = 2 second
 				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 				time_Arrow = ZERO;
 				}
@@ -275,9 +267,9 @@ void checkEvents(){
 		Event_PartialKm_Reset = ZERO;
 		Partial_Speedometer = ZERO;
 	}
-
-	
 }
+
+
 /*!
  *  \brief Reads the variable 'RPM_VALUE' and draws the relative bar.
  *  Called: None
