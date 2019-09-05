@@ -12,42 +12,8 @@
 #include "stm32f4_discovery_lcd.c"
 #include "config.h"
 
-unsigned char contains( const Widget *w, TPoint *point){
-	if	((point->x >= w->xl) && (point->x <= w->xl + w->xw) &&
-		 (point->y >= w->yt) && (point->y <= w->yt + w->yh)) {
-/*		debuginfo(5, point->x, point->y, 0);
-		debuginfo(6, w->xl, w->yt, 0); */
-		return 1;
-	}
-	else
-		return 0;
-}
 
 
-unsigned char OnTouch(const Widget ws[], TPoint *press){
-	unsigned char i, res;
-
-	res = 0;
-	for(i=0; i<NUMWIDGETS; i++) {
-		if (ws[i].wt == BUTTONICON) {
-			if(contains(&ws[i], press)) {
-				SetEvent(biconinfo(&ws[i])->onpress);
- 			    res = 1;
- 			}
-		}
-		if (ws[i].wt == ICON) {
-			if(contains(&ws[i], press)) {
-			if(IsEvent(iconinfo(&ws[i])->onevent)){
-				ClearEvent(iconinfo(&ws[i])->onevent);
-				}else{
-				SetEvent(iconinfo(&ws[i])->onevent);
-				}
-			res = 1;
-			}
-		}
-	}
-	return res;
-}
 
 unsigned char DrawInit( const Widget ws[])
 {

@@ -13,7 +13,6 @@
 #include "assets/pictures.h"
 #include "libs/Widget.h"
 #include "libs/WidgetConfig.h"
-#include "libs/Touch.h"
 #include "libs/Event.h"
 #include "libs/debug.h"
 #include "libs_custom/io.h"
@@ -423,15 +422,7 @@ char text[20];
  *  Called: None
  *  \return void
  */
-void debug(uint32_T a){
-char text[20];
-	LCD_SetTextColor(Black);
-	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(50, 130, 100, 40);
-	LCD_SetTextColor(White);
-   	sprintf((char*)text,"%d", a);
-    LCD_DisplayStringXY(50, 130, text);
-}
+
 
 /*!
  *  \brief Simulate the engine response reading the throttle and calculate the new RPM of the engine
@@ -589,12 +580,12 @@ int main(void)
 	EE_systick_set_period(MILLISECONDS_TO_TICKS(1, SystemCoreClock));
 	EE_systick_enable_int();
 	EE_systick_start();
-	/* Initializes LCD and touchscreen */
+	/* Initializes LCD */
 	IOE_Config();
 	/* Initialize the LCD */
 	STM32f4_Discovery_LCD_Init();
 
-	InitTouch(-0.102, 0.0656, -310, 16);//DAVIDE::to remove this
+
 
 	/* Draw the background*/
 	DrawInit(MyDashBoardScr);

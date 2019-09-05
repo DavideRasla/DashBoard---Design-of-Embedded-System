@@ -51,7 +51,6 @@ CPU mySystem {
 		CPU_DATA = CORTEX_MX {
 			MODEL = M4;
 			APP_SRC = "code.c";
-			APP_SRC = "libs/Touch.c";
 			APP_SRC = "assets/pictures.c";
 			APP_SRC = "libs/Event.c";
 			APP_SRC = "libs/Widget.c";

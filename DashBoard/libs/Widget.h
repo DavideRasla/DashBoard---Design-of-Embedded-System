@@ -4,7 +4,6 @@
 #define WIDGET_H_
 
 #include "Event.h"
-#include "Touch.h"
 #include "fonts.h"
 #include "../libs_custom/types.h"
 
@@ -62,7 +61,7 @@ typedef struct {
 #define imginfo(w) ((Image *)((w)->ws))
 #define imgGearinfo(w) ((Image_ARRAY *)((w)->ws))
 
-unsigned char OnTouch( const Widget ws[], TPoint *press);
+
 unsigned char DrawInit(const Widget ws[]);
 unsigned char DrawOn( const Widget *w);
 unsigned char DrawOff( const Widget *w);
