@@ -23,7 +23,7 @@
 
 /*Global Variables*/
 
-uint8_T hours=13, minutes=44, seconds=ZERO;
+uint8_T hours=Initial_Hours, minutes=59, seconds=55;
 
 uint8_T   Fuel_Value   			= FULL_FUEL;
 uint8_T   IstantSpeed  			= ZERO;
@@ -35,9 +35,19 @@ double    Actual_Accel 			= ZERO;
 uint32_T  MetersTraveled 		= ZERO;
 uint8_T	  KmTraveled 			= ZERO;
 bool_t 	  StopEngine 			= ZERO; //0 = ON; 1 = OFF
-bool_t Blink_Left = 0;
-bool_t Blink_Right = 0;
-uint8_T time_Arrow = 0;
+bool_t Blink_Left = ZERO;
+bool_t Blink_Right = ZERO;
+uint8_T time_Arrow = ZERO;
+
+
+/*Events: Task ReadSensors will set them at ONE when needed. Task CheckEvents will reset them when used. */
+
+bool_t Event_LeftArrow = ZERO;
+bool_t Event_RightArrow = ZERO;
+bool_t Event_GearUp = ZERO;
+bool_t Event_GearDown = ZERO;
+bool_t Event_PartialKm_Reset = ZERO;
+
 /*
  * SysTick ISR2
  */
@@ -103,8 +113,12 @@ static uint8_T Average = ZERO;
  */
 void UpdateTime()
 {
-static uint8_T i = 0;
-unsigned char watchstr[20];
+static uint8_T i = ZERO;
+unsigned char Seconds_Str[5];
+unsigned char Minutes_Str[5];
+unsigned char Hours_Str[5];
+bool_t inc_m = ZERO;
+bool_t inc_h = ZERO;
 
 	if(i == 1){
 	i = ZERO;
@@ -112,9 +126,12 @@ unsigned char watchstr[20];
 	if(seconds == 60){
 		seconds = ZERO;
 		minutes++;
+		inc_m = ONE;
+
 		if (minutes == 60){
 			minutes = ZERO;
 			hours++;
+		inc_h = ONE;
 		}
 		if (hours == 99){
 			hours = ZERO;
@@ -124,12 +141,30 @@ unsigned char watchstr[20];
 	}
 i++;
 
-	sprintf(watchstr, "%2d:%2d:%2d", hours, minutes, seconds);
+	sprintf(Seconds_Str, ":%2d", seconds);
+	sprintf(Minutes_Str, "%2d", minutes);
+	sprintf(Hours_Str, "%2d:", hours);
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(95, 20, 135, 30);
+	LCD_DrawFullRect(190, 20, 40, 30);
 	LCD_SetTextColor(White);
-    LCD_DisplayStringXY(90, 20, watchstr);   
+    LCD_DisplayStringXY(180, 20, Seconds_Str);  
+
+    if(inc_m==ONE){
+	LCD_SetTextColor(Black);
+	LCD_SetBackColor(Black);
+	LCD_DrawFullRect(150, 20, 30, 30);
+	LCD_SetTextColor(White);
+   		LCD_DisplayStringXY(150, 20, Minutes_Str);
+   	}
+   	if(inc_h==ONE){
+   		LCD_SetTextColor(Black);
+		LCD_SetBackColor(Black);
+		LCD_DrawFullRect(90, 20, 50, 30);
+		LCD_SetTextColor(White);
+   		LCD_DisplayStringXY(100, 20, Hours_Str); 
+   		}  
+   		
 }
 /*!
  *  \brief Reads the variable 'Fuel_Value' and draws the relative bar.
@@ -169,32 +204,40 @@ void UpdateFuel(){
  *  Called: None
  *  \return void
  */
+
+
 void checkEvents(){
 
-	if(Button_LeftArrow_Read()){
+
+
+
+	if(Event_LeftArrow){
+		Event_LeftArrow = ZERO;
 		Blink_Left = !Blink_Left;
-		Blink_Right = 0;
+		Blink_Right = ZERO;
 		ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 		ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-		time_Arrow = 0;
+		time_Arrow = ZERO;
 		}
-	if(Button_RightArrow_Read()){
+
+	if(Event_RightArrow ){
+		Event_RightArrow = ZERO; 
 		Blink_Right = !Blink_Right;
-		Blink_Left = 0;
+		Blink_Left = ZERO;
 		ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 		ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-		time_Arrow = 0;
+		time_Arrow = ZERO;
 		}	
+
 	if(Blink_Left == 1){
 			if(time_Arrow ==20){
 				SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 				}
 			else if(time_Arrow==40){
 				ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
-				time_Arrow = 0;
+				time_Arrow = ZERO;
 				}
 			time_Arrow++;
-
 	}		
 	if(Blink_Right == 1){
 			if(time_Arrow ==20){
@@ -202,10 +245,9 @@ void checkEvents(){
 				}
 			else if(time_Arrow==40){
 				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
-				time_Arrow = 0;
+				time_Arrow = ZERO;
 				}
-			time_Arrow++;
-			
+			time_Arrow++;	
 	}
 
 
@@ -213,7 +255,8 @@ void checkEvents(){
 	//if(IsEvent(LIGHT)){
 
 	//}
-	if(Button_GearUp_Read() && Actual_Gear <= Sixth_Gear && Clutch_Read()==1 ){
+	if(Event_GearUp && Actual_Gear <= Sixth_Gear && Clutch_Read()==1 ){
+		Event_GearUp = ZERO;
 		Actual_Gear++;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
@@ -221,15 +264,17 @@ void checkEvents(){
 			RPM_Value = RPM_Value / 2;
 
 	}
-	if(Button_GearDown_Read() && Actual_Gear > Neutral_Gear && Clutch_Read()==1 ){
+	if(Event_GearDown && Actual_Gear > Neutral_Gear && Clutch_Read()==1 ){
+		Event_GearDown = ZERO;
 		Actual_Gear--;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
 		IstantSpeed = IstantSpeed / 2;
 		if( (RPM_Value/2)>RPM_MIN )
 			RPM_Value = RPM_Value / 2;
 	}
-	if(Button_ResetKm_Read() && StopEngine == 0 ){//Reset the partial km
-		Partial_Speedometer = 0;
+	if(Event_PartialKm_Reset && StopEngine == ZERO){//Reset the partial km
+		Event_PartialKm_Reset = ZERO;
+		Partial_Speedometer = ZERO;
 	}
 
 	
@@ -300,7 +345,7 @@ void UpdateSpeedValue(){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(90, 100, 45, 30);
+	LCD_DrawFullRect(90, 100, 50, 30);
 	LCD_SetTextColor(White);
 
 if( StopEngine == ZERO ){//if engine can work
@@ -364,7 +409,7 @@ void UpdateSpeedoMeter(){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
-	LCD_DrawFullRect(110, 200, 70, 30);
+	LCD_DrawFullRect(110, 200, 100, 30);
 	LCD_DrawFullRect(20, 200, 15, 30);
 	LCD_SetTextColor(White);
    	sprintf((char*)text,"%d", Speedometer);
@@ -378,7 +423,7 @@ char text[20];
  *  Called: None
  *  \return void
  */
-void debug(int a){
+void debug(uint32_T a){
 char text[20];
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
@@ -442,7 +487,7 @@ TASK(TaskGuiDashboardFast)
  *   Also reads all the events from the buttons
  *  \return void
  */
-TASK(TaskUpdateSensors)
+TASK(TaskCheckEvents)
 {
 
 UpdateEngineResponse();
@@ -451,6 +496,85 @@ checkEvents();
 
 }
 
+
+/**/
+TASK(TaskReadSensors){
+
+static uint8_t RepeatLeftArrow = ZERO;
+static uint8_t RepeatRightArrow = ZERO;
+static uint8_t RepeatGearUp = ZERO;
+static uint8_t RepeatGearDown = ZERO;
+static uint8_t RepeatResetButton = ZERO;
+
+bool_t ReadLeftArrow = Button_LeftArrow_Read();
+bool_t ReadRightArrow = Button_RightArrow_Read();
+bool_t ReadGearUp = Button_GearUp_Read();
+bool_t ReadGearDown = Button_GearDown_Read();
+bool_t ReadResetKm = Button_ResetKm_Read();
+debug(RepeatLeftArrow);
+/*debouncing for left arrow button*/
+	if(ReadLeftArrow && RepeatLeftArrow <= 3){
+		RepeatLeftArrow++;
+	}
+	if(ReadLeftArrow && RepeatLeftArrow == 3){
+		Event_LeftArrow = ONE;
+	}
+	if( ReadLeftArrow==ZERO ){
+		RepeatLeftArrow = ZERO;
+		Event_LeftArrow = ZERO;
+	}
+
+/*debouncing for right arrow button*/
+	if(ReadRightArrow && RepeatRightArrow <= 3){
+		RepeatRightArrow++;
+	}
+	if(ReadRightArrow && RepeatRightArrow == 3){
+		Event_RightArrow = ONE;
+	}
+	if( ReadRightArrow==ZERO ){
+		RepeatRightArrow = ZERO;
+		Event_RightArrow = ZERO;
+	}
+
+/*debouncing for GearUpbutton*/
+	if(ReadGearUp && RepeatGearUp <= 3){
+		RepeatGearUp++;
+	}
+	if(ReadGearUp && RepeatGearUp == 3){
+		Event_GearUp = ONE;
+	}
+	if( ReadGearUp==ZERO ){
+		RepeatGearUp = ZERO;
+		Event_GearUp = ZERO;
+	}
+
+/*debouncing for GearDownbutton*/
+	if(ReadGearDown && RepeatGearDown <= 3){
+		RepeatGearDown++;
+	}
+	if(ReadGearDown && RepeatGearDown == 3){
+		Event_GearDown = ONE;
+	}
+	if( ReadGearDown ==ZERO ){
+		RepeatGearDown = ZERO;
+		Event_GearDown = ZERO;
+	}
+
+/*debouncing for Reset partial km button*/
+	if(ReadResetKm && RepeatResetButton <= 3){
+		RepeatResetButton++;
+	}
+	if(ReadResetKm && RepeatResetButton == 3){//if for 3 times the value was HIGH
+		Event_PartialKm_Reset = ONE;
+	}
+	if( ReadResetKm==ZERO ){						//if and only if the user release the button the counter restarts from zero
+		RepeatResetButton = ZERO;
+		Event_PartialKm_Reset = ZERO;
+		}
+
+
+	
+}
 
 /*
  * MAIN TASK
@@ -484,9 +608,11 @@ int main(void)
 	/* Program cyclic alarms which will fire after an initial offset,
 	 * and after that periodically
 	 * */
-	SetRelAlarm(AlarmTaskUpdateSensors, TASKOFFSET, TaskUpdateSensors_FREQ);
+	SetRelAlarm(AlarmTaskCheckEvents, TASKOFFSET, TaskCheckEvents_FREQ);
+	SetRelAlarm(AlarmTaskReadSensors, TASKOFFSET, TASKGUI_ReadSensors_FREQ);
 	SetRelAlarm(AlarmTaskGuiDashboardSlow, TASKOFFSET, TASKGUI_FREQ_SLOW);
 	SetRelAlarm(AlarmTaskGuiDashboardFast, TASKOFFSET, TASKGUI_FREQ_FAST);
+
   /* Forever loop: background activities (if any) should go here */
 	for (;;) {
 	}

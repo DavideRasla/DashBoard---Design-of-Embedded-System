@@ -120,11 +120,14 @@ CPU mySystem {
     	};
 	
 
-	ALARM AlarmTaskUpdateSensors {
+	ALARM AlarmTaskCheckEvents {
 		COUNTER = myCounter;
-		ACTION = ACTIVATETASK { TASK = TaskUpdateSensors; };
+		ACTION = ACTIVATETASK { TASK = TaskCheckEvents; };
 	};
-	
+	 ALARM AlarmTaskReadSensors {
+		COUNTER = myCounter;
+		ACTION = ACTIVATETASK { TASK = TaskReadSensors; };
+	};
 	ALARM AlarmTaskGuiDashboardSlow {
 		COUNTER = myCounter;
 		ACTION = ACTIVATETASK { TASK = TaskGuiDashboardSlow; };
@@ -134,8 +137,9 @@ CPU mySystem {
 		ACTION = ACTIVATETASK { TASK = TaskGuiDashboardFast ; };
 	};
 
+
 	TASK TaskGuiDashboardSlow {
-		PRIORITY = 0x02;   /* High priority */
+		PRIORITY = 0x01;  /* Low priority */
 		AUTOSTART = FALSE;
 		STACK = SHARED;
 		ACTIVATION = 1;    /* only one pending activation */
@@ -148,14 +152,20 @@ CPU mySystem {
 		ACTIVATION = 1;    /* only one pending activation */
 		SCHEDULE = FULL;
 	};	
-	TASK TaskUpdateSensors {
-		PRIORITY = 0x01;   /* Low priority */
+	TASK TaskCheckEvents {
+		PRIORITY = 0x02;   /* High priority */
 		AUTOSTART = FALSE;
 		STACK = SHARED;
 		ACTIVATION = 1;    /* only one pending activation */
 		SCHEDULE = FULL;
 	};
-
+	TASK TaskReadSensors {
+		PRIORITY = 0x04;   /* High priority */
+		AUTOSTART = FALSE;
+		STACK = SHARED;
+		ACTIVATION = 1;    /* only one pending activation */
+		SCHEDULE = FULL;
+	};
 	ISR systick_handler {
 		CATEGORY = 2;
 		ENTRY = "SYSTICK";

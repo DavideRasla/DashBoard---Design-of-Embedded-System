@@ -65,10 +65,11 @@
 #define ADC_CLUTCH_CHANNEL 		(ADC_Channel_5)
 
 //TASK CONFIGURATIONS
-#define TASKOFFSET 		10
-#define TaskUpdateSensors_FREQ	50
-#define TASKGUI_FREQ_FAST	200
-#define TASKGUI_FREQ_SLOW	1000
+#define TASKOFFSET 					10
+#define TaskCheckEvents_FREQ		50
+#define TASKGUI_FREQ_FAST			200
+#define TASKGUI_FREQ_SLOW			1000
+#define TASKGUI_ReadSensors_FREQ	20
 
 //EVENTS DASHBOARD
 #define OIL 		0x02
@@ -77,12 +78,14 @@
 #define AL			0x010
 
 //EVENTS BUTTONS
-#define TURNR 		0x012
-#define TURNL 		0x014
-#define GEARUP 		0x016
-#define GEARDOWN 	0x018
-#define LIGHT		0x020
+#define TURNR 			0x012
+#define TURNL 			0x014
+#define GEARUP 			0x016
+#define GEARDOWN 		0x018
+#define LIGHT			0x020
+#define TIME_DEBOUNCING 40 //50ms*40 =2000ms = 2sec
 
-
-
+#define Initial_Seconds 0
+#define Initial_Minutes 42
+#define Initial_Hours 13
 #endif

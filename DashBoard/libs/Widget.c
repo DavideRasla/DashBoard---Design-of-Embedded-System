@@ -10,6 +10,7 @@
 #include "Event.h"
 #include "debug.h"
 #include "stm32f4_discovery_lcd.c"
+#include "config.h"
 
 unsigned char contains( const Widget *w, TPoint *point){
 	if	((point->x >= w->xl) && (point->x <= w->xl + w->xw) &&
@@ -49,8 +50,12 @@ unsigned char OnTouch(const Widget ws[], TPoint *press){
 }
 
 unsigned char DrawInit( const Widget ws[])
-{LCD_SetTextColor(White);
+{
+
+	LCD_SetTextColor(White);
 	unsigned char i;
+	unsigned char watchstr[20];
+
 	for(i=0; i<NUMWIDGETS; i++) {
 		DrawOff(&ws[i]);
 	}
@@ -59,10 +64,16 @@ unsigned char DrawInit( const Widget ws[])
 	LCD_SetTextColor(Black);
 	LCD_SetBackColor(Black);
 	LCD_DrawFullRect(50, 200, 280, 30);
+	LCD_DrawFullRect(100, 20, 100, 30);
 	LCD_SetTextColor(White);
     LCD_DisplayStringXY(210, 210, "Km");
     LCD_DisplayStringXY(40, 210, "Km");
     LCD_DisplayStringXY(150, 100, "Km");
+
+ /*Draw the clock for the first time*/
+ uint8_t hours=Initial_Hours, minutes=Initial_Minutes, seconds=Initial_Seconds;
+ sprintf(watchstr, "%2d:%2d:%2d", hours, minutes, seconds);
+ LCD_DisplayStringXY(100, 20, watchstr);
 	return 1;
 }
 
