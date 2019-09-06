@@ -25,7 +25,7 @@
 
 uint8_T hours=Initial_Hours, minutes=59, seconds=55;		// Clock variables
 uint8_T   Fuel_Value   			= FULL_FUEL;				// Fuel value, inizializated to full
-uint8_T   IstantSpeed  			= ZERO;						// Speed on the scren
+uint8_T   InstantSpeed  			= ZERO;						// Speed on the scren
 uint32_T  Speedometer  			= SPEEDOMETER_INITIAL;		// Total KM counter
 uint32_T  Partial_Speedometer  	= ZERO;						// Total partial KM counter. This can be resetted
 uint16_T  RPM_Value    			= RPM_INITIAL;				// RPM of the engine
@@ -69,10 +69,10 @@ static uint8_T Speed2 = ZERO;
 static uint8_T Average = ZERO;
 
 	if( i!=2 ){ //First call: simulate an instant t0 
-	Speed1 = IstantSpeed;
+	Speed1 = InstantSpeed;
 	}else{ 		//Second call: simulate an istant t1
 	i = ZERO;
-	Speed2 = IstantSpeed;
+	Speed2 = InstantSpeed;
 	Average = (Speed1 + Speed2)/2;
 	MetersTraveled = MetersTraveled +  2*Average/3.6;//From km/h to m/s. Calculate for 2 seconds
 	if(MetersTraveled > ONE_KM){
@@ -250,7 +250,7 @@ void checkEvents(){
 		Event_GearUp = ZERO;
 		Actual_Gear++;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
-		IstantSpeed = IstantSpeed / 2;
+		InstantSpeed = InstantSpeed / 2;
 		if((RPM_Value / 2)>RPM_MIN)
 			RPM_Value = RPM_Value / 2;
 
@@ -259,7 +259,7 @@ void checkEvents(){
 		Event_GearDown = ZERO;
 		Actual_Gear--;
 		ChangeGear(&MyDashBoardScr[5], Actual_Gear);
-		IstantSpeed = IstantSpeed / 2;
+		InstantSpeed = InstantSpeed / 2;
 		if( (RPM_Value/2)>RPM_MIN )
 			RPM_Value = RPM_Value / 2;
 	}
@@ -343,51 +343,51 @@ if( StopEngine == ZERO ){//if engine can work
 	if(Clutch_Read()==0 && Actual_Gear != Neutral_Gear){//if the clutch is not on AND if the gear is not in neutral
 					//debug(Actual_Accel);
 						if(Actual_Accel>ZERO) {//Positive accelleration, need to increase the speed
-								if(IstantSpeed == ZERO){
-									IstantSpeed = 5;
+								if(InstantSpeed == ZERO){
+									InstantSpeed = 5;
 								}
-								if(IstantSpeed < SPEED_MAX/10){ //low speed
-										IstantSpeed = 5 + IstantSpeed + ((int)(IstantSpeed  *1.4*Actual_Accel));
+								if(InstantSpeed < SPEED_MAX/10){ //low speed
+										InstantSpeed = 5 + InstantSpeed + ((int)(InstantSpeed  *1.4*Actual_Accel));
 								}
-								if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/3){ //low speed
-										IstantSpeed = IstantSpeed + ((int)(IstantSpeed *1.1*Actual_Accel));
+								if(InstantSpeed >= SPEED_MAX/10 && InstantSpeed < SPEED_MAX/3){ //low speed
+										InstantSpeed = InstantSpeed + ((int)(InstantSpeed *1.1*Actual_Accel));
 								}
-								if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed < SPEED_MAX/2){ //medium speed
-										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.6*Actual_Accel));
+								if(InstantSpeed >= SPEED_MAX/3 && InstantSpeed < SPEED_MAX/2){ //medium speed
+										InstantSpeed = InstantSpeed +  ((int)(InstantSpeed * 0.6*Actual_Accel));
 								}
-								if(IstantSpeed >= SPEED_MAX/2 && IstantSpeed < SPEED_MAX){ //high speed
-									if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX)
-										IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.25*Actual_Accel));
+								if(InstantSpeed >= SPEED_MAX/2 && InstantSpeed < SPEED_MAX){ //high speed
+									if( (uint8_T)(InstantSpeed + InstantSpeed * Actual_Accel) < SPEED_MAX)
+										InstantSpeed = InstantSpeed +  ((int)(InstantSpeed * 0.25*Actual_Accel));
 								}
 						}else{//Negative accelleration, need to reduce the speed
-									if(IstantSpeed < SPEED_MAX/10){ //very low speed
-										if( (uint8_T)(IstantSpeed - 0.6*IstantSpeed)>0 ){
-											IstantSpeed =  IstantSpeed - 0.6*IstantSpeed;
-											if(IstantSpeed < 7){
-											IstantSpeed = 0; //Stop
+									if(InstantSpeed < SPEED_MAX/10){ //very low speed
+										if( (uint8_T)(InstantSpeed - 0.6*InstantSpeed)>0 ){
+											InstantSpeed =  InstantSpeed - 0.6*InstantSpeed;
+											if(InstantSpeed < 7){
+											InstantSpeed = 0; //Stop
 											}
 										}
 									}
-									if(IstantSpeed >= SPEED_MAX/10 && IstantSpeed < SPEED_MAX/5){ //low speed
-										if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-											IstantSpeed = IstantSpeed + ((int)(IstantSpeed *0.3*Actual_Accel));
+									if(InstantSpeed >= SPEED_MAX/10 && InstantSpeed < SPEED_MAX/5){ //low speed
+										if( (uint8_T)(InstantSpeed + InstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(InstantSpeed + InstantSpeed * Actual_Accel)>0 )
+											InstantSpeed = InstantSpeed + ((int)(InstantSpeed *0.3*Actual_Accel));
 									}
-									if(IstantSpeed >= SPEED_MAX/5 && IstantSpeed < SPEED_MAX/2){ //medium speed
-										if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-											IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.7*Actual_Accel));
+									if(InstantSpeed >= SPEED_MAX/5 && InstantSpeed < SPEED_MAX/2){ //medium speed
+										if( (uint8_T)(InstantSpeed + InstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(InstantSpeed + InstantSpeed * Actual_Accel)>0 )
+											InstantSpeed = InstantSpeed +  ((int)(InstantSpeed * 0.7*Actual_Accel));
 									}
-									if(IstantSpeed >= SPEED_MAX/3 && IstantSpeed <= SPEED_MAX){ //high speed
-										if( (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(IstantSpeed + IstantSpeed * Actual_Accel)>0 )
-											IstantSpeed = IstantSpeed +  ((int)(IstantSpeed * 0.9*Actual_Accel));
+									if(InstantSpeed >= SPEED_MAX/3 && InstantSpeed <= SPEED_MAX){ //high speed
+										if( (uint8_T)(InstantSpeed + InstantSpeed * Actual_Accel) < SPEED_MAX && (uint8_T)(InstantSpeed + InstantSpeed * Actual_Accel)>0 )
+											InstantSpeed = InstantSpeed +  ((int)(InstantSpeed * 0.9*Actual_Accel));
 									}
 							}
 						}else{//Clutch is ON, slow 10%
-								IstantSpeed = IstantSpeed -  ((int)(IstantSpeed * 0.07)); //slow 10%
+								InstantSpeed = InstantSpeed -  ((int)(InstantSpeed * 0.07)); //slow 10%
 						}
 }else{/*No Fuel || No Oil*/
-		IstantSpeed = 0;
+		InstantSpeed = 0;
 	}
-	sprintf((char*)text,"%d", IstantSpeed);
+	sprintf((char*)text,"%d", InstantSpeed);
     LCD_DisplayStringXY(90, 100, text);
 }
 
@@ -437,7 +437,7 @@ int16_T NewRPM =  Throttle_Read();
 			if( RPM_Value < RPM_MAX/2 && RPM_Value+ NewRPM > RPM_MIN ){ //low speed
 					RPM_Value = RPM_Value + NewRPM;
 			}
-			if(RPM_Value < RPM_MAX/2 &&  RPM_Value + 1.2*NewRPM > RPM_MIN ){ 
+			if(RPM_Value < RPM_MAX/2 && (RPM_Value + 1.2*NewRPM) > RPM_MIN ){ 
 					RPM_Value = RPM_Value + 1.2*NewRPM;
 			}else if(RPM_Value + 1.5*NewRPM > RPM_MIN){
 					RPM_Value = RPM_Value + 1.5*NewRPM;
@@ -494,7 +494,9 @@ bool_t ReadRightArrow = Button_RightArrow_Read();
 bool_t ReadGearUp = Button_GearUp_Read();
 bool_t ReadGearDown = Button_GearDown_Read();
 bool_t ReadResetKm = Button_ResetKm_Read();
-debug(RepeatLeftArrow);
+debug(RepeatLeftArrow);//Davide: Remove this
+
+
 /*debouncing for left arrow button*/
 	if(ReadLeftArrow && RepeatLeftArrow <= 3){
 		RepeatLeftArrow++;
@@ -502,7 +504,7 @@ debug(RepeatLeftArrow);
 	if(ReadLeftArrow && RepeatLeftArrow == 3){
 		Event_LeftArrow = ONE;
 	}
-	if( ReadLeftArrow==ZERO ){
+	if( ReadLeftArrow==ZERO ){{						//if and only if the user release the button the counter restarts from zero
 		RepeatLeftArrow = ZERO;
 		Event_LeftArrow = ZERO;
 	}
@@ -514,7 +516,7 @@ debug(RepeatLeftArrow);
 	if(ReadRightArrow && RepeatRightArrow == 3){
 		Event_RightArrow = ONE;
 	}
-	if( ReadRightArrow==ZERO ){
+	if( ReadRightArrow==ZERO ){{					//if and only if the user release the button the counter restarts from zero
 		RepeatRightArrow = ZERO;
 		Event_RightArrow = ZERO;
 	}
@@ -526,7 +528,7 @@ debug(RepeatLeftArrow);
 	if(ReadGearUp && RepeatGearUp == 3){
 		Event_GearUp = ONE;
 	}
-	if( ReadGearUp==ZERO ){
+	if( ReadGearUp==ZERO ){{						//if and only if the user release the button the counter restarts from zero
 		RepeatGearUp = ZERO;
 		Event_GearUp = ZERO;
 	}
@@ -538,7 +540,7 @@ debug(RepeatLeftArrow);
 	if(ReadGearDown && RepeatGearDown == 3){
 		Event_GearDown = ONE;
 	}
-	if( ReadGearDown ==ZERO ){
+	if( ReadGearDown==ZERO ){{						//if and only if the user release the button the counter restarts from zero
 		RepeatGearDown = ZERO;
 		Event_GearDown = ZERO;
 	}
@@ -553,10 +555,7 @@ debug(RepeatLeftArrow);
 	if( ReadResetKm==ZERO ){						//if and only if the user release the button the counter restarts from zero
 		RepeatResetButton = ZERO;
 		Event_PartialKm_Reset = ZERO;
-		}
-
-
-	
+		}	
 }
 
 /*
@@ -576,18 +575,11 @@ int main(void)
 	IOE_Config();
 	/* Initialize the LCD */
 	STM32f4_Discovery_LCD_Init();
-
-
-
 	/* Draw the background*/
 	DrawInit(MyDashBoardScr);
-	
-
 	LCD_SetTextColor(White);
-
 	//Initialize gpio
 	io_init();
-
 	/* Program cyclic alarms which will fire after an initial offset,
 	 * and after that periodically
 	 * */
