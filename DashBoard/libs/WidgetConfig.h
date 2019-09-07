@@ -8,7 +8,7 @@
 #ifndef WIDGETCONFIG_H_
 #define WIDGETCONFIG_H_
 
-#define NUMWIDGETS 6
+#define NUMWIDGETS 7
 
 
 

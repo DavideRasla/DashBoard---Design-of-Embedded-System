@@ -118,7 +118,6 @@ char *imgptr = 0;
                LCD_DrawPicture(w->xl, w->yt, w->xw, w->yh, imgptr);
                return 1;
        }
-
                 return 0;
 }
 

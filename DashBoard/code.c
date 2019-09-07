@@ -25,7 +25,7 @@
 
 uint8_T hours=Initial_Hours, minutes=59, seconds=55;		// Clock variables
 uint8_T   Fuel_Value   			= FULL_FUEL;				// Fuel value, inizializated to full
-uint8_T   InstantSpeed  			= ZERO;						// Speed on the scren
+uint8_T   InstantSpeed  			= ZERO;					// Speed on the scren
 uint32_T  Speedometer  			= SPEEDOMETER_INITIAL;		// Total KM counter
 uint32_T  Partial_Speedometer  	= ZERO;						// Total partial KM counter. This can be resetted
 uint16_T  RPM_Value    			= RPM_INITIAL;				// RPM of the engine
@@ -37,7 +37,7 @@ bool_t 	  StopEngine 			= ZERO; 					// If equals to zero the engine can work, o
 bool_t Blink_Left 				= ZERO;						// If equals to one the left arrow can blink
 bool_t Blink_Right				= ZERO;						// If equals to one the right arrow can blink
 uint8_T time_Arrow 				= ZERO;						// Used to count the time in order to simulate the blinking of the arrow
-
+bool_t Brights_Status 			= ZERO;						// Used to store the status of the brights
 
 /*Events variables: When the task ReadSensor reads a valid input they are set to one */
 
@@ -46,6 +46,7 @@ bool_t Event_RightArrow = ZERO;
 bool_t Event_GearUp = ZERO;
 bool_t Event_GearDown = ZERO;
 bool_t Event_PartialKm_Reset = ZERO;
+bool_t Event_Brights = ZERO;
 
 /*
  * SysTick ISR2
@@ -59,7 +60,6 @@ ISR2(systick_handler)
 
 /*!
  *  \brief Calculates the amount of Meters Traveled in 2 seconds 
- *  Called: NONE
  *  \return void
  */
 void Calculate_MetersTraveled(){
@@ -105,7 +105,6 @@ static uint8_T Average = ZERO;
 
 /*!
  *  \brief Updates the clock on the top of the DashBoard. Also calls Calculate_MetersTraveld 
- *  Called: Calculate_MetersTraveled()
  *  \return void
  */
 void UpdateTime()
@@ -164,8 +163,7 @@ i++;
    		
 }
 /*!
- *  \brief Reads the variable 'Fuel_Value' and draws the relative bar.
- *  Called: None
+ *  \brief: Reads the variable 'Fuel_Value' and draws the relative bar.
  *  \return void
  */
 void UpdateFuel(){
@@ -198,7 +196,6 @@ void UpdateFuel(){
 }
 /*!
  *  \brief Checks all the events from the buttons.
- *  Called: None
  *  \return void
  */
 void checkEvents(){
@@ -243,9 +240,15 @@ void checkEvents(){
 
 
 	
-	//if(IsEvent(LIGHT)){
 
-	//}
+	if( Event_Brights ){//if the task readSensors reads a valid input, then the right arrow must blink
+		Event_Brights = ZERO;
+		Brights_Status = !Brights_Status; 
+		if(Brights_Status)//if was OFF
+			SetEvent(iconinfo(&MyDashBoardScr[7])->onevent);
+		else //if was ON
+			ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+		}
 	if(Event_GearUp && Actual_Gear <= Sixth_Gear && Clutch_Read()==1 ){
 		Event_GearUp = ZERO;
 		Actual_Gear++;
@@ -272,7 +275,6 @@ void checkEvents(){
 
 /*!
  *  \brief Reads the variable 'RPM_VALUE' and draws the relative bar.
- *  Called: None
  *  \return void
  */
 void UpdateMotorRPM(){
@@ -321,7 +323,6 @@ void UpdateMotorRPM(){
 
 /*!
  *  \brief Read from the sensor the amount of Throttle and calculates the actual acceleration of the motorbike.
- *  Called: None
  *  \return void
  */
 void Update_Accell(){
@@ -329,7 +330,6 @@ void Update_Accell(){
 }
 /*!
  *  \brief Reads the variable 'Actual_Accel' and calculate the new speed
- *  Called: None
  *  \return void
  */
 void UpdateSpeedValue(){
@@ -393,7 +393,6 @@ if( StopEngine == ZERO ){//if engine can work
 
 /*!
  *  \brief Reads the variable 'Speedometer' and print it on the screen
- *  Called: None
  *  \return void
  */
 void UpdateSpeedoMeter(){
@@ -411,14 +410,12 @@ char text[20];
 
 /*!
  *  \brief Used to print a variable on the screen
- *  Called: None
  *  \return void
  */
 
 
 /*!
  *  \brief Simulate the engine response reading the throttle and calculate the new RPM of the engine
- *  Called: None
  *  \return void
  */
 void UpdateEngineResponse(){
@@ -488,12 +485,15 @@ static uint8_t RepeatRightArrow = ZERO;
 static uint8_t RepeatGearUp = ZERO;
 static uint8_t RepeatGearDown = ZERO;
 static uint8_t RepeatResetButton = ZERO;
+static uint8_t RepeatBrightsButton = ZERO;
 
 bool_t ReadLeftArrow = Button_LeftArrow_Read();
 bool_t ReadRightArrow = Button_RightArrow_Read();
 bool_t ReadGearUp = Button_GearUp_Read();
 bool_t ReadGearDown = Button_GearDown_Read();
 bool_t ReadResetKm = Button_ResetKm_Read();
+bool_t ReadBrights = Button_Brights_Read();
+
 debug(RepeatLeftArrow);//Davide: Remove this
 
 
@@ -556,6 +556,19 @@ debug(RepeatLeftArrow);//Davide: Remove this
 		RepeatResetButton = ZERO;
 		Event_PartialKm_Reset = ZERO;
 		}	
+
+/*debouncing for Brights button*/
+	if( ReadBrights && RepeatBrightsButton <= 3){
+		RepeatBrightsButton++;
+	}
+	if(ReadBrights && RepeatBrightsButton == 3){
+		Event_Brights = ONE;
+	}
+	if( ReadBrights==ZERO ){{						//if and only if the user release the button the counter restarts from zero
+		RepeatBrightsButton = ZERO;
+		Event_Brights = ZERO;
+	}
+
 }
 
 /*

@@ -14,19 +14,19 @@
 //Motorbike Parameters
 #define SPEED_MAX 					   250
 #define CONSUMPTION_LITRE				 2 		//2km for litre
-#define Oil_MustBe_Refilled			  	 1		//Should be 500
-#define Km_Before_Crash					 1		//Should be 50
+#define Oil_MustBe_Refilled			  	 1		//Should be like 500
+#define Km_Before_Crash					 2		//Should be 50
 
 //RPM Parameters
-#define RPM_INITIAL					  3000
-#define RPM_MAX						 14000
-#define RPM_LOW						  2000
-#define RPM_MEDIUM					  8000
-#define RPM_MIN						  500
+#define RPM_INITIAL					  3000      //Initial RPM when the engine is ON
+#define RPM_MAX						 14000      //Max value of RPM
+#define RPM_LOW						  2000      //low RPM (Green)
+#define RPM_MEDIUM					  8000      //Medium RPM (yellow)
+#define RPM_MIN						  500       //Min RPM value
 
 
 //Dashboard Parameters
-#define SPEEDOMETER_INITIAL			123000
+#define SPEEDOMETER_INITIAL			123000      //Initial total amount of km. User can't reset this
 #define	ZERO							 0
 #define	ONE 							 1
 #define	ONE_KM						  1000
@@ -40,8 +40,7 @@
 #define	Sixth_Gear						 6
 
 //GPIO CONFIGURATIONS
-//#define BUTTON_PORT     (GPIOE)
-//#define BUTTON_PIN      (GPIO_PIN_5)
+
 #define BTN_PORT 				(GPIOE)
 
 #define BTN_GEAR_UP_PIN			(GPIO_PIN_0)
@@ -50,6 +49,7 @@
 #define BTN_TURNLIGHT_SX_PIN	(GPIO_PIN_6)
 #define BTN_HEADLIGHT_PIN		(GPIO_PIN_2)
 #define BTN_RESET_PARTIALKM		(GPIO_PIN_1)
+#define BTN_Brights_DOWN_PIN    (GPIO_PIN_3)
 #define OUT_PORT				(GPIOB)
 
 #define LED_ARROW_DX			(GPIO_PIN_1)
@@ -76,6 +76,8 @@
 #define FUEL 		0x04
 #define AR			0x08
 #define AL			0x010
+#define BRIGHTS     0x011
+
 
 //EVENTS BUTTONS
 #define TURNR 			0x012
