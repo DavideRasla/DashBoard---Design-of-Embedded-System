@@ -94,9 +94,10 @@ bool_t Button_Brights_Read(){
 	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_Brights_DOWN_PIN)));
 }
 
-/*
-	Retuns between [100 - 4000]
-*/
+/*!
+ *  \brief Reads the value of the throttle [0-4000]. If <2000 returns a negative acceleration, otherwise a positive accelleration.
+ *  \return int
+ */
 int Throttle_Read(){
 	uint32_T ActualThrottleValue= TM_ADC_Read(ADC_THROTTLE_DEV, ADC_THROTTLE_CHANNEL);
 if(ActualThrottleValue > 1){
@@ -108,7 +109,10 @@ if(ActualThrottleValue > 1){
 }
 return 0;
 }
-
+/*!
+ *  \brief Reads the value of the throttle [0-4000]. If <2000 returns 0, otherwise the clutch is ON
+ *  \return bool_t
+ */
 bool_t Clutch_Read(){
 uint32_T ActualClutchValue= TM_ADC_Read(ADC_CLUTCH_DEV, ADC_CLUTCH_CHANNEL);
 	if(ActualClutchValue > 1){

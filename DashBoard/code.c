@@ -504,7 +504,7 @@ debug(RepeatLeftArrow);//Davide: Remove this
 	if(ReadLeftArrow && RepeatLeftArrow == 3){
 		Event_LeftArrow = ONE;
 	}
-	if( ReadLeftArrow==ZERO ){{						//if and only if the user release the button the counter restarts from zero
+	if( ReadLeftArrow==ZERO ){						//if and only if the user release the button the counter restarts from zero
 		RepeatLeftArrow = ZERO;
 		Event_LeftArrow = ZERO;
 	}
@@ -516,7 +516,7 @@ debug(RepeatLeftArrow);//Davide: Remove this
 	if(ReadRightArrow && RepeatRightArrow == 3){
 		Event_RightArrow = ONE;
 	}
-	if( ReadRightArrow==ZERO ){{					//if and only if the user release the button the counter restarts from zero
+	if( ReadRightArrow==ZERO ){					//if and only if the user release the button the counter restarts from zero
 		RepeatRightArrow = ZERO;
 		Event_RightArrow = ZERO;
 	}
@@ -528,7 +528,7 @@ debug(RepeatLeftArrow);//Davide: Remove this
 	if(ReadGearUp && RepeatGearUp == 3){
 		Event_GearUp = ONE;
 	}
-	if( ReadGearUp==ZERO ){{						//if and only if the user release the button the counter restarts from zero
+	if( ReadGearUp==ZERO ){						//if and only if the user release the button the counter restarts from zero
 		RepeatGearUp = ZERO;
 		Event_GearUp = ZERO;
 	}
@@ -540,7 +540,7 @@ debug(RepeatLeftArrow);//Davide: Remove this
 	if(ReadGearDown && RepeatGearDown == 3){
 		Event_GearDown = ONE;
 	}
-	if( ReadGearDown==ZERO ){{						//if and only if the user release the button the counter restarts from zero
+	if( ReadGearDown==ZERO ){						//if and only if the user release the button the counter restarts from zero
 		RepeatGearDown = ZERO;
 		Event_GearDown = ZERO;
 	}
@@ -564,7 +564,7 @@ debug(RepeatLeftArrow);//Davide: Remove this
 	if(ReadBrights && RepeatBrightsButton == 3){
 		Event_Brights = ONE;
 	}
-	if( ReadBrights==ZERO ){{						//if and only if the user release the button the counter restarts from zero
+	if( ReadBrights==ZERO ){						//if and only if the user release the button the counter restarts from zero
 		RepeatBrightsButton = ZERO;
 		Event_Brights = ZERO;
 	}
