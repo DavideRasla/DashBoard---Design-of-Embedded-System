@@ -23,21 +23,21 @@
 /*Global Variables*/
 
 
-uint8_T hours=Initial_Hours, minutes=59, seconds=55;		// Clock variables
-uint8_T   Fuel_Value   			= FULL_FUEL;				// Fuel value, inizializated to full
-uint8_T   InstantSpeed  			= ZERO;					// Speed on the scren
-uint32_T  Speedometer  			= SPEEDOMETER_INITIAL;		// Total KM counter
-uint32_T  Partial_Speedometer  	= ZERO;						// Total partial KM counter. This can be resetted
-uint16_T  RPM_Value    			= RPM_INITIAL;				// RPM of the engine
-uint8_T   Actual_Gear 			= Neutral_Gear;				// Actual gear of the motorbike. Is shown on the screen
-double    Actual_Accel 			= ZERO;						// Actual accelleration readed by the sensors
-uint32_T  MetersTraveled 		= ZERO;						// Meters traveled since the Power On
-uint8_T	  KmTraveled 			= ZERO;						// KM traveled since the Power On
-bool_t 	  StopEngine 			= ZERO; 					// If equals to zero the engine can work, otherwise the engine has a problem or the motorbike is without fuel
-bool_t Blink_Left 				= ZERO;						// If equals to one the left arrow can blink
-bool_t Blink_Right				= ZERO;						// If equals to one the right arrow can blink
-uint8_T time_Arrow 				= ZERO;						// Used to count the time in order to simulate the blinking of the arrow
-bool_t Brights_Status 			= ZERO;						// Used to store the status of the brights
+uint8_T hours=Initial_Hours, minutes=Initial_Minutes, seconds=Initial_Seconds;		// Clock variables
+uint8_T   Fuel_Value   			= FULL_FUEL;										// Fuel value, inizializated to full
+uint8_T   InstantSpeed  		= ZERO;												// Speed on the scren
+uint32_T  Speedometer  			= SPEEDOMETER_INITIAL;								// Total KM counter
+uint32_T  Partial_Speedometer  	= ZERO;												// Total partial KM counter. This can be resetted
+uint16_T  RPM_Value    			= RPM_INITIAL;										// RPM of the engine
+uint8_T   Actual_Gear 			= Neutral_Gear;										// Actual gear of the motorbike. Is shown on the screen
+double    Actual_Accel 			= ZERO;												// Actual accelleration readed by the sensors
+uint32_T  MetersTraveled 		= ZERO;												// Meters traveled since the Power On
+uint8_T	  KmTraveled 			= ZERO;												// KM traveled since the Power On
+bool_t 	  StopEngine 			= ZERO; 											// If equals to zero the engine can work, otherwise the engine has a problem or the motorbike is without fuel
+bool_t Blink_Left 				= ZERO;												// If equals to one the left arrow can blink
+bool_t Blink_Right				= ZERO;												// If equals to one the right arrow can blink
+uint8_T time_Arrow 				= ZERO;												// Used to count the time in order to simulate the blinking of the arrow
+bool_t Brights_Status 			= ZERO;												// Used to store the status of the brights
 
 /*Events variables: When the task ReadSensor reads a valid input they are set to one */
 
@@ -63,10 +63,10 @@ ISR2(systick_handler)
  *  \return void
  */
 void Calculate_MetersTraveled(){
-static uint8_T i = ONE;
-static uint8_T Speed1 = ZERO;
-static uint8_T Speed2 = ZERO;
-static uint8_T Average = ZERO;
+static uint8_T i 		= ONE;
+static uint8_T Speed1   = ZERO;
+static uint8_T Speed2   = ZERO;
+static uint8_T Average  = ZERO;
 
 	if( i!=2 ){ //First call: simulate an instant t0 
 	Speed1 = InstantSpeed;
@@ -200,38 +200,38 @@ void UpdateFuel(){
  */
 void checkEvents(){
 	if(Event_LeftArrow){ //if the task readSensors reads a valid input, then the left arrow must blink
-		Event_LeftArrow = ZERO;
-		Blink_Left = !Blink_Left;
-		Blink_Right = ZERO;
+		Event_LeftArrow = ZERO;		//To avoid multiple commands
+		Blink_Left = !Blink_Left; 	//if was ON then reset, otherwise set
+		Blink_Right = ZERO;			//The arrows cannot be on at the same time
 		ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 		ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 		time_Arrow = ZERO;
 		}
 
 	if(Event_RightArrow ){//if the task readSensors reads a valid input, then the right arrow must blink
-		Event_RightArrow = ZERO; 
-		Blink_Right = !Blink_Right;
-		Blink_Left = ZERO;
+		Event_RightArrow = ZERO; 	//To avoid multiple commands
+		Blink_Right = !Blink_Right; //if was ON then reset, otherwise set
+		Blink_Left = ZERO;			//The arrows cannot be on at the same time
 		ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 		ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 		time_Arrow = ZERO;
 		}	
 
 	if(Blink_Left == 1){
-			if(time_Arrow ==20){//20 * 50ms = 1 second
+			if( time_Arrow==10 ){//10 * 50ms (Task_Frequency) = 0,5 second
 				SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 				}
-			else if(time_Arrow==40){//40 * 50ms = 2 second
+			else if( time_Arrow==20 ){//20 * 50ms (Task_Frequency) = 1 second
 				ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 				time_Arrow = ZERO;	//restart the counter
 				}
 			time_Arrow++;
 	}		
 	if(Blink_Right == 1){
-			if(time_Arrow ==20){//20 * 50ms = 1 second
+			if( time_Arrow==10 ){//10 * 50ms (Task_Frequency) = 0,5 second
 				SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 				}
-			else if(time_Arrow==40){//40 * 50ms = 2 second
+			else if (time_Arrow==20 ){//20 * 50ms (Task_Frequency) = 1 second
 				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 				time_Arrow = ZERO;
 				}
@@ -249,6 +249,7 @@ void checkEvents(){
 		else //if was ON
 			ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 		}
+		
 	if(Event_GearUp && Actual_Gear <= Sixth_Gear && Clutch_Read()==1 ){
 		Event_GearUp = ZERO;
 		Actual_Gear++;
