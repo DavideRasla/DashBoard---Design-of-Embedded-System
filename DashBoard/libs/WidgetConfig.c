@@ -12,6 +12,8 @@
 #include "stm32f4_discovery_lcd.h"
 #include "fonts.h"
 #include "../config.h"
+#include "../libs_custom/Sensors.h"
+#include "../libs_custom/GUI.h"
 
 Icon RightArrow = {
 		RightArrow_ON, RightArrow_OFF, AR

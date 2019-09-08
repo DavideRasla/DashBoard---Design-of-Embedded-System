@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "widgetconfig.h": "c",
+        "widget.h": "c",
+        "stm32f4_discovery_lcd.h": "c",
+        "stmpe811qtr.h": "c",
+        "event.h": "c",
+        "debug.h": "c",
+        "config.h": "c",
+        "sensors.h": "c"
+    }
+}
