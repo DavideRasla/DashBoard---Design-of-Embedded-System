@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "tm_stm32f4_adc.h": "c",
+        "io.h": "c",
+        "automated.h": "c"
+    }
+}
