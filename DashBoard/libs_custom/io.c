@@ -45,7 +45,7 @@ void io_init(){
 						TM_GPIO_Speed_High);
 
 
-	TM_GPIO_Init(BTN_PORT_D,
+	TM_GPIO_Init(BTN_PORT_C,
 			BTN_RESET_PARTIALKM,
 						TM_GPIO_Mode_IN,
 						TM_GPIO_OType_PP,
@@ -84,7 +84,7 @@ bool_t Button_GearDown_Read(){
 	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_GEAR_DOWN_PIN)));
 }
 bool_t Button_ResetKm_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT_D), (BTN_RESET_PARTIALKM)));
+	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT_C), (BTN_RESET_PARTIALKM)));
 }
 bool_t Button_Brights_Read(){
 	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_Brights_DOWN_PIN)));
