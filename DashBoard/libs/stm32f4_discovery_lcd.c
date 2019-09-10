@@ -1040,7 +1040,7 @@ void LCD_DrawLineByAngle(uint16_t Xpos, uint16_t Ypos, uint16_t Length, int Angl
       LCD_SetCursor(Xpos + dx , Ypos + dy ); 
     
       if( i==90 && Angle == 90){
-        debugInt(30, 200,dx, dy , dx);
+    //    debugInt(30, 200,dx, dy , dx);
       }
     }
   }

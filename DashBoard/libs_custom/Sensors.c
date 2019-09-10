@@ -199,8 +199,9 @@ void checkEvents(){
 		Brights_Status = !Brights_Status; 
 		if(Brights_Status)//if was OFF
 			SetEvent(iconinfo(&MyDashBoardScr[7])->onevent);
-		else //if was ON
+		else{ //if was ON
 			ClearEvent(iconinfo(&MyDashBoardScr[7])->onevent);
+			}
 		}
 		
 	if(Event_GearUp && Actual_Gear <= Sixth_Gear && Clutch_Read()==1 ){
@@ -224,6 +225,8 @@ void checkEvents(){
 		Event_PartialKm_Reset = ZERO;
 		Partial_Speedometer = ZERO;
 	}
+//debug(evts);
+	//debugInt(10,130,iconinfo(&MyDashBoardScr[1])->onevent,iconinfo(&MyDashBoardScr[2])->onevent,iconinfo(&MyDashBoardScr[3])->onevent,iconinfo(&MyDashBoardScr[4])->onevent,iconinfo(&MyDashBoardScr[7])->onevent );
 }
 
 
@@ -353,7 +356,7 @@ bool_t ReadResetKm = Button_ResetKm_Read();
 bool_t ReadBrights = Button_Brights_Read();
 
 
-
+debug(Button_ResetKm_Read());
 
 /*debouncing for left arrow button*/
 	if(ReadLeftArrow && RepeatLeftArrow <= 3){
@@ -409,20 +412,21 @@ bool_t ReadBrights = Button_Brights_Read();
 	}
 	if(ReadResetKm && RepeatResetButton == 3){//if for 3 times the value was HIGH
 		Event_PartialKm_Reset = ONE;
+		//debug(7);
 	}
 	if( ReadResetKm==ZERO ){						//if and only if the user release the button the counter restarts from zero
 		RepeatResetButton = ZERO;
-		Event_PartialKm_Reset = ZERO;
+		//Event_PartialKm_Reset = ZERO;
 		}	
 
 /*debouncing for Brights button*/
 	if( ReadBrights && RepeatBrightsButton <= 3){
 		RepeatBrightsButton++;
-		debug(RepeatBrightsButton);
+		//debug(RepeatBrightsButton);
 	}
 	if(ReadBrights && RepeatBrightsButton == 3){
 		Event_Brights = ONE;
-		debug(5);
+		//debug(5);
 	}
 	if( ReadBrights==ZERO ){						//if and only if the user release the button the counter restarts from zero
 		//debug(9);
