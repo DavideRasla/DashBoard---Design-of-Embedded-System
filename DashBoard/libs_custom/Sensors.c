@@ -4,7 +4,7 @@
 #include "../libs/stm32f4_discovery_lcd.h"
 #include "../libs/Widget.h"
 #include "../libs/WidgetConfig.h"
-
+#include "io.h"
 #include "../libs/STMPE811QTR.h"
 #include "../assets/pictures.h"
 #include "../libs/Event.h"
@@ -171,20 +171,20 @@ void checkEvents(){
 		}	
 
 	if(Blink_Left == 1){
-			if( time_Arrow==10 ){//10 * 50ms (Task_Frequency) = 0,5 second
+			if( time_Arrow==20 ){//10 * 50ms (Task_Frequency) = 0,5 second
 				SetEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 				}
-			else if( time_Arrow==20 ){//20 * 50ms (Task_Frequency) = 1 second
+			else if( time_Arrow==40 ){//20 * 50ms (Task_Frequency) = 1 second
 				ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
 				time_Arrow = ZERO;	//restart the counter
 				}
 			time_Arrow++;
 	}		
 	if(Blink_Right == 1){
-			if( time_Arrow==10 ){//10 * 50ms (Task_Frequency) = 0,5 second
+			if( time_Arrow==20 ){//10 * 50ms (Task_Frequency) = 0,5 second
 				SetEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 				}
-			else if (time_Arrow==20 ){//20 * 50ms (Task_Frequency) = 1 second
+			else if (time_Arrow==40 ){//20 * 50ms (Task_Frequency) = 1 second
 				ClearEvent(iconinfo(&MyDashBoardScr[1])->onevent);
 				time_Arrow = ZERO;
 				}
@@ -200,7 +200,7 @@ void checkEvents(){
 		if(Brights_Status)//if was OFF
 			SetEvent(iconinfo(&MyDashBoardScr[7])->onevent);
 		else //if was ON
-			ClearEvent(iconinfo(&MyDashBoardScr[2])->onevent);
+			ClearEvent(iconinfo(&MyDashBoardScr[7])->onevent);
 		}
 		
 	if(Event_GearUp && Actual_Gear <= Sixth_Gear && Clutch_Read()==1 ){
@@ -352,7 +352,7 @@ bool_t ReadGearDown = Button_GearDown_Read();
 bool_t ReadResetKm = Button_ResetKm_Read();
 bool_t ReadBrights = Button_Brights_Read();
 
-debug(RepeatLeftArrow);//Davide: Remove this
+
 
 
 /*debouncing for left arrow button*/
@@ -418,13 +418,17 @@ debug(RepeatLeftArrow);//Davide: Remove this
 /*debouncing for Brights button*/
 	if( ReadBrights && RepeatBrightsButton <= 3){
 		RepeatBrightsButton++;
+		debug(RepeatBrightsButton);
 	}
 	if(ReadBrights && RepeatBrightsButton == 3){
 		Event_Brights = ONE;
+		debug(5);
 	}
 	if( ReadBrights==ZERO ){						//if and only if the user release the button the counter restarts from zero
+		//debug(9);
 		RepeatBrightsButton = ZERO;
-		Event_Brights = ZERO;
+		//Event_Brights = ZERO;
 	}
+			//debug(RepeatBrightsButton);//Davide: Remove this
 
 }

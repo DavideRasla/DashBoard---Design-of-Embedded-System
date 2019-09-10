@@ -8,8 +8,7 @@
 #define RED_FUEL						30
 #define YELLOW_FUEL						70
 
-//Engine Status
-#define ENGINE_ON				  	  2500
+
 
 //Motorbike Parameters
 #define SPEED_MAX 					   250
@@ -30,7 +29,6 @@
 #define	ZERO							 0
 #define	ONE 							 1
 #define	ONE_KM						  1000
-#define	Watch_Pos						 6
 #define	Neutral_Gear					 0
 #define	First_Gear						 1
 #define	Second_Gear						 2
@@ -47,14 +45,10 @@
 #define BTN_GEAR_DOWN_PIN		(GPIO_PIN_5)
 #define BTN_TURNLIGHT_DX_PIN	(GPIO_PIN_4)
 #define BTN_TURNLIGHT_SX_PIN	(GPIO_PIN_6)
-#define BTN_HEADLIGHT_PIN		(GPIO_PIN_2)
-#define BTN_RESET_PARTIALKM		(GPIO_PIN_1)
-#define BTN_Brights_DOWN_PIN    (GPIO_PIN_3)
-#define OUT_PORT				(GPIOB)
+#define BTN_RESET_PARTIALKM		(GPIO_PIN_2)
+#define BTN_Brights_DOWN_PIN    (GPIO_PIN_1)
 
-#define LED_ARROW_DX			(GPIO_PIN_1)
-#define LED_ARROW_SX			(GPIO_PIN_3)
-#define LED_LIGHT				(GPIO_PIN_5)
+
 
 /* Initialize ADC1 on channel 4 for the throttle, this is pin PA4 */
 #define ADC_THROTTLE_DEV		(ADC1)
@@ -69,22 +63,19 @@
 #define TaskCheckEvents_FREQ		50
 #define TASKGUI_FREQ_FAST			200
 #define TASKGUI_FREQ_SLOW			1000
-#define TASKGUI_ReadSensors_FREQ	20
+#define TASKGUI_ReadSensors_FREQ	40
 
 //EVENTS DASHBOARD
-#define OIL 		0x02
-#define FUEL 		0x04
-#define AR			0x08
-#define AL			0x010
-#define BRIGHTS     0x011
+#define OIL 		0x01
+#define FUEL 		0x02
+#define AR			0x04
+#define AL			0x08
+#define BRIGHTS     0x10
 
 
 //EVENTS BUTTONS
-#define TURNR 			0x012
-#define TURNL 			0x014
-#define GEARUP 			0x016
-#define GEARDOWN 		0x018
-#define LIGHT			0x020
+#define TURNR 			0x20
+#define TURNL 			0x40
 #define TIME_DEBOUNCING 40 //50ms*40 =2000ms = 2sec
 
 #define Initial_Seconds 0

@@ -109,7 +109,7 @@ return 0;
  *  \brief Reads the value of the throttle [0-4000]. If <2000 returns 0, otherwise the clutch is ON
  *  \return bool_t
  */
-bool_t Clutch_Read(valueClutch){
+bool_t Clutch_Read(uint32_T valueClutch){
 uint32_T ActualClutchValue= valueClutch;
 	if(ActualClutchValue > 1){
 		if( ActualClutchValue<2000 ){

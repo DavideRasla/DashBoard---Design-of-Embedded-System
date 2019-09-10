@@ -4,10 +4,12 @@
 #include "../config.h"
 #include "../libs_custom/types.h"
 #include "../libs/Event.h"
-
-
+#include "Sensors.h"
+#include "GUI.h"
 #include "../libs/tm_stm32f4_gpio.h"
 #include "../libs/tm_stm32f4_adc.h"
+#include "../libs/stm32f4xx_gpio.h"
+#include "../libs/stm32f4xx_adc.h"
 
 
 
@@ -42,12 +44,6 @@ void io_init(){
 						TM_GPIO_PuPd_DOWN,
 						TM_GPIO_Speed_High);
 
-	TM_GPIO_Init(BTN_PORT,
-			BTN_HEADLIGHT_PIN,
-						TM_GPIO_Mode_IN,
-						TM_GPIO_OType_PP,
-						TM_GPIO_PuPd_DOWN,
-						TM_GPIO_Speed_High);
 
 	TM_GPIO_Init(BTN_PORT,
 			BTN_RESET_PARTIALKM,
@@ -61,6 +57,7 @@ void io_init(){
 						TM_GPIO_OType_PP,
 						TM_GPIO_PuPd_DOWN,
 						TM_GPIO_Speed_High);
+						
 
 	//ADC INPUTS
 /* Initialize ADC1 on channel 4 for the throttle, this is pin PA4 */
@@ -89,7 +86,6 @@ bool_t Button_GearDown_Read(){
 bool_t Button_ResetKm_Read(){
 	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_RESET_PARTIALKM)));
 }
-
 bool_t Button_Brights_Read(){
 	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_Brights_DOWN_PIN)));
 }

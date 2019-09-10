@@ -4,6 +4,7 @@
 #include "../libs/stm32f4_discovery_lcd.h"
 #include "../libs/Widget.h"
 #include "../libs/WidgetConfig.h"
+#include "io.h"
 
 #include "../libs/STMPE811QTR.h"
 #include "../assets/pictures.h"
