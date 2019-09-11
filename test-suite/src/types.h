@@ -4,7 +4,7 @@
 // Contains NULL declaration
 #include <stddef.h>
 #include <stdint.h>
-
+#include <math.h>
 // Defines a boolean type to be used in C
 typedef enum { false, true } bool_t;
 

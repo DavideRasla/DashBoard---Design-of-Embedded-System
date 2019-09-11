@@ -1,94 +1,13 @@
 
 #include <stdlib.h>
+#include <math.h>
 #include "io.h"
 #include "config.h"
 #include "types.h"
 #include "Event.h"
 
+bool_t StopEngine = 0;
 
-
-
-void io_init(){
-	//BUTTON INPUTS
-	TM_GPIO_Init(BTN_PORT,
-				BTN_GEAR_UP_PIN,
-				TM_GPIO_Mode_IN,
-				TM_GPIO_OType_PP,
-				TM_GPIO_PuPd_DOWN,
-				TM_GPIO_Speed_High);
-
-	TM_GPIO_Init(BTN_PORT,
-					BTN_GEAR_DOWN_PIN,
-					TM_GPIO_Mode_IN,
-					TM_GPIO_OType_PP,
-					TM_GPIO_PuPd_DOWN,
-					TM_GPIO_Speed_High);
-
-	TM_GPIO_Init(BTN_PORT,
-					BTN_TURNLIGHT_DX_PIN,
-						TM_GPIO_Mode_IN,
-						TM_GPIO_OType_PP,
-						TM_GPIO_PuPd_DOWN,
-						TM_GPIO_Speed_High);
-
-	TM_GPIO_Init(BTN_PORT,
-				BTN_TURNLIGHT_SX_PIN,
-						TM_GPIO_Mode_IN,
-						TM_GPIO_OType_PP,
-						TM_GPIO_PuPd_DOWN,
-						TM_GPIO_Speed_High);
-
-	TM_GPIO_Init(BTN_PORT,
-			BTN_HEADLIGHT_PIN,
-						TM_GPIO_Mode_IN,
-						TM_GPIO_OType_PP,
-						TM_GPIO_PuPd_DOWN,
-						TM_GPIO_Speed_High);
-
-	TM_GPIO_Init(BTN_PORT,
-			BTN_RESET_PARTIALKM,
-						TM_GPIO_Mode_IN,
-						TM_GPIO_OType_PP,
-						TM_GPIO_PuPd_DOWN,
-						TM_GPIO_Speed_High);
-	TM_GPIO_Init(BTN_PORT,
-			BTN_Brights_DOWN_PIN,
-						TM_GPIO_Mode_IN,
-						TM_GPIO_OType_PP,
-						TM_GPIO_PuPd_DOWN,
-						TM_GPIO_Speed_High);
-
-	//ADC INPUTS
-/* Initialize ADC1 on channel 4 for the throttle, this is pin PA4 */
-    TM_ADC_Init(ADC_THROTTLE_DEV, ADC_THROTTLE_CHANNEL);
-/* Initialize ADC2 on channel 3 for the Clutch, this is pin PA3 */
-    TM_ADC_Init(ADC_CLUTCH_DEV, ADC_CLUTCH_CHANNEL);
-	/* Enable vbat channel */
-	TM_ADC_EnableVbat();
-
-
-	
-}
-
-bool_t Button_LeftArrow_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_TURNLIGHT_SX_PIN)));
-}
-bool_t Button_RightArrow_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_TURNLIGHT_DX_PIN)));
-}
-bool_t Button_GearUp_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_GEAR_UP_PIN)));
-}
-bool_t Button_GearDown_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_GEAR_DOWN_PIN)));
-}
-bool_t Button_ResetKm_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_RESET_PARTIALKM)));
-}
-
-bool_t Button_Brights_Read(){
-	return BOOL(TM_GPIO_GetInputPinValue((BTN_PORT), (BTN_Brights_DOWN_PIN)));
-}
 
 /*!
  *  \brief Reads the value of the throttle [0-4000]. If <2000 returns a negative acceleration, otherwise a positive accelleration.
@@ -98,9 +17,9 @@ int Throttle_Read(uint32_T valueThrottle){
 	uint32_T ActualThrottleValue=valueThrottle ;
 if(ActualThrottleValue > 1){
 	if( ActualThrottleValue<2000 ){
-		return -150*log(ActualThrottleValue);
+		return -150;
 	}else{
-		return 130*log(ActualThrottleValue);
+		return 130;
 	}
 }
 return 0;
@@ -122,4 +41,18 @@ uint32_T ActualClutchValue= valueClutch;
 }
 
 
-
+int UpdateFuel(int Fuel_Value){
+	int ret;
+	if( Fuel_Value>=ZERO ){
+			if( Fuel_Value < RED_FUEL){
+				ret = 1;
+			}else if(Fuel_Value >=RED_FUEL && Fuel_Value<= YELLOW_FUEL){			
+				ret = 2;
+			}else{			
+				ret = 3;
+				}
+		}else{
+				ret = -1;
+		}
+	return ret;
+}

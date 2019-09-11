@@ -225,8 +225,7 @@ void checkEvents(){
 		Event_PartialKm_Reset = ZERO;
 		Partial_Speedometer = ZERO;
 	}
-//debug(evts);
-	//debugInt(10,130,iconinfo(&MyDashBoardScr[1])->onevent,iconinfo(&MyDashBoardScr[2])->onevent,iconinfo(&MyDashBoardScr[3])->onevent,iconinfo(&MyDashBoardScr[4])->onevent,iconinfo(&MyDashBoardScr[7])->onevent );
+//debug(evts);//DAVIDE: USEFUL in order to print the events
 }
 
 
@@ -252,7 +251,6 @@ char text[20];
 
 if( StopEngine == ZERO ){//if engine can work
 	if(Clutch_Read()==0 && Actual_Gear != Neutral_Gear){//if the clutch is not on AND if the gear is not in neutral
-					//debug(Actual_Accel);
 						if(Actual_Accel>ZERO) {//Positive accelleration, need to increase the speed
 								if(InstantSpeed == ZERO){
 									InstantSpeed = 5;
@@ -356,7 +354,6 @@ bool_t ReadResetKm = Button_ResetKm_Read();
 bool_t ReadBrights = Button_Brights_Read();
 
 
-debug(Button_ResetKm_Read());
 
 /*debouncing for left arrow button*/
 	if(ReadLeftArrow && RepeatLeftArrow <= 3){
@@ -412,27 +409,20 @@ debug(Button_ResetKm_Read());
 	}
 	if(ReadResetKm && RepeatResetButton == 3){//if for 3 times the value was HIGH
 		Event_PartialKm_Reset = ONE;
-		//debug(7);
 	}
 	if( ReadResetKm==ZERO ){						//if and only if the user release the button the counter restarts from zero
 		RepeatResetButton = ZERO;
-		//Event_PartialKm_Reset = ZERO;
 		}	
 
 /*debouncing for Brights button*/
 	if( ReadBrights && RepeatBrightsButton <= 3){
 		RepeatBrightsButton++;
-		//debug(RepeatBrightsButton);
 	}
 	if(ReadBrights && RepeatBrightsButton == 3){
 		Event_Brights = ONE;
-		//debug(5);
 	}
 	if( ReadBrights==ZERO ){						//if and only if the user release the button the counter restarts from zero
-		//debug(9);
 		RepeatBrightsButton = ZERO;
-		//Event_Brights = ZERO;
 	}
-			//debug(RepeatBrightsButton);//Davide: Remove this
 
 }

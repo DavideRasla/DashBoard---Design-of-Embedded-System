@@ -54,8 +54,8 @@ const Widget MyDashBoardScr[NUMWIDGETS] = {
 		{10, 5, 40, 40, ICON, (void *)&LeftArrow},
 		{60, 20, 30, 16, ICON, (void *)&Oil},
 		{230, 20, 30, 30, ICON, (void *)&Low_Fuel},
-		{10, 160, 40, 40, IMAGE_ARR, (void *)&RUN},
+		{10, 110, 40, 40, IMAGE_ARR, (void *)&RUN},
 		{70, 30, 40, 40, TEXT, (void *)&txt},
-		{10, 80, 40, 40,  ICON, (void *)&Brights},
+		{10, 50, 40, 40,  ICON, (void *)&Brights},
 };
 
