@@ -12,6 +12,8 @@
 #include "stm32f4_discovery_lcd.h"
 #include "fonts.h"
 #include "../config.h"
+#include "../libs_custom/Sensors.h"
+#include "../libs_custom/GUI.h"
 
 Icon RightArrow = {
 		RightArrow_ON, RightArrow_OFF, AR
@@ -29,13 +31,13 @@ Image_ARRAY RUN = {
 		Neutral, First, Second, third, fourth, fifth, sixth
 };
 
-
-
 Icon Low_Fuel = {
 		LowFuel_ON, LowFuel_OFF, FUEL
 };
 
-
+Icon Brights = {
+		Brights_ON, Brights_OFF, BRIGHTS
+};
 
 Text txt = {
 		&Font32x48, White
@@ -52,7 +54,8 @@ const Widget MyDashBoardScr[NUMWIDGETS] = {
 		{10, 5, 40, 40, ICON, (void *)&LeftArrow},
 		{60, 20, 30, 16, ICON, (void *)&Oil},
 		{230, 20, 30, 30, ICON, (void *)&Low_Fuel},
-		{10, 80, 40, 40, IMAGE_ARR, (void *)&RUN},
+		{10, 110, 40, 40, IMAGE_ARR, (void *)&RUN},
 		{70, 30, 40, 40, TEXT, (void *)&txt},
+		{10, 50, 40, 40,  ICON, (void *)&Brights},
 };
 

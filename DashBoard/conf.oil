@@ -54,6 +54,8 @@ CPU mySystem {
 			APP_SRC = "assets/pictures.c";
 			APP_SRC = "libs/Event.c";
 			APP_SRC = "libs/Widget.c";
+			APP_SRC = "libs_custom/Sensors.c";
+			APP_SRC = "libs_custom/GUI.c";
 			APP_SRC = "libs/WidgetConfig.c";
 			APP_SRC = "libs/STMPE811QTR.c";
 			APP_SRC = "libs/debug.c";

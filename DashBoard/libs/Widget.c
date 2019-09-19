@@ -86,7 +86,10 @@ LCD_SetTextColor(White);
 	//debugInt(0,0,(int) w->xl,(int) w->yt, 1);
 		return 0;
 }
-
+/*!
+ *  \brief Reads the variable 'Gear' and print on the screen the relative icon
+ *  \return void
+ */
 unsigned char ChangeGear(  Widget *w, int Gear)
  {
 char *imgptr = 0;
@@ -118,7 +121,6 @@ char *imgptr = 0;
                LCD_DrawPicture(w->xl, w->yt, w->xw, w->yh, imgptr);
                return 1;
        }
-
                 return 0;
 }
 

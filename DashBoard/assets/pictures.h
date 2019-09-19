@@ -54,6 +54,9 @@ extern const unsigned char LowFuel_ON[1854];
 extern const unsigned char LowFuel_OFF[1854];
 
 
+extern const unsigned char Brights_ON[3254];
+extern const unsigned char Brights_OFF[3254];
+
 #endif /*__PICTURES_H */ 
 
 /******************* (C) COPYRIGHT 2014 STMicroelectronics *****END OF FILE****/ 

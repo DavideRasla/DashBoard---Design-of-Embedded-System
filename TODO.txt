@@ -1,5 +1,0 @@
-- Finire sysml
-- Fare simulink
-- Fare testing
-- Scrivere report
-- Fare handcoded

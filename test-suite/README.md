@@ -1,6 +1,6 @@
 # Unit and Coverage Testing
 
-This directory contains some utilities to run unit testing and and coverage testing on some platform-independent parts of the Sonar system.
+This directory contains some utilities to run unit testing and and coverage testing on this Dashboard system.
 
 To run these tests, run:
 ```sh
