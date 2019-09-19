@@ -19,21 +19,17 @@
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_a-9IEs8UEemYRroEq0iUBw"/>
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_a-9vIM8UEemYRroEq0iUBw" value="1"/>
         </ownedAttribute>
-        <ownedAttribute xmi:type="uml:Property" xmi:id="_hG5Rgs8mEemYRroEq0iUBw" name="leds" type="_67RycM5eEem8osQJGYOTtQ" aggregation="composite" association="_hG4qcM8mEemYRroEq0iUBw">
-          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_hG54kM8mEemYRroEq0iUBw"/>
-          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_hG54kc8mEemYRroEq0iUBw" value="1"/>
-        </ownedAttribute>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_h70uYs8mEemYRroEq0iUBw" name="potentiometers" type="_VOF0YM5eEem8osQJGYOTtQ" aggregation="composite" association="_h70HUM8mEemYRroEq0iUBw">
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_h71VcM8mEemYRroEq0iUBw"/>
-          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_h71Vcc8mEemYRroEq0iUBw" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_h71Vcc8mEemYRroEq0iUBw" value="*"/>
         </ownedAttribute>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_idqQIs8mEemYRroEq0iUBw" name="buttons" type="_2HuZUM5dEem8osQJGYOTtQ" aggregation="composite" association="_idppEM8mEemYRroEq0iUBw">
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_idqQI88mEemYRroEq0iUBw"/>
-          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_idqQJM8mEemYRroEq0iUBw" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_idqQJM8mEemYRroEq0iUBw" value="*"/>
         </ownedAttribute>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_eIcpwM8uEemYRroEq0iUBw" name="Board" type="_4o-UYM8pEemYRroEq0iUBw" aggregation="composite" association="_j_D30M8uEemYRroEq0iUBw"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_564ZcM8vEemYRroEq0iUBw" name="LCD_Display" type="_Nsu4kM5aEem8osQJGYOTtQ" aggregation="composite" association="_-d6fwM8vEemYRroEq0iUBw"/>
-        <ownedAttribute xmi:type="uml:Property" xmi:id="_VB1XYM_aEem6CdFu_N5Ecw" name="BTN_GEAR_UP" type="_2HuZUM5dEem8osQJGYOTtQ" aggregation="composite" association="_eJQ18M_aEem6CdFu_N5Ecw"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_VB1XYM_aEem6CdFu_N5Ecw" name="BTN_LIGHTS" type="_2HuZUM5dEem8osQJGYOTtQ" aggregation="composite" association="_eJQ18M_aEem6CdFu_N5Ecw"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_nfgzoM_aEem6CdFu_N5Ecw" name="CopyOf_BTN_GEAR_UP_10" type="_2HuZUM5dEem8osQJGYOTtQ" aggregation="composite" association="_nfqkoM_aEem6CdFu_N5Ecw"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_9-rIUM_aEem6CdFu_N5Ecw" name="BTN_GEAR_DOWN" type="_2HuZUM5dEem8osQJGYOTtQ" aggregation="composite" association="__mVpsM_aEem6CdFu_N5Ecw"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_QntgAM_bEem6CdFu_N5Ecw" name="BTN_TURNL" type="_2HuZUM5dEem8osQJGYOTtQ" aggregation="composite" association="_SAoawM_bEem6CdFu_N5Ecw"/>
@@ -72,6 +68,10 @@
         <ownedConnector xmi:type="uml:Connector" xmi:id="_8DP8cM_lEem6CdFu_N5Ecw" name="BindingConnector25">
           <end xmi:type="uml:ConnectorEnd" xmi:id="_8DS_wM_lEem6CdFu_N5Ecw" partWithPort="_eIcpwM8uEemYRroEq0iUBw" role="_zufQ8M_lEem6CdFu_N5Ecw"/>
           <end xmi:type="uml:ConnectorEnd" xmi:id="_8DTm0M_lEem6CdFu_N5Ecw" partWithPort="_564ZcM8vEemYRroEq0iUBw" role="_5OIJcM_lEem6CdFu_N5Ecw"/>
+        </ownedConnector>
+        <ownedConnector xmi:type="uml:Connector" xmi:id="_gBrtoNiBEemeEZaVRzJjeA" name="BindingConnector26">
+          <end xmi:type="uml:ConnectorEnd" xmi:id="_gB5wENiBEemeEZaVRzJjeA" partWithPort="_VB1XYM_aEem6CdFu_N5Ecw" role="_cQxi8M_dEem6CdFu_N5Ecw"/>
+          <end xmi:type="uml:ConnectorEnd" xmi:id="_gB6XINiBEemeEZaVRzJjeA" partWithPort="_eIcpwM8uEemYRroEq0iUBw" role="_XhYggNiBEemeEZaVRzJjeA"/>
         </ownedConnector>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_Nsu4kM5aEem8osQJGYOTtQ" name="Display">
@@ -113,7 +113,6 @@
         </ownedAttribute>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_izCAAM8iEemYRroEq0iUBw" name="changeValue"/>
       </packagedElement>
-      <packagedElement xmi:type="uml:Class" xmi:id="_67RycM5eEem8osQJGYOTtQ" name="Leds"/>
       <packagedElement xmi:type="uml:Class" xmi:id="_c4i3QM5hEem8osQJGYOTtQ" name="Board" visibility="public"/>
       <packagedElement xmi:type="uml:Class" xmi:id="__rLN0M8TEemYRroEq0iUBw" name="TaskIO"/>
       <packagedElement xmi:type="uml:Class" xmi:id="_WNI-4M8UEemYRroEq0iUBw" name="InterfaceTask"/>
@@ -152,6 +151,7 @@
         <ownedAttribute xmi:type="uml:Port" xmi:id="_zufQ8M_lEem6CdFu_N5Ecw" name="display_bus" aggregation="composite">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
         </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Port" xmi:id="_XhYggNiBEemeEZaVRzJjeA" name="in_light" aggregation="composite"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_IaamMM5hEem8osQJGYOTtQ" name="Associations">
         <packagedElement xmi:type="uml:Association" xmi:id="_i0A0UM5aEem8osQJGYOTtQ" memberEnd="_i0CCcM5aEem8osQJGYOTtQ _i0Cpgc5aEem8osQJGYOTtQ">
@@ -172,13 +172,6 @@
           </eAnnotations>
           <ownedEnd xmi:type="uml:Property" xmi:id="_NKQpIM8UEemYRroEq0iUBw" name="system" type="_LZMIoM5aEem8osQJGYOTtQ" association="_NKJ7cM8UEemYRroEq0iUBw"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_QehPMM8UEemYRroEq0iUBw" memberEnd="_QeidUc8UEemYRroEq0iUBw _QejrcM8UEemYRroEq0iUBw">
-          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Qeh2QM8UEemYRroEq0iUBw" source="org.eclipse.papyrus">
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QeidUM8UEemYRroEq0iUBw" key="nature" value="UML_Nature"/>
-          </eAnnotations>
-          <ownedEnd xmi:type="uml:Property" xmi:id="_QeidUc8UEemYRroEq0iUBw" name="taskio" type="__rLN0M8TEemYRroEq0iUBw" association="_QehPMM8UEemYRroEq0iUBw"/>
-          <ownedEnd xmi:type="uml:Property" xmi:id="_QejrcM8UEemYRroEq0iUBw" name="leds" type="_67RycM5eEem8osQJGYOTtQ" association="_QehPMM8UEemYRroEq0iUBw"/>
-        </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_a-758M8UEemYRroEq0iUBw" memberEnd="_a-9IEc8UEemYRroEq0iUBw _a-9vIc8UEemYRroEq0iUBw">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_a-8hAM8UEemYRroEq0iUBw" source="org.eclipse.papyrus">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_a-9IEM8UEemYRroEq0iUBw" key="nature" value="UML_Nature"/>
@@ -191,12 +184,6 @@
           </eAnnotations>
           <ownedEnd xmi:type="uml:Property" xmi:id="_eJysYM8UEemYRroEq0iUBw" name="display" type="_Nsu4kM5aEem8osQJGYOTtQ" association="_eJxeQM8UEemYRroEq0iUBw"/>
           <ownedEnd xmi:type="uml:Property" xmi:id="_eJzTcM8UEemYRroEq0iUBw" name="taskgui" type="_WNI-4M8UEemYRroEq0iUBw" association="_eJxeQM8UEemYRroEq0iUBw"/>
-        </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_hG4qcM8mEemYRroEq0iUBw" memberEnd="_hG5Rgs8mEemYRroEq0iUBw _hG54ks8mEemYRroEq0iUBw">
-          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_hG5RgM8mEemYRroEq0iUBw" source="org.eclipse.papyrus">
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hG5Rgc8mEemYRroEq0iUBw" key="nature" value="UML_Nature"/>
-          </eAnnotations>
-          <ownedEnd xmi:type="uml:Property" xmi:id="_hG54ks8mEemYRroEq0iUBw" name="system" type="_LZMIoM5aEem8osQJGYOTtQ" association="_hG4qcM8mEemYRroEq0iUBw"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_h70HUM8mEemYRroEq0iUBw" memberEnd="_h70uYs8mEemYRroEq0iUBw _h71Vcs8mEemYRroEq0iUBw">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_h70uYM8mEemYRroEq0iUBw" source="org.eclipse.papyrus">
@@ -352,8 +339,6 @@
   <Blocks:Block xmi:id="__rWM8M8TEemYRroEq0iUBw" base_Class="__rLN0M8TEemYRroEq0iUBw"/>
   <Blocks:Block xmi:id="_WNQToM8UEemYRroEq0iUBw" base_Class="_WNI-4M8UEemYRroEq0iUBw"/>
   <Blocks:Block xmi:id="_h9kgAM8UEemYRroEq0iUBw" base_Class="_h9eZYM8UEemYRroEq0iUBw"/>
-  <Blocks:Block xmi:id="_0W00oM8nEemYRroEq0iUBw" base_Class="_67RycM5eEem8osQJGYOTtQ"/>
-  <Dashboard_profile:Peripheral xmi:id="_yfqesM8nEemYRroEq0iUBw" base_Class="_67RycM5eEem8osQJGYOTtQ" direction="OUT"/>
   <Dashboard_profile:Peripheral xmi:id="_4im4kM8nEemYRroEq0iUBw" base_Class="_2HuZUM5dEem8osQJGYOTtQ"/>
   <Dashboard_profile:Hardware xmi:id="_8zzA8M8nEemYRroEq0iUBw" base_Class="_c4i3QM5hEem8osQJGYOTtQ"/>
   <Dashboard_profile:Peripheral xmi:id="_HvnOQM8oEemYRroEq0iUBw" base_Class="_Nsu4kM5aEem8osQJGYOTtQ" direction="OUT"/>
@@ -402,4 +387,8 @@
   <Blocks:NestedConnectorEnd xmi:id="_8DTm0c_lEem6CdFu_N5Ecw" base_Element="_8DS_wM_lEem6CdFu_N5Ecw" propertyPath="_eIcpwM8uEemYRroEq0iUBw" base_ConnectorEnd="_8DS_wM_lEem6CdFu_N5Ecw"/>
   <Blocks:NestedConnectorEnd xmi:id="_8DUN4M_lEem6CdFu_N5Ecw" base_Element="_8DTm0M_lEem6CdFu_N5Ecw" propertyPath="_564ZcM8vEemYRroEq0iUBw" base_ConnectorEnd="_8DTm0M_lEem6CdFu_N5Ecw"/>
   <Blocks:BindingConnector xmi:id="_8DUN4c_lEem6CdFu_N5Ecw" base_Connector="_8DP8cM_lEem6CdFu_N5Ecw"/>
+  <DeprecatedElements:FlowPort xmi:id="_XhxiENiBEemeEZaVRzJjeA" base_Port="_XhYggNiBEemeEZaVRzJjeA" direction="in"/>
+  <Blocks:NestedConnectorEnd xmi:id="_gB7lQNiBEemeEZaVRzJjeA" base_Element="_gB5wENiBEemeEZaVRzJjeA" propertyPath="_VB1XYM_aEem6CdFu_N5Ecw" base_ConnectorEnd="_gB5wENiBEemeEZaVRzJjeA"/>
+  <Blocks:NestedConnectorEnd xmi:id="_gB8zYNiBEemeEZaVRzJjeA" base_Element="_gB6XINiBEemeEZaVRzJjeA" propertyPath="_eIcpwM8uEemYRroEq0iUBw" base_ConnectorEnd="_gB6XINiBEemeEZaVRzJjeA"/>
+  <Blocks:BindingConnector xmi:id="_gB9acNiBEemeEZaVRzJjeA" base_Connector="_gBrtoNiBEemeEZaVRzJjeA"/>
 </xmi:XMI>
